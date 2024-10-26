@@ -1,4 +1,10 @@
-import type { Store, StoreModule, StoreActions, StoreState } from "./index.js";
+import type {
+	Store,
+	StoreModule,
+	StoreActions,
+	StoreState,
+	Handlers,
+} from "./index.js";
 
 export type ElementsInstance = {
 	options: {
@@ -20,7 +26,7 @@ export type ElementsInstance = {
 		};
 	};
 	started: boolean;
-	plugins: string[];
+	handlers: Handlers;
 	storeModules: Map<string, StoreModule<StoreState, StoreActions>>;
 	stores: Map<string, Store<StoreState, StoreActions>>;
 	trackedElements: WeakSet<HTMLElement>;

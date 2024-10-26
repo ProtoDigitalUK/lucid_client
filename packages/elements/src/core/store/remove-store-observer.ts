@@ -34,6 +34,7 @@ const removeElement = (element: HTMLElement) => {
 	const store = Elements.stores.get(storeKey);
 	if (!store) return;
 
+	for (const handler of Elements.handlers.values()) handler.destroy?.(store);
 	store[0].stateObserver?.disconnect();
 	store[0].dispose();
 	Elements.stores.delete(storeKey);

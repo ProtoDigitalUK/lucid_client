@@ -26,12 +26,11 @@ const { title } = Astro.props;
 		<CookieController />
 
 		<script>
+			import { events } from "@lucidclient/elements/handlers";
 			import Elements, { storeModule, registerHandler, createSignal } from "@lucidclient/elements";
 			import { speculateLinks, PrefetchData } from "@lucidclient/speculate";
 
-			registerHandler("eventHandlers");
-			registerHandler("intersectionHandlers");
-			registerHandler("domHandlers");
+			registerHandler(events);
 
 			storeModule<
 				{
@@ -73,7 +72,7 @@ const { title } = Astro.props;
 						// console.log(getArray());
 						// console.log(getCustomState());
 
-						console.log(store.refs.get('button'))
+						// console.log(store.refs.get('button'))
 						setDisabled(true);
 					},
 				},

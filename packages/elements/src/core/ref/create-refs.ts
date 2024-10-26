@@ -46,8 +46,6 @@ const createRefs = (
 		}
 	}
 
-	console.log(refs);
-
 	store[1]("refs", refs);
 };
 

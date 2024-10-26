@@ -64,7 +64,7 @@ const initialiseStore = (element: HTMLElement, storeKey: string | null) => {
 		state.createState(store);
 		state.watchState(element, store);
 		ref.createRefs(element, store);
-		// handlers
+		for (const handler of Elements.handlers.values()) handler.initialise(store);
 
 		// -----------------
 		// update Elements instance

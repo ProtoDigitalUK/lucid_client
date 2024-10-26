@@ -10,7 +10,7 @@ const Elements: ElementsInstance = {
 		attributes: C.defaults.attributes,
 	},
 	started: false,
-	plugins: [],
+	handlers: new Map(),
 	stores: new Map(),
 	storeModules: new Map(),
 	trackedElements: new Set(),

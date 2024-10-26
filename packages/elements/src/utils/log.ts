@@ -4,8 +4,10 @@ import Elements from "../core/elements.js";
 /**
  * Debug logging - this is only enabled if the library is started with debug: true
  */
-const debug = (msg: string) =>
-	Elements.options.debug ? console.debug(`${C.prefix} ${msg}`) : undefined;
+const debug = (msg: string, force?: boolean) =>
+	Elements.options.debug || force
+		? console.debug(`${C.prefix} ${msg}`)
+		: undefined;
 
 /**
  * Warn logging
