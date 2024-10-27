@@ -5,9 +5,7 @@ const namespace = "events";
 
 const eventsHandler: Handler = {
 	namespace: namespace,
-	initialise: (store) => {
-		// console.log(store[0].attributeMaps);
-	},
+	initialise: (store) => {},
 	destroy: (store) => {
 		utils.log.debug(`Handler destroyed for namespace "${namespace}"`);
 	},
