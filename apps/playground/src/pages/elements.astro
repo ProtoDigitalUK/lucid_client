@@ -25,8 +25,8 @@ import Layout from "../layouts/Layout.astro";
             data-bind--data-array-hello="example:array[0]"
             data-bind--data-custom-state-attribute="example:customState"
 
-            data-handler--on.click="example:handleClick"
-            data-handler--on.scroll="example:handleScroll"
+            data-handler--event.click="example:handleClick"
+            data-handler--event.scroll="example:handleScroll"
 
             class="data-[state--boolean=true]:bg-red-500"
         >
@@ -37,7 +37,7 @@ import Layout from "../layouts/Layout.astro";
         		<span data-bind--data-array-hello="example:array[0]" data-ref="example:span[]"></span>
             <button
                 data-bind--disabled="example:boolean"
-                data-handler--on.click="example:handleClick"
+                data-handler--event.click="example:handleClick"
                 data-handler--dom.text="$example:boolean ? 'Hide Content' : 'Show Content'"
                 data-ref="example:button"
             >
