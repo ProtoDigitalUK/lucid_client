@@ -1,7 +1,5 @@
 # Lucid Elements
 
-> This is currently an R&D library, and is not recommended for production use as it may not go anywhere. Syntax, APIs and functionality is subject to change.
-
 The missing layer between your HTML and your JS. Elements is a light weight library that levels up your HTML with reactive state attributes, attribute bindings and handlers for event handling, intersection and DOM manipulation.
 
 ## Getting Started
