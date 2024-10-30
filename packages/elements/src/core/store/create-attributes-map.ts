@@ -100,9 +100,9 @@ const createAttributesMap = (
 				const namespaceMap = handlerAttributes.get(namespace);
 				if (namespaceMap) {
 					if (!namespaceMap.has(specifier)) {
-						namespaceMap.set(specifier, []);
+						namespaceMap.set(specifier, new Set());
 					}
-					namespaceMap.get(specifier)?.push(value);
+					namespaceMap.get(specifier)?.add(value);
 				}
 			}
 		}

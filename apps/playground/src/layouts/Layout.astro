@@ -54,7 +54,7 @@ const { title } = Astro.props;
 						store.actions.handleClick(); // or this.handleClick()
 					},
 					handleClick: () => {
-						const [_, setDisabled] = store.state.boolean;
+						const [_, setBoolean] = store.state.boolean;
 						// const [getNumber] = store.state.number;
 						// const [getString] = store.state.string;
 						// const [getObject] = store.state.object;
@@ -73,7 +73,7 @@ const { title } = Astro.props;
 						// console.log(getCustomState());
 
 						// console.log(store.refs.get('button'))
-						setDisabled(true);
+						setBoolean((prev) => !prev);
 					},
 				},
 			}));

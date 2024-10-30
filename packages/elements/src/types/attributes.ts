@@ -36,5 +36,5 @@ type HandlerAction = string;
  */
 export type HandlerAttributesMap = Map<
 	HandlerNamespace,
-	Map<HandlerSpecifier, Array<HandlerAction>>
+	Map<HandlerSpecifier, Set<HandlerAction>>
 >;
