@@ -17,6 +17,10 @@ import getStoreInterface from "./get-store-interface.js";
 /**
  * Creates a store for the given element if one hasnt already been specified.
  * - Populates the store with attribute maps.
+ * - Creates state.
+ * - Observes state.
+ * - Creates refs.
+ * - Initialises handlers.
  */
 const initialiseStore = (element: HTMLElement, storeKey: string | null) => {
 	const key = storeKey ?? utils.helpers.uuid();
