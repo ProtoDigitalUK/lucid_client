@@ -18,7 +18,9 @@ const createAttributesMap = (
 } => {
 	const scope =
 		element.getAttribute(
-			utils.helpers.buildAttribute(Elements.options.attributes.selectors.scope),
+			utils.helpers.buildAttribute(
+				Elements.options.attributes.selectors.element,
+			),
 		) ?? null;
 	const stateAttributes: StateAttribtuesMap = new Map();
 	const bindAttributes: BindAttributesMap = new Map();

@@ -9,8 +9,7 @@ import Layout from "../layouts/Layout.astro";
     </h1>
     <div class="w-full mt-2.5">
         <div
-            data-element="exampleStore"
-            data-scope="example"
+            data-element="example"
             data-state--boolean="false"
             data-state--number="1"
             data-state--string="hello world"
@@ -51,17 +50,17 @@ import Layout from "../layouts/Layout.astro";
             Parent Element (scoped)
             <!-- Sub Element -->
             <div
-                data-element="nestedStore"
+                data-element="nested"
                 data-state--name="I am nested!"
                 data-ref="example:div"
-                data-bind--name="name"
+                data-bind--name="nested:name"
                 data-bind--boolean="example:boolean"
             >
                 Single Nested (not scoped)
                 <div
-                    data-element="doubleNestedStore"
+                    data-element="doubleNested"
                     data-state--name="I am double nested!"
-                    data-bind--name="name"
+                    data-bind--name="doubleNested:name"
                     data-bind--boolean="example:boolean"
                 >
                     Double Nested (not scoped)

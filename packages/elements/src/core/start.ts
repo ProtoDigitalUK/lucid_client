@@ -17,7 +17,6 @@ const start = (options?: {
 			bind?: string;
 			handler?: string;
 			ref?: string;
-			scope?: string;
 		};
 		seperators?: {
 			scope?: string;
@@ -53,9 +52,6 @@ const start = (options?: {
 				ref:
 					options?.attributes?.selectors?.ref ??
 					C.defaults.attributes.selectors.ref,
-				scope:
-					options?.attributes?.selectors?.scope ??
-					C.defaults.attributes.selectors.scope,
 			},
 			seperators: {
 				scope:
@@ -72,7 +68,15 @@ const start = (options?: {
 
 	// initialise elements stores
 	const elements = utils.elementSelectors.getAllElements();
-	for (const item of elements) store.initialiseStore(item[0], item[1]);
+	for (const item of elements) {
+		if (!item[1]) {
+			utils.log.warn(
+				"Please ensure all 'data-element' attributes have a value. This is needed to scope state, binds and handler actions.",
+			);
+			continue;
+		}
+		store.initialiseStore(item[0], item[1]);
+	}
 
 	handler.initialiseHandlers();
 	store.registerStoreObserver();

@@ -18,7 +18,6 @@ export type ElementsInstance = {
 				bind: string;
 				handler: string;
 				ref: string;
-				scope: string;
 			};
 			seperators: {
 				scope: string;

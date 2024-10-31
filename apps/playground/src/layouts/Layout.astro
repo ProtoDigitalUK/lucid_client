@@ -3,7 +3,7 @@
 import CookieController from "../components/CookieController.astro";
 
 interface Props {
-	title: string;
+    title: string;
 }
 
 const { title } = Astro.props;
@@ -11,113 +11,180 @@ const { title } = Astro.props;
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content="Astro description" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-	</head>
-	<body>
-		<main>
-			<slot />
-		</main>
-		<CookieController />
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="description" content="Astro description" />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="generator" content={Astro.generator} />
+        <title>{title}</title>
+    </head>
+    <body>
+        <header
+            data-element="nav"
+            data-state--open="false"
+            class="h-10 bg-black text-white"
+        >
+            <div class="flex justify-between items-center">
+                <h1>Elements</h1>
+                <button
+                    data-handler--event.click="nav:toggle"
+                    data-bind--aria-expanded="nav:open"
+                    data-bind--aria-label="nav:ariaLabel"
+                    aria-controls="main-nav"
+                >
+                    <span data-ref="nav:buttonLabel"> Open Navigation </span>
+                </button>
+            </div>
+            <nav
+                id="main-nav"
+                data-bind--aria-hidden="nav:open"
+                class="fixed inset-0 top-10 bg-gray-800 z-50 transition-transform duration-200 translate-x-full [&[aria-hidden='false']]:translate-x-0 p-2.5"
+                aria-label="Main navigation"
+            >
+                <a href="/">Home</a>
+                <a href="/about">About</a>
+            </nav>
+        </header>
+        <main>
+            <slot />
+        </main>
+        <CookieController />
 
-		<script>
-			import { events } from "@lucidclient/elements/handlers";
-			import Elements, { storeModule, registerHandler, createSignal } from "@lucidclient/elements";
-			import { speculateLinks, PrefetchData } from "@lucidclient/speculate";
+        <script>
+            import { events } from "@lucidclient/elements/handlers";
+            import Elements, {
+                storeModule,
+                registerHandler,
+                createSignal,
+            } from "@lucidclient/elements";
+            import {
+                speculateLinks,
+                PrefetchData,
+            } from "@lucidclient/speculate";
 
-			registerHandler(events);
+            registerHandler(events);
 
-			storeModule<
-				{
-					boolean: boolean;
-					number: number;
-					string: string;
-					// object: Record<string, string>;
-					// array: Array<string>;
-					customState: string;
-				},
-				{
-					init: () => void;
-					handleClick: () => void;
-				}
-			>("exampleStore", (store) => ({
-				state: {
-					customState: createSignal("hello world"),
-				},
-				actions: {
-					init() {
-						store.actions.handleClick(); // or this.handleClick()
-					},
-					handleClick: () => {
-						const [_, setBoolean] = store.state.boolean;
-						console.log('handleClick');
-						// const [getNumber] = store.state.number;
-						// const [getString] = store.state.string;
-						// const [getObject] = store.state.object;
-						// const [getArray] = store.state.array;
-						// const [getCustomState] = store.state.customState;
+            storeModule<
+                {
+                    boolean: boolean;
+                    number: number;
+                    string: string;
+                    // object: Record<string, string>;
+                    // array: Array<string>;
+                    customState: string;
+                },
+                {
+                    init: () => void;
+                    handleClick: () => void;
+                }
+            >("example", (store) => ({
+                state: {
+                    customState: createSignal("hello world"),
+                },
+                actions: {
+                    init() {
+                        store.actions.handleClick(); // or this.handleClick()
+                    },
+                    handleClick: () => {
+                        const [_, setBoolean] = store.state.boolean;
+                        console.log("handleClick");
+                        // const [getNumber] = store.state.number;
+                        // const [getString] = store.state.string;
+                        // const [getObject] = store.state.object;
+                        // const [getArray] = store.state.array;
+                        // const [getCustomState] = store.state.customState;
 
-						// setInterval(() => {
-						// 	console.log(getDisabled());
-						// }, 1000);
+                        // setInterval(() => {
+                        // 	console.log(getDisabled());
+                        // }, 1000);
 
-						// console.log(getBoolean());
-						// console.log(getNumber());
-						// console.log(getString());
-						// console.log(getObject());
-						// console.log(getArray());
-						// console.log(getCustomState());
+                        // console.log(getBoolean());
+                        // console.log(getNumber());
+                        // console.log(getString());
+                        // console.log(getObject());
+                        // console.log(getArray());
+                        // console.log(getCustomState());
 
-						// console.log(store.refs.get('button'))
-						setBoolean((prev) => !prev);
-					},
-				},
-			}));
+                        // console.log(store.refs.get('button'))
+                        setBoolean((prev) => !prev);
+                    },
+                },
+            }));
 
-			Elements.start({
-				debug: true,
-			});
+            type NavStoreState = {
+                open: boolean;
+                ariaLabel: string;
+            };
 
-			speculateLinks();
-			new PrefetchData({
-				target: "#load-data-prefetch",
-				fetch: async () => {
-					return fetch("https://api.sampleapis.com/wines/reds").then(
-						(res) => res.json(),
-					) as Promise<
-						Array<{
-							winery: string;
-							wine: string;
-							rating: {
-								average: string;
-								reviews: string;
-							};
-							location: string;
-							image: string;
-							id: number;
-						}>
-					>;
-				},
-				onClick: (data) => {
-					console.log(data);
-				},
-				staletime: 10000,
-			});
+            type NavStoreActions = {
+                toggle: (e: Event) => void;
+            };
 
-			const loadmore = document.querySelector("#load-data");
-			if (loadmore) {
-				loadmore?.addEventListener("click", async () => {
-					const data = await fetch(
-						"https://api.sampleapis.com/wines/reds",
-					).then((res) => res.json());
-					console.log(data);
-				});
-			}
-		</script>
-	</body>
+            storeModule<NavStoreState, NavStoreActions>("nav", (store) => ({
+                state: {
+                    ariaLabel: createSignal("Open Navigation"),
+                },
+                actions: {
+                    toggle: () => {
+                        const [getOpen, setOpen] = store.state.open;
+                        const [_, setAriaLabel] = store.state.ariaLabel;
+                        const buttonElement = store.refs.get("buttonLabel");
+
+                        if (getOpen()) {
+                            setAriaLabel("Open Navigation");
+                            if (buttonElement instanceof HTMLElement)
+                                buttonElement.innerText = "Open Navigation";
+                        } else {
+                            setAriaLabel("Close Navigation");
+                            if (buttonElement instanceof HTMLElement)
+                                buttonElement.innerText = "Close Navigation";
+                        }
+
+                        setOpen((prev) => !prev);
+                    },
+                },
+            }));
+
+            Elements.start({
+                debug: true,
+            });
+
+            speculateLinks();
+            new PrefetchData({
+                target: "#load-data-prefetch",
+                fetch: async () => {
+                    return fetch("https://api.sampleapis.com/wines/reds").then(
+                        (res) => res.json(),
+                    ) as Promise<
+                        Array<{
+                            winery: string;
+                            wine: string;
+                            rating: {
+                                average: string;
+                                reviews: string;
+                            };
+                            location: string;
+                            image: string;
+                            id: number;
+                        }>
+                    >;
+                },
+                onClick: (data) => {
+                    console.log(data);
+                },
+                staletime: 10000,
+            });
+
+            const loadmore = document.querySelector("#load-data");
+            if (loadmore) {
+                loadmore?.addEventListener("click", async () => {
+                    const data = await fetch(
+                        "https://api.sampleapis.com/wines/reds",
+                    ).then((res) => res.json());
+                    console.log(data);
+                });
+            }
+        </script>
+    </body>
 </html>

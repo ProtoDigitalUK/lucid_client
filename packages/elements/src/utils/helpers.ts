@@ -7,11 +7,6 @@ const buildAttribute = (attribute: string) =>
 	`${Elements.options.attributes.prefix}${attribute}`;
 
 /**
- * Creates a unique* id
- */
-const uuid = () => Math.random().toString(36).slice(2);
-
-/**
  * Parses a state attribute value and returns an inferred type
  */
 const parseStateString = (value: string | null) => {
@@ -147,7 +142,6 @@ const deepCollectAttr = (element: Element): Attr[] => {
  */
 const helpers = {
 	buildAttribute,
-	uuid,
 	parseStateString,
 	stringifyState,
 	valueType,

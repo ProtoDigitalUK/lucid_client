@@ -10,7 +10,6 @@ const C = {
 				bind: "bind--",
 				handler: "handler--",
 				ref: "ref",
-				scope: "scope",
 			},
 			seperators: {
 				scope: ":",

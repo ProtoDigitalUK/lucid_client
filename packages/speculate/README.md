@@ -1,4 +1,6 @@
-# Lucid Speculate 
+# Speculate
+
+> Part of the Lucid Client suite
 
 A simple library designed to enhance anchor elements by adding support for prefetching and prerendering. By default this uses the new experimental [Speculation Rules](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/speculationrules) API, but falls back to `<link rel="prefetch">` or `fetch` when not supported. Additionally, the library features a `PrefetchData` class, enabling asynchronous data fetching based on user interactions with specified targets.
 

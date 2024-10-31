@@ -22,9 +22,7 @@ import getStoreInterface from "./get-store-interface.js";
  * - Creates refs.
  * - Initialises handlers.
  */
-const initialiseStore = (element: HTMLElement, storeKey: string | null) => {
-	const key = storeKey ?? utils.helpers.uuid();
-
+const initialiseStore = (element: HTMLElement, storeKey: string) => {
 	createRoot((dispose) => {
 		// -----------------
 		// sreate store
@@ -58,7 +56,7 @@ const initialiseStore = (element: HTMLElement, storeKey: string | null) => {
 			utils.helpers.buildAttribute(
 				Elements.options.attributes.selectors.element,
 			),
-			key,
+			storeKey,
 		);
 		store[1]("attributeMaps", createAttributesMap(element));
 		store[1]("stateObserver", state.stateObserver(element, store));
@@ -71,14 +69,14 @@ const initialiseStore = (element: HTMLElement, storeKey: string | null) => {
 
 		// -----------------
 		// update Elements instance
-		Elements.stores.set(key, store);
+		Elements.stores.set(storeKey, store);
 		Elements.trackedElements.add(element);
 
 		store[1]("initialised", true);
 		void store[0].actions.init?.();
 
 		utils.log.debug(
-			`Store initialised for element "${element.id || element.tagName}" with key "${key}"`,
+			`Store initialised for element "${element.id || element.tagName}" with key "${storeKey}"`,
 		);
 	});
 };
