@@ -186,8 +186,10 @@ When a store is initialised, it always attempts to call the `init` action on the
 - [x] Add interface to use for the store module instead of passing the store in.
 - [x] Add scoping support to attribute values? So elements store can define a scope via `data-scope="name"` and then bind, refs and handles can prefix values with `scopename:`. A bind for example, would look like `data-bind--disabled="scopename:statekey"`.
 - [x] Constant attributes prefixes need to be configurable via the Elements.start method. Smae with seperators config.
+- [] Handles shouldnt be grabbed in the context of a store and instead globally. Based on state and scope used the store used should be determined. Ie. if no scope exists, find the closest parent `data-element` and use that store. If a scope exists, use the scope to lookup the store.
 - [] Implement solution for plugins and registering handlers.
 - [] Add support for function constructors on handler actions - this is optional, by default you should use store module actions. Feature opt-in?
+- [] Change scoping to use `data-element="name"` instead of `data-scope="name"` to simplify it. Would allow you to opt it to scoping a value, if you omit the scope prefix `scope:` youd have to be aware about name collisions between nested stores.
 - [] Create Events handler plugin.
 - [] Create Intersection handler plugin.
 - [] Create DOM handler plugin.

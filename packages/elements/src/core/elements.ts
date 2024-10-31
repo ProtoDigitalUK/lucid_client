@@ -11,6 +11,7 @@ const Elements: ElementsInstance = {
 	},
 	started: false,
 	handlers: new Map(),
+	handlerAttributes: new Map(),
 	stores: new Map(),
 	storeModules: new Map(),
 	trackedElements: new Set(),

@@ -1,6 +1,5 @@
 import type {
 	BindAttributesMap,
-	HandlerAttributesMap,
 	StateAttribtuesMap,
 } from "../../types/index.js";
 import Elements from "../elements.js";
@@ -16,7 +15,6 @@ const createAttributesMap = (
 	scope: string | null;
 	state: StateAttribtuesMap;
 	bind: BindAttributesMap;
-	handler: HandlerAttributesMap;
 } => {
 	const scope =
 		element.getAttribute(
@@ -24,7 +22,6 @@ const createAttributesMap = (
 		) ?? null;
 	const stateAttributes: StateAttribtuesMap = new Map();
 	const bindAttributes: BindAttributesMap = new Map();
-	const handlerAttributes: HandlerAttributesMap = new Map();
 
 	if (
 		!element.hasAttribute(
@@ -40,7 +37,6 @@ const createAttributesMap = (
 			scope: scope,
 			state: stateAttributes,
 			bind: bindAttributes,
-			handler: handlerAttributes,
 		};
 	}
 
@@ -50,9 +46,6 @@ const createAttributesMap = (
 	const bindPrefix = utils.helpers.buildAttribute(
 		Elements.options.attributes.selectors.bind,
 	); //* 'data-bind--'
-	const handlerPrefix = utils.helpers.buildAttribute(
-		Elements.options.attributes.selectors.handler,
-	); //* 'data-handler--'
 
 	//* for state bindings - state can only be defined on the parent
 	for (const attr of element.attributes) {
@@ -84,35 +77,12 @@ const createAttributesMap = (
 			}
 			bindAttributes.get(stateKey)?.add(bindName);
 		}
-		//* for handlers
-		else if (name.startsWith(handlerPrefix)) {
-			const handlerParts = name
-				.slice(handlerPrefix.length)
-				.split(Elements.options.attributes.seperators.handler);
-			if (handlerParts.length === 2) {
-				const [namespace, specifier] = handlerParts;
-				if (!namespace || !specifier) continue;
-
-				if (!handlerAttributes.has(namespace)) {
-					handlerAttributes.set(namespace, new Map());
-				}
-
-				const namespaceMap = handlerAttributes.get(namespace);
-				if (namespaceMap) {
-					if (!namespaceMap.has(specifier)) {
-						namespaceMap.set(specifier, new Set());
-					}
-					namespaceMap.get(specifier)?.add(value);
-				}
-			}
-		}
 	}
 
 	return {
 		scope: scope,
 		state: stateAttributes,
 		bind: bindAttributes,
-		handler: handlerAttributes,
 	};
 };
 

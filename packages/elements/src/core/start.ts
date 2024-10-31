@@ -2,6 +2,7 @@ import utils from "../utils/index.js";
 import C from "./constants.js";
 import Elements from "./elements.js";
 import store from "./store/index.js";
+import handler from "./handler/index.js";
 
 /**
  * Sets up and starts the Elements library
@@ -66,12 +67,14 @@ const start = (options?: {
 			},
 		},
 	};
+	Elements.handlerAttributes = handler.createAttributeMap();
 	Elements.started = true;
 
 	// initialise elements stores
 	const elements = utils.elementSelectors.getAllElements();
 	for (const item of elements) store.initialiseStore(item[0], item[1]);
 
+	handler.initialiseHandlers();
 	store.registerStoreObserver();
 
 	utils.log.debug("library started.");

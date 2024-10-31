@@ -1,4 +1,4 @@
-import type { Store, StoreState, StoreActions } from "./index.js";
+import type { HandlerAttributes } from "./index.js";
 
 export type Handler = {
 	/**
@@ -6,13 +6,10 @@ export type Handler = {
 	 */
 	namespace: string;
 	/**
-	 * For each store, this is called on initialisation
+	 * Called once on the iniitalisation of Elements
 	 */
-	initialise: (store: Store<StoreState, StoreActions>) => void;
-	/**
-	 * When a store is destroyed, this is called. This can be used to remove event listeners, etc.
-	 */
-	destroy?: (store: Store<StoreState, StoreActions>) => void;
+	initialise: (attributes: HandlerAttributes) => void;
+	destroy?: (attributes: HandlerAttributes) => void;
 };
 
 export type Handlers = Map<string, Handler>;

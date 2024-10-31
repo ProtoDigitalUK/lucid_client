@@ -4,6 +4,7 @@ import type {
 	StoreActions,
 	StoreState,
 	Handlers,
+	HandlerAttributesMap,
 } from "./index.js";
 
 export type ElementsInstance = {
@@ -27,6 +28,7 @@ export type ElementsInstance = {
 	};
 	started: boolean;
 	handlers: Handlers;
+	handlerAttributes: HandlerAttributesMap;
 	storeModules: Map<string, StoreModule<StoreState, StoreActions>>;
 	stores: Map<string, Store<StoreState, StoreActions>>;
 	trackedElements: WeakSet<HTMLElement>;

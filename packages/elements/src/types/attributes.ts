@@ -26,15 +26,13 @@ export type BindAttributesMap = Map<StateKey, Set<AttributeName>>;
 // ----------------
 // Handlers Attributes
 
-type HandlerNamespace = string;
+export type HandlerNamespace = string;
 type HandlerSpecifier = string;
 type HandlerAction = string;
+export type HandlerAttributes = Map<HandlerSpecifier, Set<HandlerAction>>;
 
 /**
  * Stores a Map of namespaces, their specifiers and all handlers functions \
  * `data-handler--namesapce.specifier="action"`
  */
-export type HandlerAttributesMap = Map<
-	HandlerNamespace,
-	Map<HandlerSpecifier, Set<HandlerAction>>
->;
+export type HandlerAttributesMap = Map<HandlerNamespace, HandlerAttributes>;

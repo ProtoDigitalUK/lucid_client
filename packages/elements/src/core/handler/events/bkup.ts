@@ -1,6 +1,12 @@
-import type { Handler, HandlerAttributes } from "../../../types/index.js";
+import type {
+	Handler,
+	Store,
+	StoreState,
+	StoreActions,
+} from "../../../types/index.js";
 import Elements from "../../elements.js";
-import store from "../../store/index.js";
+import utils from "../../../utils/index.js";
+import scope from "../../scope/index.js";
 
 /**
  * The namespace for the event handler
@@ -16,17 +22,25 @@ const createSelector = (namespace: string, event: string, action: string) =>
 /**
  * Handles registering and unregistering event listeners
  */
-const registerEvents = (attributes: HandlerAttributes, register: boolean) => {
-	for (const event of attributes) {
+const registerEvents = (
+	store: Store<StoreState, StoreActions>,
+	register: boolean,
+) => {
+	const events = store[0].attributeMaps?.handler.get(namespace);
+	if (!events) return;
+
+	for (const event of events) {
 		const [eventName, actions] = event;
+
 		for (const key of actions) {
-			const action = store.findAction(key);
+			const actionKey = scope.removeScope(key);
+
+			const action = store[0].actions[actionKey];
 			if (!action) continue;
 
 			const targets = document.querySelectorAll(
 				createSelector(namespace, eventName, key),
 			);
-
 			for (const target of targets) {
 				if (register) {
 					target.addEventListener(eventName, (e) => {
@@ -47,8 +61,11 @@ const registerEvents = (attributes: HandlerAttributes, register: boolean) => {
  */
 const eventsHandler: Handler = {
 	namespace: namespace,
-	initialise: (attributes) => registerEvents(attributes, true),
-	destroy: (attributes) => registerEvents(attributes, false),
+	initialise: (store) => registerEvents(store, true),
+	destroy: (store) => {
+		registerEvents(store, false);
+		utils.log.debug(`Handler destroyed for namespace "${namespace}"`);
+	},
 };
 
 export default eventsHandler;

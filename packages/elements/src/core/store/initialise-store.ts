@@ -64,11 +64,10 @@ const initialiseStore = (element: HTMLElement, storeKey: string | null) => {
 		store[1]("stateObserver", state.stateObserver(element, store));
 
 		// -----------------
-		// handle state, attribute bindings and handlers
+		// handle state, attribute bindings
 		state.createState(store);
 		state.watchState(element, store);
 		ref.createRefs(element, store);
-		for (const handler of Elements.handlers.values()) handler.initialise(store);
 
 		// -----------------
 		// update Elements instance

@@ -1,23 +1,19 @@
 import type { SetStoreFunction } from "solid-js/store";
 import type { Signal } from "solid-js";
-import type {
-	BindAttributesMap,
-	HandlerAttributesMap,
-	StateAttribtuesMap,
-} from "./index.js";
+import type { BindAttributesMap, StateAttribtuesMap } from "./index.js";
 
 export type AttributeMaps = {
 	scope: string | null;
 	state: StateAttribtuesMap;
 	bind: BindAttributesMap;
-	handler: HandlerAttributesMap;
 };
 
 export type Refs = Map<string, Element | Element[]>;
 
 export type StoreState = Record<string, unknown>;
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-export type StoreActions = Record<string, (...args: any[]) => unknown>;
+export type Action = (...args: any[]) => unknown;
+export type StoreActions = Record<string, Action>;
 
 export type StoreData<S extends StoreState, A extends StoreActions> = {
 	initialised: boolean;
