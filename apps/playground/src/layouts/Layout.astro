@@ -38,9 +38,10 @@ const { title } = Astro.props;
             </div>
             <nav
                 id="main-nav"
-                data-bind--aria-hidden="nav:open"
-                class="fixed inset-0 top-10 bg-gray-800 z-50 transition-transform duration-200 translate-x-full [&[aria-hidden='false']]:translate-x-0 p-2.5"
+                data-bind--aria-hidden="nav:closed"
+                class="[&[aria-hidden='false']]:translate-x-0 fixed inset-0 top-10 bg-gray-800 z-50 transition-transform duration-200 translate-x-full p-2.5"
                 aria-label="Main navigation"
+                aria-hidden="true"
             >
                 <a href="/">Home</a>
                 <a href="/about">About</a>
@@ -119,6 +120,7 @@ const { title } = Astro.props;
 
             type NavStoreActions = {
                 toggle: (e: Event) => void;
+                closed: () => boolean;
             };
 
             storeModule<NavStoreState, NavStoreActions>("nav", (store) => ({
@@ -142,6 +144,10 @@ const { title } = Astro.props;
                         }
 
                         setOpen((prev) => !prev);
+                    },
+                    closed: () => {
+                        const [getOpen] = store.state.open;
+                        return !getOpen();
                     },
                 },
             }));

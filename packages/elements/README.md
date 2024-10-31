@@ -61,9 +61,10 @@ Elements.start();
     </div>
     <nav
         id="main-nav"
-        data-bind--aria-hidden="nav:!open"
+        data-bind--aria-hidden="nav:closed"
         class="[&[aria-hidden='false']]:translate-x-0 fixed inset-0 top-10 bg-gray-800 z-50 transition-transform duration-200 translate-x-full p-2.5"
         aria-label="Main navigation"
+        aria-hidden="true"
     >
         <a href="/">Home</a>
         <a href="/about">About</a>
@@ -85,6 +86,7 @@ type NavStoreState = {
 
 type NavStoreActions = {
     toggle: (e: Event) => void;
+    closed: () => boolean;
 }
 
 storeModule<NavStoreState, NavStoreActions>("nav", (store) => ({
@@ -109,6 +111,10 @@ storeModule<NavStoreState, NavStoreActions>("nav", (store) => ({
 
             setOpen((prev) => !prev);
         },
+        closed: () => {
+            const [getOpen] = store.state.open;
+            return !getOpen(); 
+        }
     },
 }));
 ```
@@ -158,13 +164,13 @@ These are two way binded, meaning if the attribute value is changed outside of t
 
 ### Bind `data-bind--`
 
-This syntax indicates an attribute binding and takes the name of the variable you want to bind to the attribute. Please note that the value must always be lowercase.
+This syntax indicates an attribute binding and takes the name of the state or action you want to bind to the attribute. Please note that the value must always be lowercase.
 
-For example, if you had an attribute binding of `data-bind--disabled="example:statekey"`, whenever the statekey signal changes on the example store, the attribute of `disabled` will be updated to reflect that new value. If your state is a `boolean` you can prefix it with `!` to negate it.
+For example, if you had an attribute binding of `data-bind--disabled="example:state"`, whenever the state signal changes on the example store, the attribute of `disabled` will be updated to reflect that new value. You can also bind to actions, so if you had an action `example:action` you could bind to it with `data-bind--disabled="example:action"` which use the returned value as the attribute value.
 
 For `array` and `object` state types you can reference values and indexes using dot and bracket notation respectively. Ie. `data-bind--data-object="example:object.hello"` and `data-bind--data-array="example:array[0]"`.
 
-Note you cannot do any conditional logic in binds, so something like `data-bind--disabled="example:boolean1 != example:boolean2"` will not work. This is because for the time being we are not able to make use of `eval` or function constructors to evaluate the expression due to the `unsafe-eval` CSP policy.
+Note you cannot do any conditional logic in binds, so something like `data-bind--disabled="example:boolean1 != example:boolean2"` will not work. This is because for the time being we are not able to make use of `eval` or function constructors to evaluate the expression due to the `unsafe-eval` CSP policy. If you want to do something like this, you can set the value to that of a action on your store module and have the action return the condition instead.
 
 ### Handler `data-handler--`
 
@@ -199,7 +205,7 @@ Any attributes that are suffixed with `[]` will be stored as an array of element
 - [x] Implement solution for plugins and registering handlers.
 - [x] Change scoping to use `data-element="name"` instead of `data-scope="name"` to reduce boilerplate and force scoping. Is more explicit and easier to understand whats going on.
 - [-] Create Events handler plugin. Needs destroy method updating.
-- [] Add support for !boolean in bind values.
+- [] Instead of supporting !state for booleans, allow attribute bindings to set actions as well allowing you to do any conditionals you need within them.
 - [] Create Intersection handler plugin.
 - [] Create DOM handler plugin.
 - [] Create Focus Trap handler plugin.
