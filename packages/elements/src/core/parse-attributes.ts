@@ -8,7 +8,7 @@ import scope from "./scope/index.js";
 
 /**
  * Responsible for extracting all the Elements attributes and config required for setup
- * - Gets all elements with data-element attribute and their store key
+ * - Gets all elements with data-store attribute and their store key
  * - Creates a store attribute map containing all of the state, binds and handlers for each store
  * - Creates a handler attribute map containing all of the handlers for each handler namespace
  */
@@ -22,7 +22,7 @@ const parseAttributes = (): {
 
 	const prefix = {
 		store: utils.helpers.buildAttribute(
-			Elements.options.attributes.selectors.element,
+			Elements.options.attributes.selectors.store,
 		),
 		state: utils.helpers.buildAttribute(
 			Elements.options.attributes.selectors.state,
@@ -122,7 +122,7 @@ const parseAttributes = (): {
 			element,
 			element.getAttribute(
 				utils.helpers.buildAttribute(
-					Elements.options.attributes.selectors.element,
+					Elements.options.attributes.selectors.store,
 				),
 			),
 		]),

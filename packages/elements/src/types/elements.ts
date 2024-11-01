@@ -14,7 +14,7 @@ export type ElementsInstance = {
 		attributes: {
 			prefix: string;
 			selectors: {
-				element: string;
+				store: string;
 				state: string;
 				bind: string;
 				handler: string;

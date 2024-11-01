@@ -13,7 +13,7 @@ const start = (options?: {
 	attributes?: {
 		prefix?: string;
 		selectors?: {
-			element?: string;
+			store?: string;
 			state?: string;
 			bind?: string;
 			handler?: string;
@@ -38,9 +38,9 @@ const start = (options?: {
 		attributes: {
 			prefix: options?.attributes?.prefix ?? C.defaults.attributes.prefix,
 			selectors: {
-				element:
-					options?.attributes?.selectors?.element ??
-					C.defaults.attributes.selectors.element,
+				store:
+					options?.attributes?.selectors?.store ??
+					C.defaults.attributes.selectors.store,
 				state:
 					options?.attributes?.selectors?.state ??
 					C.defaults.attributes.selectors.state,
@@ -74,7 +74,7 @@ const start = (options?: {
 	for (const item of elements) {
 		if (!item[1]) {
 			utils.log.warn(
-				"Please ensure all 'data-element' attributes have a value. This is needed to scope state, binds and handler actions.",
+				"Please ensure all 'data-store' attributes have a value. This is needed to scope state, binds and handler actions.",
 			);
 			continue;
 		}

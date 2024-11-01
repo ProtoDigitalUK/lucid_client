@@ -27,7 +27,7 @@ const registerStoreObserver = () => {
  */
 const removeElement = (element: HTMLElement) => {
 	const storeKey = element.getAttribute(
-		utils.helpers.buildAttribute(Elements.options.attributes.selectors.element),
+		utils.helpers.buildAttribute(Elements.options.attributes.selectors.store),
 	);
 	if (!storeKey) return;
 

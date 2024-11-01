@@ -21,7 +21,7 @@ const { title } = Astro.props;
     </head>
     <body>
         <header
-            data-element="nav"
+            data-store="nav"
             data-state--open="false"
             class="h-10 bg-black text-white"
         >
@@ -89,7 +89,6 @@ const { title } = Astro.props;
                     },
                     handleClick: () => {
                         const [_, setBoolean] = store.state.boolean;
-                        console.log("handleClick");
                         // const [getNumber] = store.state.number;
                         // const [getString] = store.state.string;
                         // const [getObject] = store.state.object;

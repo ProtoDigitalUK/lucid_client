@@ -44,7 +44,7 @@ Elements.start();
 
 ```html
 <header
-    data-element="nav"
+    data-store="nav"
     data-state--open="false"
     class="h-10 bg-black text-white"
 >
@@ -125,19 +125,19 @@ storeModule<NavStoreState, NavStoreActions>("nav", (store) => ({
 
 There are 4 main types of attributes Elements currently registers, these allow you to register state, binds, handlers and refs.
 
-### Store `data-element`
+### Store `data-store`
 
-To denote an element as a store, use the `data-element` attribute. This requires a value to be set against it, which is used to scope state and handler actions as well as to reference a store module if you choose to register one.
+To denote an element as a store, use the `data-store` attribute. This requires a value to be set against it, which is used to scope state and handler actions as well as to reference a store module if you choose to register one.
 
 Stores can be nested, so you can have a parent element with a store and a child element with a store. This then allows children to reference the parent store via the scoped state.
 
 ```html
 <header
-    data-element="nav"
+    data-store="nav"
     data-state--open="false"
 >
     <div
-        data-element="content"
+        data-store="content"
         data-state--label="Hello World"
         data-bind--aria-expanded="nav:open"
     >
@@ -148,7 +148,7 @@ Stores can be nested, so you can have a parent element with a store and a child 
 
 ### State `data-state--`
 
-Any element that has a store registered against with via the `data-element` attribute can also register state via the `data-state--` attribute. You can define these using the `data-state--{statekey}="{value}"` attribute, where the `statekey` is the name of the signal and the value is the default value. These support a few different data types including `string`, `number`, `boolean`, `object` and `array`.
+Any element that has a store registered against with via the `data-store` attribute can also register state via the `data-state--` attribute. You can define these using the `data-state--{statekey}="{value}"` attribute, where the `statekey` is the name of the signal and the value is the default value. These support a few different data types including `string`, `number`, `boolean`, `object` and `array`.
 
 These are reactive, meaning on change they will:
 
@@ -206,6 +206,7 @@ Any attributes that are suffixed with `[]` will be stored as an array of element
 - [x] Change scoping to use `data-element="name"` instead of `data-scope="name"` to reduce boilerplate and force scoping. Is more explicit and easier to understand whats going on.
 - [x] Instead of supporting !state for booleans, allow attribute bindings to set actions as well allowing you to do any conditionals you need within them.
 - [x] Update how attributes are read into attribute maps. Currently each store and the init handlers all handle this themselves. Instead, at a top level we should select all the valid attributes and then pass them to the store and handlers as required.
+- [x] Rename the data-element attribute to data-store.
 - [-] Create Events handler plugin. Needs destroy method updating.
 - [] Create Intersection handler plugin.
 - [] Create DOM handler plugin.

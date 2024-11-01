@@ -5,11 +5,11 @@ const C = {
 		attributes: {
 			prefix: "data-",
 			selectors: {
-				element: "element",
+				store: "store",
+				ref: "ref",
 				state: "state--",
 				bind: "bind--",
 				handler: "handler--",
-				ref: "ref",
 			},
 			seperators: {
 				scope: ":",
