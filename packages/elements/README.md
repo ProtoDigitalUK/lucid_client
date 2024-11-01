@@ -61,7 +61,7 @@ Elements.start();
     </div>
     <nav
         id="main-nav"
-        data-bind--aria-hidden="nav:closed"
+        data-bind--aria-hidden="nav:@closed"
         class="[&[aria-hidden='false']]:translate-x-0 fixed inset-0 top-10 bg-gray-800 z-50 transition-transform duration-200 translate-x-full p-2.5"
         aria-label="Main navigation"
         aria-hidden="true"
@@ -164,9 +164,9 @@ These are two way binded, meaning if the attribute value is changed outside of t
 
 ### Bind `data-bind--`
 
-This syntax indicates an attribute binding and takes the name of the state or action you want to bind to the attribute. Please note that the value must always be lowercase.
+This syntax indicates an attribute binding and takes the name of the state or action you want to bind to the attribute. When the state is mutated, the attribute will be updated to reflect the new value.
 
-For example, if you had an attribute binding of `data-bind--disabled="example:state"`, whenever the state signal changes on the example store, the attribute of `disabled` will be updated to reflect that new value. You can also bind to actions, so if you had an action `example:action` you could bind to it with `data-bind--disabled="example:action"` which use the returned value as the attribute value.
+For example, if you had an attribute binding of `data-bind--disabled="example:state"`, whenever the state signal changes on the example store, the attribute of `disabled` will be updated to reflect that new value. You can also bind to actions, so if you had an action called `isDisabled` in your store module, you could bind to it with `data-bind--disabled="example:@isDisabled"` which use the returned value as the attribute value.
 
 For `array` and `object` state types you can reference values and indexes using dot and bracket notation respectively. Ie. `data-bind--data-object="example:object.hello"` and `data-bind--data-array="example:array[0]"`.
 
@@ -204,8 +204,9 @@ Any attributes that are suffixed with `[]` will be stored as an array of element
 - [x] Handles shouldnt be grabbed in the context of a store and instead globally. Based on state and scope used the store used should be determined.
 - [x] Implement solution for plugins and registering handlers.
 - [x] Change scoping to use `data-element="name"` instead of `data-scope="name"` to reduce boilerplate and force scoping. Is more explicit and easier to understand whats going on.
+- [x] Instead of supporting !state for booleans, allow attribute bindings to set actions as well allowing you to do any conditionals you need within them.
+- [] Update how attributes are read into attribute maps. Currently each store and the init handlers all handle this themselves. Instead, at a top level we should select all the valid attributes and then pass them to the store and handlers as required.
 - [-] Create Events handler plugin. Needs destroy method updating.
-- [] Instead of supporting !state for booleans, allow attribute bindings to set actions as well allowing you to do any conditionals you need within them.
 - [] Create Intersection handler plugin.
 - [] Create DOM handler plugin.
 - [] Create Focus Trap handler plugin.

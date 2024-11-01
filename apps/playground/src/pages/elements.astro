@@ -41,7 +41,7 @@ import Layout from "../layouts/Layout.astro";
                 data-ref="example:span[]"></span>
             <button
                 data-handler--event.click="example:handleClick"
-                data-handler--dom.text="$example:boolean ? 'Hide Content' : 'Show Content'"
+                data-handler--dom.text="example:contentCopy"
                 data-ref="example:button"
                 class="cursor-pointer pointer-events-auto"
             >

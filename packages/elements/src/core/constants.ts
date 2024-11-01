@@ -15,6 +15,9 @@ const C = {
 				scope: ":",
 				handler: ".",
 			},
+			denote: {
+				action: "@",
+			},
 		},
 	},
 };

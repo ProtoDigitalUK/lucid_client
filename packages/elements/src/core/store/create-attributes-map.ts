@@ -1,5 +1,6 @@
 import type {
-	BindAttributesMap,
+	BindActionAttributeMap,
+	BindStateAttributesMap,
 	StateAttribtuesMap,
 } from "../../types/index.js";
 import Elements from "../elements.js";
@@ -14,7 +15,8 @@ const createAttributesMap = (
 ): {
 	scope: string | null;
 	state: StateAttribtuesMap;
-	bind: BindAttributesMap;
+	bind: BindStateAttributesMap;
+	bindActions: BindActionAttributeMap;
 } => {
 	const scope =
 		element.getAttribute(
@@ -23,7 +25,8 @@ const createAttributesMap = (
 			),
 		) ?? null;
 	const stateAttributes: StateAttribtuesMap = new Map();
-	const bindAttributes: BindAttributesMap = new Map();
+	const bindAttributes: BindStateAttributesMap = new Map();
+	const bindActionsAttributes: BindActionAttributeMap = new Map();
 
 	if (
 		!element.hasAttribute(
@@ -39,6 +42,7 @@ const createAttributesMap = (
 			scope: scope,
 			state: stateAttributes,
 			bind: bindAttributes,
+			bindActions: bindActionsAttributes,
 		};
 	}
 
@@ -72,12 +76,17 @@ const createAttributesMap = (
 		//* for binds
 		if (name.startsWith(bindPrefix)) {
 			const bindName = name.slice(bindPrefix.length);
+			const bindValue = utils.helpers.parseBindValue(value);
 
-			const stateKey = utils.helpers.stateFromAttrValue(value);
-			if (!bindAttributes.has(stateKey)) {
-				bindAttributes.set(stateKey, new Set());
+			if (bindValue.type === "state") {
+				if (!bindAttributes.has(bindValue.value))
+					bindAttributes.set(bindValue.value, new Set());
+				bindAttributes.get(bindValue.value)?.add(bindName);
+			} else {
+				if (!bindActionsAttributes.has(bindValue.value))
+					bindActionsAttributes.set(bindValue.value, new Set());
+				bindActionsAttributes.get(bindValue.value)?.add(bindName);
 			}
-			bindAttributes.get(stateKey)?.add(bindName);
 		}
 	}
 
@@ -85,6 +94,7 @@ const createAttributesMap = (
 		scope: scope,
 		state: stateAttributes,
 		bind: bindAttributes,
+		bindActions: bindActionsAttributes,
 	};
 };
 

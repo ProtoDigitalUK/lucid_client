@@ -52,13 +52,13 @@ const updateAttributes = (
 	},
 	attributeMaps: AttributeMaps | undefined,
 ) => {
-	if (!attributeMaps?.bind) return;
+	if (!attributeMaps?.bindState) return;
 
 	const stateKey = attributeMaps.scope
 		? scope.scopeValue(attributeMaps.scope, state.key)
 		: state.key;
 
-	const affectedAttributes = attributeMaps.bind.get(stateKey);
+	const affectedAttributes = attributeMaps.bindState.get(stateKey);
 	if (!affectedAttributes) return;
 
 	const bindPrefix = utils.helpers.buildAttribute(

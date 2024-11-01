@@ -13,6 +13,7 @@ import ref from "../ref/index.js";
 import Elements from "../elements.js";
 import createAttributesMap from "./create-attributes-map.js";
 import getStoreInterface from "./get-store-interface.js";
+import bind from "../bind/index.js";
 
 /**
  * Creates a store for the given element if one hasnt already been specified.
@@ -66,6 +67,7 @@ const initialiseStore = (element: HTMLElement, storeKey: string) => {
 		state.createState(store);
 		state.watchState(element, store);
 		ref.createRefs(element, store);
+		bind.registerActionEffects(store);
 
 		// -----------------
 		// update Elements instance

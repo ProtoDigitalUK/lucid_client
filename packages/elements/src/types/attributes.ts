@@ -13,17 +13,6 @@ export type StateAttribtuesMap = Map<
 >;
 
 // ----------------
-// Bind Attributes
-
-// the name of the attribute the bind creates and maps to
-type AttributeName = string;
-
-/**
- * Stores a map of state keys and all of their bind attributes. \
- */
-export type BindAttributesMap = Map<StateKey, Set<AttributeName>>;
-
-// ----------------
 // Handlers Attributes
 
 export type HandlerNamespace = string;
@@ -36,3 +25,15 @@ export type HandlerAttributes = Map<HandlerSpecifier, Set<HandlerAction>>;
  * `data-handler--namesapce.specifier="action"`
  */
 export type HandlerAttributesMap = Map<HandlerNamespace, HandlerAttributes>;
+
+// ----------------
+// Bind Attributes
+
+// the name of the attribute the bind creates and maps to
+type AttributeName = string;
+
+/**
+ * Stores a map of state keys and all of their bind attributes. \
+ */
+export type BindStateAttributesMap = Map<StateKey, Set<AttributeName>>;
+export type BindActionAttributeMap = Map<HandlerAction, Set<AttributeName>>;

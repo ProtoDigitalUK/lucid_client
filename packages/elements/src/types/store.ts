@@ -1,11 +1,12 @@
 import type { SetStoreFunction } from "solid-js/store";
 import type { Signal } from "solid-js";
-import type { BindAttributesMap, StateAttribtuesMap } from "./index.js";
+import type { BindStateAttributesMap, StateAttribtuesMap } from "./index.js";
 
 export type AttributeMaps = {
 	scope: string | null;
 	state: StateAttribtuesMap;
-	bind: BindAttributesMap;
+	bindState: BindStateAttributesMap;
+	bindActions: BindStateAttributesMap;
 };
 
 export type Refs = Map<string, Element | Element[]>;
