@@ -7,7 +7,7 @@ import utils from "../../utils/index.js";
  * Updates a single element's attribute based on its binding value
  */
 const resolveBindingValue = (
-	element: HTMLElement | Element,
+	element: Element,
 	attribute: string,
 	targetKey: string,
 	state: {
@@ -45,7 +45,7 @@ const resolveBindingValue = (
  * Updates the attribute bindings for state. Updates the target element and all children.
  */
 const updateAttributes = (
-	parent: HTMLElement,
+	parent: Element,
 	state: {
 		key: string;
 		value: unknown;

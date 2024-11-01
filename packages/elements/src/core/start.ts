@@ -3,6 +3,7 @@ import C from "./constants.js";
 import Elements from "./elements.js";
 import store from "./store/index.js";
 import handler from "./handler/index.js";
+import parseAttributes from "./parse-attributes.js";
 
 /**
  * Sets up and starts the Elements library
@@ -63,11 +64,13 @@ const start = (options?: {
 			},
 		},
 	};
-	Elements.handlerAttributes = handler.createAttributeMap();
-	Elements.started = true;
+
+	// parse attributes
+	const { elements, handlerAttributes, storeAttributes } = parseAttributes();
+
+	Elements.handlerAttributes = handlerAttributes;
 
 	// initialise elements stores
-	const elements = utils.elementSelectors.getAllElements();
 	for (const item of elements) {
 		if (!item[1]) {
 			utils.log.warn(
@@ -75,12 +78,14 @@ const start = (options?: {
 			);
 			continue;
 		}
-		store.initialiseStore(item[0], item[1]);
+
+		store.initialiseStore(item[0], item[1], storeAttributes.get(item[1]));
 	}
 
 	handler.initialiseHandlers();
 	store.registerStoreObserver();
 
+	Elements.started = true;
 	utils.log.debug("library started.");
 };
 

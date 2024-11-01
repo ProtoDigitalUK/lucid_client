@@ -5,7 +5,7 @@ import utils from "../../utils/index.js";
  * Updates the state attribute for the given element if the value has changed
  */
 const updateAttributes = (
-	element: HTMLElement,
+	element: Element,
 	state: {
 		key: string;
 		value: unknown;

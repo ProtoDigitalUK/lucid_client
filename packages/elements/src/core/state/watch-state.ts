@@ -9,7 +9,7 @@ import utils from "../../utils/index.js";
  * - Updates attribute bindings
  */
 const watchState = (
-	element: HTMLElement,
+	element: Element,
 	store: Store<StoreState, StoreActions>,
 ) => {
 	for (const [key, signal] of Object.entries(store[0].state))
@@ -24,7 +24,7 @@ const watchState = (
  * Attribute bindings are update by the state-observer.
  */
 const registerStateEffect = (
-	element: HTMLElement,
+	element: Element,
 	key: string,
 	signal: Signal<unknown>,
 ) => {

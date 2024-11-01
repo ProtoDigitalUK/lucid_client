@@ -10,7 +10,7 @@ import Elements from "../elements.js";
  * - Updates the attribute bindings
  */
 const handleMutation = (
-	target: HTMLElement,
+	target: Element,
 	attribute: string,
 	oldValue: string | null,
 	get: Store<StoreState, StoreActions>[0],
@@ -33,7 +33,7 @@ const handleMutation = (
  * This allows for you to update the state attributes outside of the Elements library and Elements will keep it in sync with its state
  */
 const stateObserver = (
-	element: HTMLElement,
+	element: Element,
 	store: Store<StoreState, StoreActions>,
 ): MutationObserver => {
 	const [get] = store;
@@ -54,7 +54,7 @@ const stateObserver = (
 		for (const mutation of mutations) {
 			if (
 				mutation.type === "attributes" &&
-				mutation.target instanceof HTMLElement &&
+				mutation.target instanceof Element &&
 				mutation.attributeName
 			) {
 				handleMutation(

@@ -6,12 +6,12 @@ import type {
 	StoreModule,
 	StoreActions,
 	StoreState,
+	AttributeMaps,
 } from "../../types/store.js";
 import utils from "../../utils/index.js";
 import state from "../state/index.js";
 import ref from "../ref/index.js";
 import Elements from "../elements.js";
-import createAttributesMap from "./create-attributes-map.js";
 import getStoreInterface from "./get-store-interface.js";
 import bind from "../bind/index.js";
 
@@ -23,20 +23,25 @@ import bind from "../bind/index.js";
  * - Creates refs.
  * - Initialises handlers.
  */
-const initialiseStore = (element: HTMLElement, storeKey: string) => {
+const initialiseStore = (
+	element: Element,
+	storeKey: string,
+	attributeMaps?: AttributeMaps,
+) => {
 	createRoot((dispose) => {
 		// -----------------
 		// sreate store
 		const store = createStore<StoreData<StoreState, StoreActions>>({
 			initialised: false,
 			dispose: dispose,
+			attributeMaps: attributeMaps,
 			state: {},
 			actions: {},
 			refs: new Map(),
 		}) satisfies Store<StoreState, StoreActions>;
 
 		// get store module and update the store
-		if (storeKey !== null && Elements.storeModules.has(storeKey)) {
+		if (Elements.storeModules.has(storeKey)) {
 			const storeModuleFn = Elements.storeModules.get(storeKey) as StoreModule<
 				StoreState,
 				StoreActions
@@ -53,13 +58,6 @@ const initialiseStore = (element: HTMLElement, storeKey: string) => {
 
 		// -----------------
 		// set data
-		element.setAttribute(
-			utils.helpers.buildAttribute(
-				Elements.options.attributes.selectors.element,
-			),
-			storeKey,
-		);
-		store[1]("attributeMaps", createAttributesMap(element));
 		store[1]("stateObserver", state.stateObserver(element, store));
 
 		// -----------------

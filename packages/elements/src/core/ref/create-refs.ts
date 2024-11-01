@@ -14,7 +14,7 @@ import utils from "../../utils/index.js";
  * - Otherwise it will create a single element
  */
 const createRefs = (
-	element: HTMLElement,
+	element: Element,
 	store: Store<StoreState, StoreActions>,
 ) => {
 	const refPrefix = utils.helpers.buildAttribute(

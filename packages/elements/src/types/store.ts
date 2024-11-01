@@ -9,6 +9,8 @@ export type AttributeMaps = {
 	bindActions: BindStateAttributesMap;
 };
 
+export type StoreAttributesMap = Map<string, AttributeMaps>;
+
 export type Refs = Map<string, Element | Element[]>;
 
 export type StoreState = Record<string, unknown>;

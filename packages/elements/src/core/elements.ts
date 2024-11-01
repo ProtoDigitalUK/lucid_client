@@ -14,7 +14,7 @@ const Elements: ElementsInstance = {
 	handlerAttributes: new Map(),
 	stores: new Map(),
 	storeModules: new Map(),
-	trackedElements: new Set(),
+	trackedElements: new WeakSet(),
 };
 
 export default Elements;

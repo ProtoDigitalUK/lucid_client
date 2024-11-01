@@ -5,6 +5,7 @@ import type {
 	StoreState,
 	Handlers,
 	HandlerAttributesMap,
+	StoreAttributesMap,
 } from "./index.js";
 
 export type ElementsInstance = {
@@ -30,5 +31,5 @@ export type ElementsInstance = {
 	handlerAttributes: HandlerAttributesMap;
 	storeModules: Map<string, StoreModule<StoreState, StoreActions>>;
 	stores: Map<string, Store<StoreState, StoreActions>>;
-	trackedElements: WeakSet<HTMLElement>;
+	trackedElements: WeakSet<Element>;
 };
