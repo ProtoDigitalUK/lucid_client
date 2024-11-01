@@ -77,7 +77,7 @@ Elements.start();
 Store modules allow you to extend the state and define actions for your element stores. In Elements all of your logic should exist within the store module, as opposed to defining functions in HTML markup. This has a few added benefits such as having LSP support, being able to be compiled and bundled, and being able to import modules etc.
 
 ```typescript
-import { storeModule, createSignal } from "@lucidclient/elements";
+import Elements, { storeModule, createSignal } from "@lucidclient/elements";
 
 type NavStoreState = {
     open: boolean;
@@ -117,6 +117,8 @@ storeModule<NavStoreState, NavStoreActions>("nav", (store) => ({
         }
     },
 }));
+
+Elements.start();
 ```
 
 > All store modules need to be defined before running the `Elements.start()` function.
@@ -207,10 +209,10 @@ Any attributes that are suffixed with `[]` will be stored as an array of element
 - [x] Instead of supporting !state for booleans, allow attribute bindings to set actions as well allowing you to do any conditionals you need within them.
 - [x] Update how attributes are read into attribute maps. Currently each store and the init handlers all handle this themselves. Instead, at a top level we should select all the valid attributes and then pass them to the store and handlers as required.
 - [x] Rename the data-element attribute to data-store.
-- [-] Create Events handler plugin. Needs destroy method updating.
-- [] Create Intersection handler plugin.
+- [x] Create Events handler plugin. Needs destroy method updating.
 - [] Create DOM handler plugin.
 - [] Create Focus Trap handler plugin.
+- [] Create Intersection handler plugin.
 - [] Go through lib and add debug logs where appropriate.
 - [] Update entire readme to be better structured and more in-depth.
 - [] Add method for re-creating the stores - would be needed for Astro's full site view transitions.

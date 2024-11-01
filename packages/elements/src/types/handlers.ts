@@ -9,7 +9,10 @@ export type Handler = {
 	 * Called once on the iniitalisation of Elements
 	 */
 	initialise: (attributes: HandlerAttributes) => void;
-	// destroy?: (attributes: HandlerAttributes) => void;
+	/**
+	 * Called when Elements.destroy() is called
+	 */
+	destroy?: (attributes: HandlerAttributes) => void;
 };
 
 export type Handlers = Map<string, Handler>;

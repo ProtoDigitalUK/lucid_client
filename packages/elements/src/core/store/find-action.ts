@@ -15,9 +15,7 @@ const findAction = (action: string): Action | null => {
 		}
 	}
 
-	return () => {
-		return null;
-	};
+	return null;
 };
 
 export default findAction;

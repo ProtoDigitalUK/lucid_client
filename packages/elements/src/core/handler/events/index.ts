@@ -48,7 +48,7 @@ const registerEvents = (attributes: HandlerAttributes, register: boolean) => {
 const eventsHandler: Handler = {
 	namespace: namespace,
 	initialise: (attributes) => registerEvents(attributes, true),
-	// destroy: (attributes) => registerEvents(attributes, false),
+	destroy: (attributes) => registerEvents(attributes, false),
 };
 
 export default eventsHandler;

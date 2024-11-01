@@ -1,5 +1,6 @@
 import utils from "../../utils/index.js";
 import Elements from "../elements.js";
+import s from "./index.js";
 
 /**
  * Sets up a mutation observer on the body element
@@ -34,14 +35,8 @@ const removeElement = (element: HTMLElement) => {
 	const store = Elements.stores.get(storeKey);
 	if (!store) return;
 
-	// for (const handler of Elements.handlers.values()) handler.destroy?.(store);
-	store[0].stateObserver?.disconnect();
-	store[0].dispose();
-	Elements.stores.delete(storeKey);
-
-	utils.log.debug(
-		`Store removed for element "${element.id || element.tagName}" with key "${storeKey}"`,
-	);
+	s.destroyStore(storeKey, store);
+	Elements.trackedElements.delete(element);
 };
 
 export default registerStoreObserver;

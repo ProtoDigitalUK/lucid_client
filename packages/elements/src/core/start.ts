@@ -86,7 +86,7 @@ const start = (options?: {
 	store.registerStoreObserver();
 
 	Elements.started = true;
-	utils.log.debug("library started.");
+	utils.log.debug("Library started.");
 };
 
 export default start;
