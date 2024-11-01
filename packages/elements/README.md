@@ -205,7 +205,7 @@ Any attributes that are suffixed with `[]` will be stored as an array of element
 - [x] Implement solution for plugins and registering handlers.
 - [x] Change scoping to use `data-element="name"` instead of `data-scope="name"` to reduce boilerplate and force scoping. Is more explicit and easier to understand whats going on.
 - [x] Instead of supporting !state for booleans, allow attribute bindings to set actions as well allowing you to do any conditionals you need within them.
-- [] Update how attributes are read into attribute maps. Currently each store and the init handlers all handle this themselves. Instead, at a top level we should select all the valid attributes and then pass them to the store and handlers as required.
+- [x] Update how attributes are read into attribute maps. Currently each store and the init handlers all handle this themselves. Instead, at a top level we should select all the valid attributes and then pass them to the store and handlers as required.
 - [-] Create Events handler plugin. Needs destroy method updating.
 - [] Create Intersection handler plugin.
 - [] Create DOM handler plugin.

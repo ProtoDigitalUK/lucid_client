@@ -23,12 +23,15 @@ const registerActionEffects = (store: Store<StoreState, StoreActions>) => {
 			const selector = `[${utils.helpers.buildAttribute(Elements.options.attributes.selectors.bind)}${attr}="${action}"]`;
 			const targets = document.querySelectorAll(selector);
 
-			createEffect(() => {
-				for (const target of targets)
-					target.setAttribute(
-						attr,
-						utils.helpers.stringifyState(store[0].actions[actionKey]?.()),
-					);
+			createEffect(async () => {
+				try {
+					const result = store[0].actions[actionKey]?.();
+					const resolvedResult = await Promise.resolve(result);
+					const stringValue = utils.helpers.stringifyState(resolvedResult);
+					for (const target of targets) target.setAttribute(attr, stringValue);
+				} catch (error) {
+					console.error(error);
+				}
 			});
 		}
 	}
