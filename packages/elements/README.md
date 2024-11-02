@@ -210,7 +210,7 @@ Any attributes that are suffixed with `[]` will be stored as an array of element
 - [x] Update how attributes are read into attribute maps. Currently each store and the init handlers all handle this themselves. Instead, at a top level we should select all the valid attributes and then pass them to the store and handlers as required.
 - [x] Rename the data-element attribute to data-store.
 - [x] Create Events handler plugin. Needs destroy method updating.
-- [] Create DOM handler plugin.
+- [x] Create DOM handler plugin.
 - [] Create Focus Trap handler plugin.
 - [] Create Intersection handler plugin.
 - [] Go through lib and add debug logs where appropriate.
