@@ -1,13 +1,13 @@
-# Lucid Primitives
+# Lucid Client 
 
-Welcome to the Lucid Primitives repository. This repository contains the source code for the Lucid Primitives libraries, which is a collection of client-side oriented tools and utilities to develop performant and accessible web applications.
+Welcome to the Lucid Client repository. A collection of client-side oriented tools and utilities to develop performant and accessible web applications.
 
 ## Installation
 
-Each library is published as a separate package on NPM. To install a library, find the package name from the readmes below and run the given installation command.
+Each library is published as a separate package on NPM. Checkout the library READMEs bellow for installation instructions and documentation. 
 
 ## Libraries
 
-- [Speculate](https://github.com/ProtoDigitalUK/lucid_primitives/tree/master/packages/speculate)
-- [Elements]()
-- [Cookie Controller]()
+- [Speculate](https://github.com/ProtoDigitalUK/lucid_client/tree/master/packages/speculate)
+- [Elements](https://github.com/ProtoDigitalUK/lucid_client/tree/master/packages/elements)
+- [Cookie Controller](https://github.com/ProtoDigitalUK/lucid_client/tree/master/packages/cookie-controller)

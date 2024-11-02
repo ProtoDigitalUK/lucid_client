@@ -1,4 +1,6 @@
-# Lucid Cookie Controller
+# Cookie Controller
+
+> Part of the Lucid Client suite
 
 The Lucid Cookie Controller is a lightweight JavaScript library that enables you to easily implement a cookie consent solution on your website. It offers a range of features that enable you to support GDPR compliance.
 

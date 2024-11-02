@@ -2,11 +2,12 @@
 	"name": "@lucidclient/elements",
 	"version": "0.1.0",
 	"private": false,
-	"description": "",
+	"description": "A lightweight, reactive UI library that bridges HTML and JavaScript through attributes, powered by SolidJS. Adds reactive state and dynamic behaviors to markup while maintaining simplicity.",
 	"type": "module",
 	"types": "./dist/index.d.ts",
 	"main": "dist/index.cjs",
 	"module": "dist/index.js",
+	"files": ["dist"],
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
@@ -25,20 +26,42 @@
 		"format": "biome format ./src",
 		"format:fix": "biome format --write ./src",
 		"lint": "biome lint ./src",
-		"lint:fix": "biome lint --apply ./src"
+		"lint:fix": "biome lint --write ./src"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^1.9.3",
+		"@biomejs/biome": "^1.9.4",
 		"@repo/config": "*",
-		"tsup": "^8.3.0",
+		"tsup": "^8.3.5",
 		"typescript": "^5.6.3"
 	},
-	"author": "",
-	"license": "ISC",
+	"author": "Proto Digital",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ProtoDigitalUK/lucid_client",
+		"directory": "packages/elements"
+	},
+	"keywords": [
+		"ui-library",
+		"reactive",
+		"solidjs",
+		"html-attributes",
+		"dom-manipulation",
+		"state-management",
+		"two-way-binding",
+		"javascript",
+		"typescript",
+		"frontend",
+		"minimal",
+		"lightweight",
+		"lucid-client",
+		"lucid"
+	],
+	"homepage": "https://lucidjs.build/elements",
 	"volta": {
 		"node": "20.18.0"
 	},
 	"dependencies": {
-		"solid-js": "^1.9.2"
+		"solid-js": "^1.9.3"
 	}
 }

@@ -1,12 +1,8 @@
 {
 	"name": "@lucidclient/speculate",
-	"version": "0.2.1",
+	"version": "0.2.2",
 	"private": false,
 	"description": "A lightweight library to handle speculate rules for prefetching and prerendering documents, with added support for data fetching on intent.",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/ProtoDigitalUK/lucid_primitives/tree/master/packages/speculate"
-	},
 	"type": "module",
 	"types": "./dist/index.d.ts",
 	"main": "dist/index.cjs",
@@ -33,9 +29,22 @@
 		"tsup": "^8.3.0",
 		"typescript": "^5.6.3"
 	},
-	"author": "William Yallop <hello@williamyallop.com>",
+	"author": "Proto Digital",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ProtoDigitalUK/lucid_client",
+		"directory": "packages/speculate"
+	},
+	"homepage": "https://lucidjs.build/speculate",
 	"license": "MIT",
-	"keywords": ["prefetch", "prerender", "speculation rules", "prefetch data"],
+	"keywords": [
+		"prefetch",
+		"prerender",
+		"speculation rules",
+		"prefetch data",
+		"lucid-client",
+		"lucid"
+	],
 	"volta": {
 		"node": "20.18.0"
 	}

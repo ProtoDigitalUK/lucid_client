@@ -2,6 +2,9 @@
 
 > Part of the Lucid Client suite
 
+> [!CAUTION]
+> This library is still in development and is not ready for production use.
+
 A lightweight, reactive UI library that bridges HTML and JavaScript through attributes. Elements brings reactive state and dynamic behaviors to your markup while maintaining simplicity - all powered by [SolidJS](https://www.solidjs.com/).
 
 ## Why Use Elements?
@@ -29,11 +32,10 @@ Import `Elements`, register any required handlers and store modules and call the
 
 ```typescript
 import Elements, { registerHandler } from "@lucidclient/elements";
-import { EventHandlers, IntersectionHandlers, DOMHandlers } from "@lucidclient/elements/handlers";
+import { events, dom } from "@lucidclient/elements/handlers";
 
-registerHandler(EventHandlers);
-registerHandler(IntersectionHandlers);
-registerHandler(DOMHandlers);
+registerHandler(events);
+registerHandler(dom);
 
 Elements.start();
 ```
@@ -56,7 +58,7 @@ Elements.start();
             data-bind--aria-label="nav:ariaLabel"
             aria-controls="main-nav"
         >
-            <span data-ref="nav:buttonLabel"> Open Navigation </span>
+            <span data-handler--dom.text="nav:buttonLabel"> Open Navigation </span>
         </button>
     </div>
     <nav
@@ -97,24 +99,23 @@ storeModule<NavStoreState, NavStoreActions>("nav", (store) => ({
         toggle: () => {
             const [getOpen, setOpen] = store.state.open;
             const [_, setAriaLabel] = store.state.ariaLabel;
-            const buttonElement = store.refs.get("buttonLabel");
+            // const overlayElement = store.refs.get("overlay");
 
-            if (getOpen()) {
-                setAriaLabel("Open Navigation");
-                if (buttonElement instanceof HTMLElement)
-                    buttonElement.innerText = "Open Navigation";
-            } else {
-                setAriaLabel("Close Navigation");
-                if (buttonElement instanceof HTMLElement)
-                    buttonElement.innerText = "Close Navigation";
-            }
+            if (getOpen()) setAriaLabel("Open Navigation"); 
+            else setAriaLabel("Close Navigation");
 
             setOpen((prev) => !prev);
         },
         closed: () => {
             const [getOpen] = store.state.open;
             return !getOpen(); 
-        }
+        },
+        buttonLabel: () => {
+            const [getOpen] = store.state.open;
+            return getOpen()
+                ? "Close Navigation"
+                : "Open Navigation";
+        },
     },
 }));
 
@@ -176,7 +177,7 @@ Note you cannot do any conditional logic in binds, so something like `data-bind-
 
 ### Handler `data-handler--`
 
-All handlers are prefixed with `data-handler--` and are registered through plugins. By default Elements doesnt register any handlers, but includes a few first-party built-in plugins for event handling, intersection, basic DOM manipulation and potentially more down the line.
+All handlers are prefixed with `data-handler--` and are registered through plugins. By default Elements doesnt register any handlers, but includes a few first-party built-in plugins for event handling, basic DOM manipulation and potentially more down the line.
 
 The naming is `data-handler--namesapce.specifier="action"`.
 
@@ -188,32 +189,8 @@ Refs are used to select elements and store them so you can easily access them fr
 
 Any attributes that are suffixed with `[]` will be stored as an array of elements with the same name.
 
-## TODO:
+## Missing Features:
 
-- [x] Add object and array state support.
-- [x] For object/array state types, dont bother update the state attributes at all. The only reason these are kept in sync with state is for CSS attribute selector support, but I dont suspect devs even using these data types for this, it makes sense that should be reserved for booleans, numbers and strings only.
-- [x] Parse state attribute values, convert to string, number, boolean, etc.
-- [x] Stringify state values when updating attribute bindings.
-- [x] Disable state registration on children.
-- [x] Optimise the updateBind function - may need attribute map bindings type updated.
-- [x] Export SolidJS createSignal, createEffect and createMemo from the library.
-- [x] Made storeModule and registerHandler exports instead of the default import for better tree shaking.
-- [x] Go through project and address all TODOs.
-- [x] Add `data-ref="name"` support. If suffixed with a `[]`, push the element to an array.
-- [x] Add interface to use for the store module instead of passing the store in.
-- [x] Add scoping support to attribute values? So elements store can define a scope via `data-scope="name"` and then bind, refs and handles can prefix values with `scopename:`. A bind for example, would look like `data-bind--disabled="scopename:statekey"`.
-- [x] Constant attributes prefixes need to be configurable via the Elements.start method. Smae with seperators config.
-- [x] Handles shouldnt be grabbed in the context of a store and instead globally. Based on state and scope used the store used should be determined.
-- [x] Implement solution for plugins and registering handlers.
-- [x] Change scoping to use `data-element="name"` instead of `data-scope="name"` to reduce boilerplate and force scoping. Is more explicit and easier to understand whats going on.
-- [x] Instead of supporting !state for booleans, allow attribute bindings to set actions as well allowing you to do any conditionals you need within them.
-- [x] Update how attributes are read into attribute maps. Currently each store and the init handlers all handle this themselves. Instead, at a top level we should select all the valid attributes and then pass them to the store and handlers as required.
-- [x] Rename the data-element attribute to data-store.
-- [x] Create Events handler plugin. Needs destroy method updating.
-- [x] Create DOM handler plugin.
-- [] Create Focus Trap handler plugin.
-- [] Create Intersection handler plugin.
-- [] Go through lib and add debug logs where appropriate.
-- [] Update entire readme to be better structured and more in-depth.
-- [] Add method for re-creating the stores - would be needed for Astro's full site view transitions.
-- [] Create some examples of how to use the library and make use of the createSignal, createEffect and createMemo functions.
+- The ability to refresh the library to re-initialise all stores and handlers.
+- Handlers for focus trapping, intersection observers, etc. These may be released separately.
+- Detailed documentation and examples via the [Lucid JS webiste](https://lucidjs.build/elements).
