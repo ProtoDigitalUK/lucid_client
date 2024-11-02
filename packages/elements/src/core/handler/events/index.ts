@@ -1,17 +1,11 @@
 import type { Handler, HandlerAttributes } from "../../../types/index.js";
-import Elements from "../../elements.js";
 import store from "../../store/index.js";
+import utils from "../../../utils/index.js";
 
 /**
  * The namespace for the event handler
  */
 const namespace = "event";
-
-/**
- * Creates a selector for a handler
- */
-const createSelector = (namespace: string, event: string, action: string) =>
-	`[${Elements.options.attributes.prefix}${Elements.options.attributes.selectors.handler}${namespace}\\.${event}="${action}"]`;
 
 /**
  * Handles registering and unregistering event listeners
@@ -24,7 +18,7 @@ const registerEvents = (attributes: HandlerAttributes, register: boolean) => {
 			if (!action) continue;
 
 			const targets = document.querySelectorAll(
-				createSelector(namespace, eventName, key),
+				utils.helpers.handlerSelector(namespace, eventName, key),
 			);
 
 			for (const target of targets) {
@@ -43,7 +37,13 @@ const registerEvents = (attributes: HandlerAttributes, register: boolean) => {
 };
 
 /**
- * The event handler entry point
+ * Registers the event handler which supports all event listeners. These can be used like so:
+ * - data-handler--event.click
+ * - data-handler--event.scroll
+ * - data-handler--event.keydown
+ * - data-handler--event.keyup
+ *
+ * Any actions assigned to these events will have the Event as the first argument.
  */
 const eventsHandler: Handler = {
 	namespace: namespace,

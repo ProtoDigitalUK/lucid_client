@@ -158,6 +158,16 @@ const deepCollectAttr = (element: Element): Attr[] => {
 };
 
 /**
+ * Creates a selector for a handler
+ */
+const handlerSelector = (
+	namespace: string,
+	specifier: string,
+	action: string,
+) =>
+	`[${Elements.options.attributes.prefix}${Elements.options.attributes.selectors.handler}${namespace}\\.${specifier}="${action}"]`;
+
+/**
  * Helpers
  */
 const helpers = {
@@ -168,6 +178,7 @@ const helpers = {
 	parseBindValue,
 	evaluatePathValue,
 	deepCollectAttr,
+	handlerSelector,
 };
 
 export default helpers;
