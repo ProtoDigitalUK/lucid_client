@@ -1,5 +1,6 @@
 import Elements from "./elements.js";
 import s from "./store/index.js";
+import handler from "./handler/index.js";
 
 /**
  * Destroys the library
@@ -9,10 +10,7 @@ import s from "./store/index.js";
  */
 const destroy = () => {
 	//* destroy handlers
-	Elements.handlerAttributes.forEach((attributes, namespace) => {
-		const handler = Elements.handlers.get(namespace);
-		if (handler) handler.destroy?.(attributes);
-	});
+	handler.destroyHandlers();
 
 	//* remove stores
 	Elements.stores.forEach((store, key) => s.destroyStore(key, store));

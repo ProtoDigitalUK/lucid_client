@@ -2,9 +2,6 @@
 
 > Part of the Lucid Client suite
 
-> [!CAUTION]
-> This library is still in development and is not ready for production use.
-
 A lightweight, reactive UI library that bridges HTML and JavaScript through attributes. Elements brings reactive state and dynamic behaviors to your markup while maintaining simplicity - all powered by [SolidJS](https://www.solidjs.com/).
 
 ## Why Use Elements?
@@ -191,6 +188,5 @@ Any attributes that are suffixed with `[]` will be stored as an array of element
 
 ## Missing Features:
 
-- The ability to refresh the library to re-initialise all stores and handlers.
-- Handlers for focus trapping, intersection observers, etc. These may be released separately.
 - Detailed documentation and examples via the [Lucid JS webiste](https://lucidjs.build/elements).
+- Handlers for focus trapping, intersection observers, etc. These may be released separately.

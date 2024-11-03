@@ -21,7 +21,6 @@ import bind from "../bind/index.js";
  * - Creates state.
  * - Observes state.
  * - Creates refs.
- * - Initialises handlers.
  */
 const initialiseStore = (
 	element: Element,
@@ -52,8 +51,6 @@ const initialiseStore = (
 
 			if (storeModule.state) store[1]("state", storeModule.state);
 			if (storeModule.actions) store[1]("actions", storeModule.actions);
-
-			Elements.storeModules.delete(storeKey);
 		}
 
 		// -----------------
