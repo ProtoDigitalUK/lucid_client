@@ -26,7 +26,20 @@ const { title } = Astro.props;
             class="h-10 bg-black text-white"
         >
             <div class="flex justify-between items-center">
-                <h1>Elements</h1>
+                <div class="flex items-center">
+                    <h1>Elements</h1>
+                    <div data-ref="nav:testEleRefresh" class="ml-2.5">
+                        <button data-handler--event.click="nav:oldClick">
+                            before
+                        </button>
+                    </div>
+                    <button
+                        data-handler--event.click="nav:replaceChild"
+                        class="ml-2.5"
+                    >
+                        Refresh Elements
+                    </button>
+                </div>
                 <button
                     data-handler--event.click="nav:toggle"
                     data-bind--aria-expanded="nav:open"
@@ -152,6 +165,23 @@ const { title } = Astro.props;
                         return getOpen()
                             ? "Close Navigation"
                             : "Open Navigation";
+                    },
+
+                    replaceChild: () => {
+                        const target = store.refs.get("testEleRefresh");
+                        if (target instanceof HTMLElement) {
+                            target.innerHTML =
+                                "<button data-handler--event.click='nav:newClick'>after</button>";
+                        }
+
+                        console.log("refreshElements");
+                        Elements.refresh();
+                    },
+                    newClick: () => {
+                        console.log("newClick");
+                    },
+                    oldClick: () => {
+                        console.log("oldClick");
                     },
                 },
             }));

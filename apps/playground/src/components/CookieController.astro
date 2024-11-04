@@ -212,12 +212,12 @@
 
     new CookieController({
         onConsentChange: (data) => {
-            // console.log(data);
+            console.log(data.cookie);
         },
         versioning: {
             current: "1.0.1",
             onNewVersion: (oldVersion, newVersion) => {
-                // console.log(oldVersion, newVersion);
+                console.log(oldVersion, newVersion);
             },
         },
     });

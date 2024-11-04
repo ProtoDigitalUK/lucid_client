@@ -112,3 +112,15 @@ Here are some tips for achieving compliance:
 - **Consent Recording:** Save the consent data to ensure compliance with the consent recording requirements of GDPR.
 
 Please note this is not an exhaustive list, and we recommend seeking legal advice to ensure full compliance.
+
+
+
+## TODO:
+
+- make the `data-cookie-action="save"` clearer. With it removed, the callback fires on checkbox change only.
+- if in change mode, when cookies are accepts and rejected, the callback doesnt fire despite the checkbox state changing.
+- on change callback probs shouldnt return the individual cookie on checkbox change and just the entire state. Keeps response consistent with the save mode.
+- move from class based to a more functional. being able to initialise multiple instances seems strange.
+- update the readme
+- publish to npm
+- utils for adding/removing scripts and cookies on state change?
