@@ -1,58 +1,33 @@
-const attributes = {
-	details: "data-cookie-details",
-	alert: "data-cookie-alert",
-	cookieConfig: "data-cookie-config",
-	action: {
-		attribute: "data-cookie-action",
-		value: {
-			dismiss: "dismiss",
-			accept: "accept",
-			reject: "reject",
-			details: "details",
-			save: "save",
-		},
-	},
-};
-const ids = {
-	details: "cookie-details",
-	alert: "cookie-alert",
-};
-
-const cookieController = "CookieController";
+import C from "./constants.js";
+import type { Options, ConsentChange, CookieState } from "./types.js";
 
 export default class CookieController {
-	userOptions: CookieControllerOptionsT = {};
-	state: CookieStateT = {
+	userOptions: Options = {};
+	state: CookieState = {
 		uuid: "",
 		interacted: false,
 		cookies: {},
 	};
-
-	constructor(options?: CookieControllerOptionsT) {
+	constructor(options?: Options) {
 		if (options) this.userOptions = options;
 		this.initialise();
 	}
 
-	// ----------------
-	// Private methods
 	private initialise() {
 		this.state = this.cookieState;
 		this.registerEvents();
 		this.setStaticAttributes();
 		this.setDynamicAttributes();
 
-		if (!this.state.interacted) {
-			this.alertState = true;
-		}
+		if (!this.state.interacted) this.alertState = true;
 
+		//* if there is a versioning option, check if the version is different from the current version
 		if (this.state.version && this.options.versioning?.current) {
 			if (this.state.version !== this.options.versioning.current) {
-				if (this.options.versioning.onNewVersion) {
-					this.options.versioning.onNewVersion(
-						this.state.version,
-						this.options.versioning.current,
-					);
-				}
+				this.options.versioning.onNewVersion?.(
+					this.state.version,
+					this.options.versioning.current,
+				);
 			}
 			this.state.version = this.options.versioning.current;
 			this.cookieState = this.state;
@@ -64,8 +39,8 @@ export default class CookieController {
 		this.accept = this.accept.bind(this);
 		this.dismiss = this.dismiss.bind(this);
 		this.reject = this.reject.bind(this);
-		this.showDetails = this.showDetails.bind(this);
-		this.onSave = this.onSave.bind(this);
+		this.toggleDetails = this.toggleDetails.bind(this);
+		this.save = this.save.bind(this);
 		this.onCookieChange = this.onCookieChange.bind(this);
 
 		this.regEventListenerLoop(this.actionDismiss, true, "click", this.dismiss);
@@ -75,9 +50,9 @@ export default class CookieController {
 			this.actionDetails,
 			true,
 			"click",
-			this.showDetails,
+			this.toggleDetails,
 		);
-		this.regEventListenerLoop(this.actionSave, true, "click", this.onSave);
+		this.regEventListenerLoop(this.actionSave, true, "click", this.save);
 		this.regEventListenerLoop(
 			this.cookieConfig,
 			true,
@@ -98,12 +73,11 @@ export default class CookieController {
 	}
 	private setStaticAttributes() {
 		if (!this.details?.hasAttribute("id"))
-			this.details?.setAttribute("id", ids.details);
+			this.details?.setAttribute("id", C.ids.details);
 		if (!this.alert?.hasAttribute("id"))
-			this.alert?.setAttribute("id", ids.alert);
+			this.alert?.setAttribute("id", C.ids.alert);
 
 		const detailId = this.details?.getAttribute("id") as string;
-		// const alertId = this.alert?.getAttribute("id") as string;
 
 		this.details?.setAttribute("role", "dialog");
 		this.details?.setAttribute("aria-modal", "true");
@@ -132,7 +106,7 @@ export default class CookieController {
 
 		const target = e.target as HTMLInputElement;
 
-		const key = target.getAttribute(attributes.cookieConfig) as string;
+		const key = target.getAttribute(C.attributes.cookieConfig) as string;
 		if (!key) return;
 
 		const value = target.checked;
@@ -146,7 +120,7 @@ export default class CookieController {
 		});
 	}
 	private onConsentChange(
-		type: ConsentChangeT["type"],
+		type: ConsentChange["type"],
 		cookie?: {
 			key: string;
 			value: boolean;
@@ -179,8 +153,21 @@ export default class CookieController {
 		return `${timestamp}-${randomNum}`;
 	}
 
-	// ----------------
-	// Public methods
+	private rejectAccept(mode: "accept" | "reject" = "accept") {
+		for (let i = 0; i < this.cookieConfig.length; i++) {
+			const element = this.cookieConfig[i];
+			if (!element) continue;
+			const key = element.getAttribute(C.attributes.cookieConfig) as string;
+			this.state.cookies[key] = mode === "accept";
+		}
+
+		this.onConsentChange(mode);
+		this.dismiss();
+	}
+
+	/**
+	 * Destroys the cookie controller instance and removes all event listeners
+	 */
 	destroy() {
 		this.regEventListenerLoop(this.actionDismiss, false, "click", this.dismiss);
 		this.regEventListenerLoop(this.actionAccept, false, "click", this.accept);
@@ -189,9 +176,9 @@ export default class CookieController {
 			this.actionDetails,
 			false,
 			"click",
-			this.showDetails,
+			this.toggleDetails,
 		);
-		this.regEventListenerLoop(this.actionSave, false, "click", this.onSave);
+		this.regEventListenerLoop(this.actionSave, false, "click", this.save);
 		this.regEventListenerLoop(
 			this.cookieConfig,
 			false,
@@ -199,23 +186,25 @@ export default class CookieController {
 			this.onCookieChange,
 		);
 	}
+	/**
+	 * Accepts all cookies
+	 * - Fires the onConsentChange accept callback
+	 * - Closes the cookie details and alert modals
+	 */
 	accept() {
 		this.rejectAccept("accept");
 	}
+	/**
+	 * Rejects all cookies
+	 * - Fires the onConsentChange reject callback
+	 * - Closes the cookie details and alert modals
+	 */
 	reject() {
 		this.rejectAccept("reject");
 	}
-	rejectAccept(mode: "accept" | "reject" = "accept") {
-		for (let i = 0; i < this.cookieConfig.length; i++) {
-			const element = this.cookieConfig[i];
-			if (!element) continue;
-			const key = element.getAttribute(attributes.cookieConfig) as string;
-			this.state.cookies[key] = mode === "accept";
-		}
-
-		this.onConsentChange(mode);
-		this.dismiss();
-	}
+	/**
+	 * Closes the cookie details and alert modals
+	 */
 	dismiss() {
 		this.detailsState = false;
 		this.alertState = false;
@@ -223,12 +212,15 @@ export default class CookieController {
 		this.state.interacted = true;
 		this.cookieState = this.state;
 	}
-	showDetails() {
+	/**
+	 * Toggles the details modal
+	 */
+	toggleDetails() {
 		for (let i = 0; i < this.cookieConfig.length; i++) {
 			const element = this.cookieConfig[i];
 			if (!element) continue;
 
-			const key = element.getAttribute(attributes.cookieConfig) as string;
+			const key = element.getAttribute(C.attributes.cookieConfig) as string;
 			const value = this.state.cookies[key];
 			element.checked = value ?? false;
 		}
@@ -237,12 +229,16 @@ export default class CookieController {
 		this.state.interacted = true;
 		this.cookieState = this.state;
 	}
-	onSave() {
+	/**
+	 * Updates the state with the new cookie preferences
+	 * - Fires the onConsentChange save callback
+	 */
+	save() {
 		for (let i = 0; i < this.cookieConfig.length; i++) {
 			const element = this.cookieConfig[i];
 			if (!element) continue;
 
-			const key = element.getAttribute(attributes.cookieConfig) as string;
+			const key = element.getAttribute(C.attributes.cookieConfig) as string;
 			const value = element.checked;
 			this.state.cookies[key] = value;
 		}
@@ -250,38 +246,44 @@ export default class CookieController {
 		this.onConsentChange("save");
 		this.dismiss();
 	}
+	/**
+	 * Returns the consent status of a cookie via the key
+	 */
 	getCookieConsent(key: string) {
 		return this.state.cookies[key];
 	}
 
-	// ----------------
-	// Error handling
-	throwError(message: string) {
-		throw new Error(`[CookieController] ${message}`);
-	}
-
-	// ----------------
-	// Setters
+	/**
+	 * Sets the alert modal state - open/close
+	 */
 	set alertState(state: boolean) {
-		this.alert?.setAttribute("data-cookie-alert", state ? "true" : "false");
+		this.alert?.setAttribute(C.attributes.alert, state ? "true" : "false");
 		this.setDynamicAttributes();
 	}
+	/**
+	 * Sets the details modal state - open/close
+	 */
 	set detailsState(state: boolean) {
 		if (this.alertState) this.alertState = false;
-		this.details?.setAttribute("data-cookie-details", state ? "true" : "false");
+		this.details?.setAttribute(C.attributes.details, state ? "true" : "false");
 		this.setDynamicAttributes();
 	}
-	set cookieState(state: CookieStateT) {
+	/**
+	 * Sets the cookie state via document.cookie
+	 * - creates new uuid if not present
+	 */
+	set cookieState(state: CookieState) {
 		if (!state.uuid) state.uuid = this.generateUUID();
 
 		const cookieValue = JSON.stringify(state);
-		document.cookie = `${cookieController}=${cookieValue};path=/;SameSite=Strict`;
+		document.cookie = `${C.key}=${cookieValue};path=/;SameSite=Strict`;
 
 		this.state = state;
 	}
 
-	// ----------------
-	// getters
+	/**
+	 * Returns the options object
+	 */
 	get options() {
 		return {
 			mode: this.actionSave.length > 0 ? "onSave" : "onChange",
@@ -289,25 +291,34 @@ export default class CookieController {
 			versioning: this.userOptions.versioning || null,
 		};
 	}
-	// State
+	/**
+	 * Returns the alert modal state - open/close
+	 */
 	get alertState() {
-		return this.alert?.getAttribute("data-cookie-alert") === "true";
+		return this.alert?.getAttribute(C.attributes.alert) === "true";
 	}
+	/**
+	 * Returns the details modal state - open/close
+	 */
 	get detailsState() {
-		return this.details?.getAttribute("data-cookie-details") === "true";
+		return this.details?.getAttribute(C.attributes.details) === "true";
 	}
+	/**
+	 * Returns the cookie state
+	 * - Either creates new state or returns existing state
+	 */
 	get cookieState() {
 		const defaultCookies: Record<string, boolean> = {};
 		for (let i = 0; i < this.cookieConfig.length; i++) {
 			const element = this.cookieConfig[i];
-			const key = element?.getAttribute(attributes.cookieConfig) as string;
+			const key = element?.getAttribute(C.attributes.cookieConfig) as string;
 			defaultCookies[key] = false;
 		}
 
 		try {
-			const value = this.getCookieHelper(cookieController);
+			const value = this.getCookieHelper(C.key);
 			if (value) {
-				return JSON.parse(value) as CookieStateT;
+				return JSON.parse(value) as CookieState;
 			}
 			return {
 				uuid: "",
@@ -324,70 +335,65 @@ export default class CookieController {
 			};
 		}
 	}
-	// Elements
+
+	/**
+	 * Returns the details modal element
+	 */
 	get details() {
-		return document.querySelector(`[${attributes.details}]`);
+		return document.querySelector(`[${C.attributes.details}]`);
 	}
+	/**
+	 * Returns the alert modal element
+	 */
 	get alert() {
-		return document.querySelector(`[${attributes.alert}]`);
+		return document.querySelector(`[${C.attributes.alert}]`);
 	}
+	/**
+	 * Returns the cookie config elements
+	 */
 	get cookieConfig() {
 		return document.querySelectorAll(
-			`input[type="checkbox"][${attributes.cookieConfig}]`,
+			`input[type="checkbox"][${C.attributes.cookieConfig}]`,
 		) as NodeListOf<HTMLInputElement>;
 	}
+	/**
+	 * Returns the dismiss button elements
+	 */
 	get actionDismiss() {
 		return document.querySelectorAll(
-			`[${attributes.action.attribute}="${attributes.action.value.dismiss}"]`,
+			`[${C.attributes.action.attribute}="${C.attributes.action.value.dismiss}"]`,
 		);
 	}
+	/**
+	 * Returns the accept button elements
+	 */
 	get actionAccept() {
 		return document.querySelectorAll(
-			`[${attributes.action.attribute}="${attributes.action.value.accept}"]`,
+			`[${C.attributes.action.attribute}="${C.attributes.action.value.accept}"]`,
 		);
 	}
+	/**
+	 * Returns the reject button elements
+	 */
 	get actionReject() {
 		return document.querySelectorAll(
-			`[${attributes.action.attribute}="${attributes.action.value.reject}"]`,
+			`[${C.attributes.action.attribute}="${C.attributes.action.value.reject}"]`,
 		);
 	}
+	/**
+	 * Returns the details button elements
+	 */
 	get actionDetails() {
 		return document.querySelectorAll(
-			`[${attributes.action.attribute}="${attributes.action.value.details}"]`,
+			`[${C.attributes.action.attribute}="${C.attributes.action.value.details}"]`,
 		);
 	}
+	/**
+	 * Returns the save button elements
+	 */
 	get actionSave() {
 		return document.querySelectorAll(
-			`[${attributes.action.attribute}="${attributes.action.value.save}"]`,
+			`[${C.attributes.action.attribute}="${C.attributes.action.value.save}"]`,
 		);
 	}
-}
-
-// ----------------
-// Types
-
-interface CookieControllerOptionsT {
-	onConsentChange?: (data: ConsentChangeT) => void;
-	versioning?: {
-		current: string;
-		onNewVersion?: (oldVersion: string, newVersion: string) => void;
-	};
-}
-interface ConsentChangeT {
-	type: "cookie" | "accept" | "reject" | "save" | "onload";
-	uuid: string;
-	version?: string;
-
-	cookie?: {
-		key: string;
-		value: boolean;
-	};
-	cookies: Record<string, boolean>;
-}
-
-interface CookieStateT {
-	uuid: string;
-	version?: string;
-	interacted: boolean;
-	cookies: Record<string, boolean>;
 }
