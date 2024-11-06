@@ -117,9 +117,12 @@ Please note this is not an exhaustive list, and we recommend seeking legal advic
 
 ## TODO:
 
+- move from oop class based - doesnt make sense for this package
 - make the `data-cookie-action="save"` clearer. With it removed, the callback fires on checkbox change only.
 - if in change mode, when cookies are accepts and rejected, the callback doesnt fire despite the checkbox state changing.
 - on change callback probs shouldnt return the individual cookie on checkbox change and just the entire state. Keeps response consistent with the save mode.
+- add new config options to support setting cookie settings, expiry, domain, path, and samesite etc.
+- cahce dom queries
 - update the readme
 - publish to npm
 - utils for adding/removing scripts and cookies on state change?
