@@ -22,6 +22,8 @@ export default class CookieController {
 	constructor(options?: Partial<Options>) {
 		this.options = {
 			mode: options?.mode ?? "save",
+			essentialCookies: options?.essentialCookies ?? false,
+			categoryCookies: options?.categoryCookies ?? {},
 			onConsentChange: options?.onConsentChange ?? null,
 			versioning: options?.versioning ?? null,
 		};
@@ -148,7 +150,7 @@ export default class CookieController {
 		this.onConsentChange("change", {
 			category,
 			consented,
-			cookies: [], //TODO: update
+			cookies: this.options.categoryCookies[category] ?? [],
 		});
 	}
 	/**
@@ -163,17 +165,26 @@ export default class CookieController {
 		},
 	) {
 		if (this.options.onConsentChange) {
+			const categories = Object.entries(this.state.categories).map(
+				([category, consented]) => ({
+					category,
+					consented,
+					cookies: this.options.categoryCookies[category] ?? [],
+				}),
+			);
+			if (this.options.essentialCookies) {
+				categories.push({
+					category: "essential",
+					consented: true,
+					cookies: this.options.categoryCookies.essential ?? [],
+				});
+			}
+
 			this.options.onConsentChange({
 				type,
 				uuid: this.state.uuid,
 				version: this.state.version,
-				categories: Object.entries(this.state.categories).map(
-					([category, consented]) => ({
-						category,
-						consented,
-						cookies: [], // TODO: update
-					}),
-				),
+				categories: categories,
 				changed: category,
 			});
 		}

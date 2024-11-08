@@ -5,9 +5,32 @@ export type Options = {
 	 * - change: whena a cookie checkbox is changed
 	 */
 	mode: "save" | "change";
+	/**
+	 * Set to true if you have essential cookies. This will return an extra category item called "essential" in the categories array on the onConsentChange callback
+	 */
+	essentialCookies: boolean;
+	/**
+	 * A list of cookies that get added when a certain cateogry is consented
+	 * - Ie: analytics: ["_ga", "_gid"]
+	 *
+	 * Note that these are just returned in the onConsentChange callback, they are not added/removed from the users cookies
+	 */
+	categoryCookies: Record<string | "esential", Array<string>>;
+	/**
+	 * A callback that is fired whenever the consent state changes
+	 */
 	onConsentChange: ((data: ConsentChange) => void) | null;
+	/**
+	 * A callback that is fired whenever a user state has a different version of the cookie policy to the current version
+	 */
 	versioning: {
+		/**
+		 * The current version of the cookie policy
+		 */
 		current: string;
+		/**
+		 * The callback
+		 */
 		onNewVersion?: (oldVersion: string, newVersion: string) => void;
 	} | null;
 };

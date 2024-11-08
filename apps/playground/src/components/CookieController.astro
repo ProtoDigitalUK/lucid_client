@@ -212,11 +212,16 @@
 
     new CookieController({
         mode: "change",
+        essentialCookies: true,
+        categoryCookies: {
+            analytics: ["_ga", "_gid"],
+            marketing: ["mkto"],
+        },
         onConsentChange: (data) => {
             console.log(data);
         },
         versioning: {
-            current: "1.0.1",
+            current: "1.0.2",
             onNewVersion: (oldVersion, newVersion) => {
                 console.log(oldVersion, newVersion);
             },
