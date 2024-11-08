@@ -24,3 +24,14 @@ export type CookieState = {
 	interacted: boolean;
 	cookies: Record<string, boolean>;
 };
+
+export type Elements = {
+	details: Element | null;
+	alert: Element | null;
+	cookieCheckboxes: NodeListOf<HTMLInputElement>;
+	actionDismiss: NodeListOf<Element>;
+	actionAccept: NodeListOf<Element>;
+	actionReject: NodeListOf<Element>;
+	actionDetails: NodeListOf<Element>;
+	actionSave: NodeListOf<Element>;
+};

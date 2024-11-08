@@ -7,7 +7,7 @@ export default {
 	attributes: {
 		details: "data-cookie-details",
 		alert: "data-cookie-alert",
-		cookieConfig: "data-cookie-config",
+		cookieCheckboxes: "data-cookie-config",
 		action: {
 			attribute: "data-cookie-action",
 			value: {
