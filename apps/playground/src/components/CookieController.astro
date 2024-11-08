@@ -167,7 +167,7 @@
                 <input
                     id="analytics"
                     type="checkbox"
-                    data-cookie-config="analytics"
+                    data-cookie-category="analytics"
                 />
             </li>
             <li
@@ -177,7 +177,7 @@
                 <input
                     id="marketing"
                     type="checkbox"
-                    data-cookie-config="marketing"
+                    data-cookie-category="marketing"
                 />
             </li>
         </ul>
@@ -211,9 +211,9 @@
     import CookieController from "@lucidclient/cookie-controller";
 
     new CookieController({
-        mode: "save",
+        mode: "change",
         onConsentChange: (data) => {
-            console.log(data.cookie);
+            console.log(data);
         },
         versioning: {
             current: "1.0.1",

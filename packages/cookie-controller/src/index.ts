@@ -6,13 +6,13 @@ export default class CookieController {
 	state: CookieState = {
 		uuid: "",
 		interacted: false,
-		cookies: {},
+		categories: {},
 	};
 	abortController = new AbortController();
 	elements: Elements = {
 		details: this.details,
 		alert: this.alert,
-		cookieCheckboxes: this.cookieCheckboxes,
+		categoryCheckboxes: this.categoryCheckboxes,
 		actionDismiss: this.actionDismiss,
 		actionAccept: this.actionAccept,
 		actionReject: this.actionReject,
@@ -27,14 +27,11 @@ export default class CookieController {
 		};
 
 		if (!this.elements.details) {
-			this.log(
-				"warn",
-				"[Cookie Controller] No details element has been found.",
-			);
+			this.log("warn", "No details element has been found.");
 			return;
 		}
 		if (!this.elements.alert) {
-			this.log("warn", "[Cookie Controller] No alert element has been found.");
+			this.log("warn", "No alert element has been found.");
 			return;
 		}
 
@@ -71,9 +68,9 @@ export default class CookieController {
 			this.save(),
 		);
 		this.regEventListenerLoop(
-			this.elements.cookieCheckboxes,
+			this.elements.categoryCheckboxes,
 			"change",
-			(e: Event) => this.onCookieChange(e),
+			(e: Event) => this.onCategoryChange(e),
 		);
 
 		//* if there is a versioning option, check if the version is different from the current version
@@ -133,24 +130,25 @@ export default class CookieController {
 		}
 	}
 	/**
-	 * The on change event of cookie checkboxes
+	 * The on change event of cookie category checkboxes
 	 */
-	private onCookieChange(e: Event) {
+	private onCategoryChange(e: Event) {
 		if (this.options.mode !== "change") return;
 
 		const target = e.target as HTMLInputElement;
 
-		const key = target.getAttribute(C.attributes.cookieCheckboxes) as string;
-		if (!key) return;
+		const category = target.getAttribute(C.attributes.cookieCategory) as string;
+		if (!category) return;
 
-		const value = target.checked;
+		const consented = target.checked;
 
-		this.state.cookies[key] = value;
+		this.state.categories[category] = consented;
 		this.cookieState = this.state;
 
-		this.onConsentChange("cookie", {
-			key,
-			value,
+		this.onConsentChange("change", {
+			category,
+			consented,
+			cookies: [], //TODO: update
 		});
 	}
 	/**
@@ -158,9 +156,10 @@ export default class CookieController {
 	 */
 	private onConsentChange(
 		type: ConsentChange["type"],
-		cookie?: {
-			key: string;
-			value: boolean;
+		category?: {
+			category: string;
+			consented: boolean;
+			cookies: Array<string>;
 		},
 	) {
 		if (this.options.onConsentChange) {
@@ -168,8 +167,14 @@ export default class CookieController {
 				type,
 				uuid: this.state.uuid,
 				version: this.state.version,
-				cookies: this.state.cookies,
-				cookie,
+				categories: Object.entries(this.state.categories).map(
+					([category, consented]) => ({
+						category,
+						consented,
+						cookies: [], // TODO: update
+					}),
+				),
+				changed: category,
 			});
 		}
 	}
@@ -205,11 +210,11 @@ export default class CookieController {
 	 * Handle rejecting or accepting
 	 */
 	private rejectAccept(mode: "accept" | "reject" = "accept") {
-		for (let i = 0; i < this.elements.cookieCheckboxes.length; i++) {
-			const element = this.elements.cookieCheckboxes[i];
+		for (let i = 0; i < this.elements.categoryCheckboxes.length; i++) {
+			const element = this.elements.categoryCheckboxes[i];
 			if (!element) continue;
-			const key = element.getAttribute(C.attributes.cookieCheckboxes) as string;
-			this.state.cookies[key] = mode === "accept";
+			const key = element.getAttribute(C.attributes.cookieCategory) as string;
+			this.state.categories[key] = mode === "accept";
 		}
 
 		this.onConsentChange(mode);
@@ -229,7 +234,7 @@ export default class CookieController {
 		this.abortController.abort();
 	}
 	/**
-	 * Accepts all cookies
+	 * Accepts all cookie categories
 	 * - Fires the onConsentChange accept callback
 	 * - Closes the cookie details and alert modals
 	 */
@@ -237,7 +242,7 @@ export default class CookieController {
 		this.rejectAccept("accept");
 	}
 	/**
-	 * Rejects all cookies
+	 * Rejects all cookie categories
 	 * - Fires the onConsentChange reject callback
 	 * - Closes the cookie details and alert modals
 	 */
@@ -258,12 +263,12 @@ export default class CookieController {
 	 * Toggles the details modal
 	 */
 	toggleDetails() {
-		for (let i = 0; i < this.elements.cookieCheckboxes.length; i++) {
-			const element = this.elements.cookieCheckboxes[i];
+		for (let i = 0; i < this.elements.categoryCheckboxes.length; i++) {
+			const element = this.elements.categoryCheckboxes[i];
 			if (!element) continue;
 
-			const key = element.getAttribute(C.attributes.cookieCheckboxes) as string;
-			const value = this.state.cookies[key];
+			const key = element.getAttribute(C.attributes.cookieCategory) as string;
+			const value = this.state.categories[key];
 			element.checked = value ?? false;
 		}
 
@@ -276,13 +281,13 @@ export default class CookieController {
 	 * - Fires the onConsentChange save callback
 	 */
 	save() {
-		for (let i = 0; i < this.elements.cookieCheckboxes.length; i++) {
-			const element = this.elements.cookieCheckboxes[i];
+		for (let i = 0; i < this.elements.categoryCheckboxes.length; i++) {
+			const element = this.elements.categoryCheckboxes[i];
 			if (!element) continue;
 
-			const key = element.getAttribute(C.attributes.cookieCheckboxes) as string;
+			const key = element.getAttribute(C.attributes.cookieCategory) as string;
 			const value = element.checked;
-			this.state.cookies[key] = value;
+			this.state.categories[key] = value;
 		}
 
 		this.onConsentChange("save");
@@ -292,7 +297,7 @@ export default class CookieController {
 	 * Returns the consent status of a cookie via the key
 	 */
 	getCookieConsent(key: string) {
-		return this.state.cookies[key];
+		return this.state.categories[key];
 	}
 
 	/**
@@ -345,13 +350,11 @@ export default class CookieController {
 	 * - Either creates new state or returns existing state
 	 */
 	get cookieState() {
-		const defaultCookies: Record<string, boolean> = {};
-		for (let i = 0; i < this.elements.cookieCheckboxes.length; i++) {
-			const element = this.elements.cookieCheckboxes[i];
-			const key = element?.getAttribute(
-				C.attributes.cookieCheckboxes,
-			) as string;
-			defaultCookies[key] = false;
+		const defaultCategories: Record<string, boolean> = {};
+		for (let i = 0; i < this.elements.categoryCheckboxes.length; i++) {
+			const element = this.elements.categoryCheckboxes[i];
+			const key = element?.getAttribute(C.attributes.cookieCategory) as string;
+			defaultCategories[key] = false;
 		}
 
 		try {
@@ -368,14 +371,14 @@ export default class CookieController {
 				uuid: "",
 				version: this.options.versioning?.current || undefined,
 				interacted: false,
-				cookies: defaultCookies,
+				categories: defaultCategories,
 			};
 		} catch (error) {
 			return {
 				uuid: "",
 				version: this.options.versioning?.current || undefined,
 				interacted: false,
-				cookies: defaultCookies,
+				categories: defaultCategories,
 			};
 		}
 	}
@@ -393,11 +396,11 @@ export default class CookieController {
 		return document.querySelector(`[${C.attributes.alert}]`);
 	}
 	/**
-	 * Returns the cookie config elements
+	 * Returns the cookie category elements
 	 */
-	get cookieCheckboxes() {
+	get categoryCheckboxes() {
 		return document.querySelectorAll(
-			`input[type="checkbox"][${C.attributes.cookieCheckboxes}]`,
+			`input[type="checkbox"][${C.attributes.cookieCategory}]`,
 		) as NodeListOf<HTMLInputElement>;
 	}
 	/**
