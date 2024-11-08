@@ -1,9 +1,10 @@
 export type Options = {
-	onConsentChange?: (data: ConsentChange) => void;
-	versioning?: {
+	mode: "save" | "change";
+	onConsentChange: ((data: ConsentChange) => void) | null;
+	versioning: {
 		current: string;
 		onNewVersion?: (oldVersion: string, newVersion: string) => void;
-	};
+	} | null;
 };
 
 export type ConsentChange = {

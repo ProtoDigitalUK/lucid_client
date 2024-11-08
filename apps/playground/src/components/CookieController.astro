@@ -211,6 +211,7 @@
     import CookieController from "@lucidclient/cookie-controller";
 
     new CookieController({
+        mode: "save",
         onConsentChange: (data) => {
             console.log(data.cookie);
         },

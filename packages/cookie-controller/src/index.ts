@@ -2,7 +2,7 @@ import C from "./constants.js";
 import type { Options, ConsentChange, CookieState, Elements } from "./types.js";
 
 export default class CookieController {
-	userOptions: Options = {};
+	options: Options;
 	state: CookieState = {
 		uuid: "",
 		interacted: false,
@@ -19,8 +19,13 @@ export default class CookieController {
 		actionDetails: this.actionDetails,
 		actionSave: this.actionSave,
 	};
-	constructor(options?: Options) {
-		if (options) this.userOptions = options;
+	constructor(options?: Partial<Options>) {
+		this.options = {
+			mode: options?.mode ?? "save",
+			onConsentChange: options?.onConsentChange ?? null,
+			versioning: options?.versioning ?? null,
+		};
+
 		if (!this.elements.details) {
 			this.log(
 				"warn",
@@ -35,10 +40,12 @@ export default class CookieController {
 
 		this.initialise();
 	}
-
+	/**
+	 * Initialises the library
+	 */
 	private initialise() {
 		this.state = this.cookieState;
-		this.setAttributes("staic");
+		this.setAttributes("static");
 		this.setAttributes("dynamic");
 
 		if (!this.state.interacted) this.alertState = true;
@@ -83,8 +90,11 @@ export default class CookieController {
 
 		this.onConsentChange("onload");
 	}
-	private setAttributes(type: "staic" | "dynamic") {
-		if (type === "staic") {
+	/**
+	 * Handles setting static or dynamic accessibility attributes
+	 */
+	private setAttributes(type: "static" | "dynamic") {
+		if (type === "static") {
 			if (!this.elements.details?.hasAttribute("id"))
 				this.elements.details?.setAttribute("id", C.ids.details);
 			if (!this.elements.alert?.hasAttribute("id"))
@@ -122,8 +132,11 @@ export default class CookieController {
 			}
 		}
 	}
+	/**
+	 * The on change event of cookie checkboxes
+	 */
 	private onCookieChange(e: Event) {
-		if (this.options.mode !== "onChange") return;
+		if (this.options.mode !== "change") return;
 
 		const target = e.target as HTMLInputElement;
 
@@ -140,6 +153,9 @@ export default class CookieController {
 			value,
 		});
 	}
+	/**
+	 * A util fires the onConsentChange callback
+	 */
 	private onConsentChange(
 		type: ConsentChange["type"],
 		cookie?: {
@@ -157,6 +173,9 @@ export default class CookieController {
 			});
 		}
 	}
+	/**
+	 * A util to register event listeners
+	 */
 	private regEventListenerLoop(
 		elements: NodeListOf<Element | HTMLInputElement>,
 		event: string,
@@ -168,6 +187,9 @@ export default class CookieController {
 			elements[i]?.addEventListener(event, fn, { signal });
 		}
 	}
+	/**
+	 * A util to generate a UUID
+	 */
 	private generateUUID() {
 		if (typeof crypto !== "undefined" && crypto.randomUUID) {
 			return crypto.randomUUID();
@@ -179,6 +201,9 @@ export default class CookieController {
 			return v.toString(16);
 		});
 	}
+	/**
+	 * Handle rejecting or accepting
+	 */
 	private rejectAccept(mode: "accept" | "reject" = "accept") {
 		for (let i = 0; i < this.elements.cookieCheckboxes.length; i++) {
 			const element = this.elements.cookieCheckboxes[i];
@@ -190,6 +215,9 @@ export default class CookieController {
 		this.onConsentChange(mode);
 		this.dismiss();
 	}
+	/**
+	 * A util for logging
+	 */
 	private log(type: "warn", msg: string) {
 		if (type === "warn") console.warn(`[Cookie Controller] ${msg}`);
 	}
@@ -270,7 +298,7 @@ export default class CookieController {
 	/**
 	 * Sets the alert modal state - open/close
 	 */
-	set alertState(state: boolean) {
+	private set alertState(state: boolean) {
 		this.elements.alert?.setAttribute(
 			C.attributes.alert,
 			state ? "true" : "false",
@@ -280,7 +308,7 @@ export default class CookieController {
 	/**
 	 * Sets the details modal state - open/close
 	 */
-	set detailsState(state: boolean) {
+	private set detailsState(state: boolean) {
 		if (this.alertState) this.alertState = false;
 		this.elements.details?.setAttribute(
 			C.attributes.details,
@@ -292,24 +320,13 @@ export default class CookieController {
 	 * Sets the cookie state via document.cookie
 	 * - creates new uuid if not present
 	 */
-	set cookieState(state: CookieState) {
+	private set cookieState(state: CookieState) {
 		if (!state.uuid) state.uuid = this.generateUUID();
 
 		const cookieValue = JSON.stringify(state);
 		document.cookie = `${C.key}=${cookieValue};path=/;SameSite=Strict`;
 
 		this.state = state;
-	}
-
-	/**
-	 * Returns the options object
-	 */
-	get options() {
-		return {
-			mode: this.elements.actionSave.length > 0 ? "onSave" : "onChange",
-			onConsentChange: this.userOptions.onConsentChange || null,
-			versioning: this.userOptions.versioning || null,
-		};
 	}
 	/**
 	 * Returns the alert modal state - open/close
