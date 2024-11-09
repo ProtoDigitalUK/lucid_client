@@ -10,7 +10,11 @@ const setCookieState = (newState: CookieState) => {
 	if (!newState.uuid) newState.uuid = lib.generateUUID();
 
 	const cookieValue = JSON.stringify(newState);
-	document.cookie = `${C.key}=${cookieValue};path=/;SameSite=Strict`;
+	document.cookie = lib.formatCookieString(
+		C.key,
+		cookieValue,
+		S.options.storage,
+	);
 
 	S.state = newState;
 };

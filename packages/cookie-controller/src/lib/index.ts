@@ -18,6 +18,7 @@ import registerEvents from "./register-events.js";
 import initialise from "./initialise.js";
 import destroy from "./destroy.js";
 import getCookieConsent from "./get-cookie-consentt.js";
+import formatCookieString from "./format-cookie-string.js";
 
 const lib = {
 	getElements,
@@ -40,6 +41,7 @@ const lib = {
 	initialise,
 	destroy,
 	getCookieConsent,
+	formatCookieString,
 };
 
 export default lib;

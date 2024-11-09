@@ -219,11 +219,16 @@
         onConsentChange: (data) => {
             console.log(data);
         },
-        versioning: {
+        version: {
             current: "1.0.2",
             onNewVersion: (oldVersion, newVersion) => {
                 console.log(oldVersion, newVersion);
             },
+        },
+        storage: {
+            path: "/",
+            sameSite: "Strict",
+            secure: window.location.protocol === "https:",
         },
     });
 </script>

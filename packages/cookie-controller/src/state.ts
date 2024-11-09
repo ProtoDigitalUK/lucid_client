@@ -15,7 +15,12 @@ const S: {
 		essentialCookies: false,
 		categoryCookies: {},
 		onConsentChange: null,
-		versioning: null,
+		version: null,
+		storage: {
+			path: "/",
+			sameSite: "Strict",
+			secure: window.location.protocol === "https:",
+		},
 	},
 	abortController: new AbortController(),
 	elements: null,

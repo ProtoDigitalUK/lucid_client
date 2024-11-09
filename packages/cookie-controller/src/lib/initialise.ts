@@ -10,7 +10,13 @@ const initialise = (initOptions?: Partial<Options>) => {
 		essentialCookies: initOptions?.essentialCookies ?? false,
 		categoryCookies: initOptions?.categoryCookies ?? {},
 		onConsentChange: initOptions?.onConsentChange ?? null,
-		versioning: initOptions?.versioning ?? null,
+		version: initOptions?.version ?? null,
+		storage: {
+			path: "/",
+			sameSite: "Strict",
+			secure: window.location.protocol === "https:",
+			...initOptions?.storage,
+		},
 	};
 
 	S.elements = lib.getElements();
@@ -33,14 +39,14 @@ const initialise = (initOptions?: Partial<Options>) => {
 
 	lib.registerEvents();
 
-	if (S.state.version && S.options.versioning?.current) {
-		if (S.state.version !== S.options.versioning.current) {
-			S.options.versioning.onNewVersion?.(
+	if (S.state.version && S.options.version?.current) {
+		if (S.state.version !== S.options.version.current) {
+			S.options.version.onNewVersion?.(
 				S.state.version,
-				S.options.versioning.current,
+				S.options.version.current,
 			);
 		}
-		S.state.version = S.options.versioning.current;
+		S.state.version = S.options.version.current;
 		lib.setCookieState(S.state);
 	}
 

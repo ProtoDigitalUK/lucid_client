@@ -27,14 +27,14 @@ const getCookieState = () => {
 
 		return {
 			uuid: "",
-			version: S.options.versioning?.current || undefined,
+			version: S.options.version?.current || undefined,
 			interacted: false,
 			categories: defaultCategories,
 		};
 	} catch (error) {
 		return {
 			uuid: "",
-			version: S.options.versioning?.current || undefined,
+			version: S.options.version?.current || undefined,
 			interacted: false,
 			categories: defaultCategories,
 		};

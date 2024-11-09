@@ -1,3 +1,11 @@
+export type StorageOptions = {
+	path?: string;
+	domain?: string;
+	sameSite?: "Strict" | "Lax" | "None";
+	secure?: boolean;
+	expires?: number | Date;
+};
+
 export type Options = {
 	/**
 	 * Set to true if you have essential cookies. This will return an extra category item called "essential" in the categories array on the onConsentChange callback
@@ -17,7 +25,7 @@ export type Options = {
 	/**
 	 * A callback that is fired whenever a user state has a different version of the cookie policy to the current version
 	 */
-	versioning: {
+	version: {
 		/**
 		 * The current version of the cookie policy
 		 */
@@ -27,6 +35,10 @@ export type Options = {
 		 */
 		onNewVersion?: (oldVersion: string, newVersion: string) => void;
 	} | null;
+	/**
+	 * Configure the options for the cookie used to store the user's preferences
+	 */
+	storage: StorageOptions;
 };
 
 export type ConsentChange = {
