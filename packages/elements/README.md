@@ -186,7 +186,7 @@ Refs are used to select elements and store them so you can easily access them fr
 
 Any attributes that are suffixed with `[]` will be stored as an array of elements with the same name.
 
-## Missing Features:
+## Missing Features
 
 - Detailed documentation and examples via the [Lucid JS webiste](https://lucidjs.build/elements).
 - Handlers for focus trapping, intersection observers, etc. These may be released separately.

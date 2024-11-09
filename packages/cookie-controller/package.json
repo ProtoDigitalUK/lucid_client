@@ -2,11 +2,7 @@
 	"name": "@lucidclient/cookie-controller",
 	"version": "0.1.0",
 	"private": false,
-	"description": "A lightweight cookie consent solution to help you comply with the EU Cookie Law and GDPR.",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/ProtoDigitalUK/lucid_primitives/tree/master/packages/cookie-controller"
-	},
+	"description": "A lightweight, bring your own markup and styles, cookie consent solution to help you comply with the EU Cookie Law and GDPR.",
 	"type": "module",
 	"types": "./dist/index.d.ts",
 	"main": "dist/index.cjs",
@@ -33,8 +29,29 @@
 		"tsup": "^8.3.0",
 		"typescript": "^5.6.3"
 	},
-	"author": "William Yallop <hello@williamyallop.com>",
+	"author": "Proto Digital",
 	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ProtoDigitalUK/lucid_client",
+		"directory": "packages/cookie-controller"
+	},
+	"keywords": [
+		"cookie-consent",
+		"cookie-law",
+		"gdpr",
+		"eu-cookie-law",
+		"privacy",
+		"consent",
+		"javascript",
+		"typescript",
+		"frontend",
+		"minimal",
+		"lightweight",
+		"lucid-client",
+		"lucid"
+	],
+	"homepage": "https://lucidjs.build/cookie-controller",
 	"volta": {
 		"node": "20.18.0"
 	}
