@@ -1,11 +1,5 @@
 export type Options = {
 	/**
-	 * Determines when the onConsentChange callback is fired
-	 * - save: when the data-cookie-action="save" button is clicked
-	 * - change: whena a cookie checkbox is changed
-	 */
-	mode: "save" | "change";
-	/**
 	 * Set to true if you have essential cookies. This will return an extra category item called "essential" in the categories array on the onConsentChange callback
 	 */
 	essentialCookies: boolean;
@@ -55,7 +49,7 @@ export type ConsentChange = {
 	version?: string;
 	/**
 	 * The cookie category that has changed
-	 * - only fires when the mode is set to "change"
+	 * - this is only present when the type is "change", triggered by a cookie checkbox change
 	 */
 	changed?: {
 		category: string;

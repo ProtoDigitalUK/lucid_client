@@ -116,7 +116,7 @@ Please note this is not an exhaustive list, and we recommend seeking legal advic
 
 
 ## TODO:
-
+- 7kb
 - add new config options to support setting cookie settings, expiry, domain, path, and samesite etc.
 - update the readme
 - publish to npm
