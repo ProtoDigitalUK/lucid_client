@@ -5,5 +5,5 @@ import tsupConfig from "@repo/config/tsupconfig-base.json" assert {
 
 export default defineConfig({
 	...tsupConfig,
-	entry: ["src/index.ts", "src/handlers.ts"],
+	entry: ["src/index.ts", "src/handlers.ts", "src/types/index.ts"],
 });

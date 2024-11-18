@@ -1,6 +1,6 @@
 {
 	"name": "@lucidclient/elements",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"private": false,
 	"description": "A lightweight, reactive UI library that bridges HTML and JavaScript through attributes, powered by SolidJS. Adds reactive state and dynamic behaviors to markup while maintaining simplicity.",
 	"type": "module",
@@ -18,6 +18,11 @@
 			"types": "./dist/handlers.d.ts",
 			"import": "./dist/handlers.js",
 			"require": "./dist/handlers.cjs"
+		},
+		"./types": {
+			"types": "./dist/types/index.d.ts",
+			"default": "./dist/types/index.js",
+			"require": "./dist/types/index.cjs"
 		}
 	},
 	"scripts": {

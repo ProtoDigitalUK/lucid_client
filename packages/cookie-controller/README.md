@@ -199,3 +199,4 @@ Please note this is not an exhaustive list, and we recommend seeking legal advic
 - Detailed documentation and examples via the [Lucid JS webiste](https://lucidjs.build/cookie-controller).
 - Functions to update individual cookie category consent.
 - The ability to refresh the library to register missing event handlers, etc.
+- Make essential cookies required as the lib itself uses one.
