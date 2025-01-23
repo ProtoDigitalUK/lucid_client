@@ -28,6 +28,10 @@ Initialise the library by calling the `speculateLinks` function.
 import { speculateLinks } from "@lucidclient/speculate";
 
 speculateLinks();
+
+// You can destroy and cleanup the instance like so:
+// const destroy = speculateLinks();
+// destroy();
 ```
 
 Define the actions and triggers for your links using the `rel` attribute. For each action (prefetch or prerender) you can specify a trigger (visible, immediate, eager, moderate or conservative). For example:

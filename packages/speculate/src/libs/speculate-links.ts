@@ -7,6 +7,7 @@ const C: {
 	fallbackAction: SpeculationActions;
 	validActions: SpeculationActions[];
 	validTriggers: SpeculationTriggers[];
+	genSpeculate: string;
 } = {
 	moderateEvents: ["mouseenter", "touchstart", "focus"],
 	fallbackTriggerSupport: ["visible", "moderate"],
@@ -14,6 +15,7 @@ const C: {
 	fallbackAction: "prefetch",
 	validActions: ["prefetch", "prerender"],
 	validTriggers: ["visible", "immediate", "eager", "moderate", "conservative"],
+	genSpeculate: "gen-speculate",
 };
 
 let initialised = false;
@@ -23,6 +25,7 @@ const prefetchSupport = document
 	.createElement("link")
 	.relList?.supports?.("prefetch");
 let observer: IntersectionObserver;
+let abortController = new AbortController();
 
 /**
  * Unobserves and deregisters the target anchor element
@@ -37,7 +40,10 @@ const unobserve = (target: HTMLAnchorElement) => {
  */
 const addEventListeners = (element: HTMLAnchorElement) => {
 	for (const event of C.moderateEvents) {
-		element.addEventListener(event, intentEvent, { passive: true });
+		element.addEventListener(event, intentEvent, {
+			passive: true,
+			signal: abortController.signal,
+		});
 	}
 };
 
@@ -69,7 +75,7 @@ const triggerAction = (
 
 	if (speculationSupport) addSpeculationRules(target.href, config);
 	else if (prefetchSupport) addLinkPrefetch(target.href);
-	else fetch(target.href, { priority: "low" });
+	else fetch(target.href, { priority: "low", signal: abortController.signal });
 
 	prefetched.add(target.href);
 	unobserve(target);
@@ -85,6 +91,7 @@ const addSpeculationRules = (
 	try {
 		const specScript = document.createElement("script");
 		specScript.type = "speculationrules";
+		specScript.setAttribute(C.genSpeculate, "");
 		const item = [
 			{
 				source: "list",
@@ -114,6 +121,7 @@ const addSpeculationRules = (
 const addLinkPrefetch = (href: string) => {
 	const link = document.createElement("link");
 	link.rel = "prefetch";
+	link.setAttribute(C.genSpeculate, "");
 	link.href = href;
 	link.as = "document";
 	document.head.appendChild(link);
@@ -250,11 +258,32 @@ const speculationLinks = () => {
 };
 
 /**
+ * Destroys and resets the speculate instance. This will also tidy up any generated speculation rules, prefetch links and cancel any on-going fetches.
+ */
+const destroy = () => {
+	abortController.abort();
+	abortController = new AbortController();
+	observer?.disconnect();
+	prefetched.clear();
+	initialised = false;
+
+	const clearEles = document.querySelectorAll(
+		`link[${C.genSpeculate}], script[${C.genSpeculate}]`,
+	);
+	for (const ele of clearEles) {
+		ele.remove();
+	}
+};
+
+/**
  * Initialises the speculation library using requestIdleCallback if available
  */
-const init = () =>
+const init = () => {
 	typeof requestIdleCallback !== "undefined"
 		? requestIdleCallback(speculationLinks)
 		: setTimeout(speculationLinks, 0);
+
+	return destroy;
+};
 
 export default init;
