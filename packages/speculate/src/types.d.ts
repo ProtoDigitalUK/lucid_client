@@ -1,3 +1,6 @@
+// --------------------------------------------------------
+// Speculate Links
+
 export type SpeculationTriggers =
 	| "visible"
 	| "immediate"
@@ -7,6 +10,62 @@ export type SpeculationTriggers =
 
 export type SpeculationActions = "prefetch" | "prerender";
 
+// --------------------------------------------------------
+// Speculator
+
+export type OptimisticPreloadStrategy = {
+	/**
+	 * The target element(s) - triggers the onIntent callback immediately
+	 */
+	immediate: string | Element | Element[] | NodeListOf<Element>;
+	/**
+	 * Intent callback fire priority (1 being the highest)
+	 */
+	priority?: number;
+	/**
+	 * Determines if the onIntent callback should be fired
+	 */
+	condition?: () => boolean;
+};
+
+export type SpeculatorConfig<T> = {
+	/**
+	 * Targets to trigger the onIntent callback, when user intent is determined
+	 */
+	targets: string | Element | Element[] | NodeListOf<Element>;
+	/**
+	 * Optimistic preload targets and strategy
+	 */
+	optimistic?: OptimisticPreloadStrategy | OptimisticPreloadStrategy[];
+	/**
+	 * Fires when use intent is determined or optimisitcally fired
+	 */
+	onIntent: (element: Element) => Promise<T>;
+	/**
+	 * The on click callback for the targets
+	 */
+	onClick?: (data: T, element: Element) => void;
+	/**
+	 * Cache config
+	 */
+	cache?: {
+		/**
+		 * @default 5
+		 */
+		maxSize?: number;
+		/**
+		 * Time in milliseconds
+		 * @default 120000
+		 */
+		staleTime?: number;
+	};
+	/**
+	 * Control the cache key thats used. This defaults to the ID, then Node posisiton.
+	 */
+	getCacheKey?: (element: Element) => string;
+};
+
+// old
 export type PrefetchDataConfig<T> = {
 	target: string;
 	fetch: () => Promise<T>;
