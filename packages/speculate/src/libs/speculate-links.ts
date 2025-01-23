@@ -191,26 +191,28 @@ const shouldPreload = (props: {
 /**
  * Connection check
  */
-const checkConnection = () => {
+const validConnection = (): boolean => {
 	if (!navigator.onLine) {
 		console.warn("The device is offline, speculate library not initialised.");
-		return;
+		return false;
 	}
 	if ("connection" in navigator) {
 		const connection = navigator.connection;
 		// @ts-expect-error
 		if (connection?.saveData) {
 			console.warn("Save-Data is enabled, speculate library not initialised.");
-			return;
+			return false;
 		}
 		// @ts-expect-error
 		if (/(2|3)g/.test(connection?.effectiveType)) {
 			console.warn(
 				"2G or 3G connection is detected, speculate library not initialised.",
 			);
-			return;
+			return false;
 		}
 	}
+
+	return true;
 };
 
 /**
@@ -220,7 +222,8 @@ const speculationLinks = () => {
 	if (initialised) return;
 	initialised = true;
 
-	checkConnection();
+	const valid = validConnection();
+	if (!valid) return;
 
 	// setup observer
 	observer =

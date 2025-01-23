@@ -1,6 +1,6 @@
 {
 	"name": "@lucidclient/speculate",
-	"version": "0.2.2",
+	"version": "0.3.0",
 	"private": false,
 	"description": "A lightweight library to handle speculate rules for prefetching and prerendering documents, with added support for data fetching on intent.",
 	"type": "module",

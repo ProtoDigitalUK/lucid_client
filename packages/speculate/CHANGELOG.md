@@ -1,5 +1,12 @@
 # @lucidclient/speculate
 
+## v0.3.0
+
+### Minor Changes
+
+- Added the ability to destroy the instance. This will destroy any event listeners, abort fetch requests and tidy up any generated script/link elements.
+- Fixed a bug where `checkConnection` wasnt being used.
+
 ## v0.2.1
 
 ### Patch Changes
