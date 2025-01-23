@@ -21,8 +21,8 @@
 		},
 		"./types": {
 			"types": "./dist/types/index.d.ts",
-			"default": "./dist/types/index.js",
-			"require": "./dist/types/index.cjs"
+			"require": "./dist/types/index.cjs",
+			"default": "./dist/types/index.js"
 		}
 	},
 	"scripts": {
@@ -37,7 +37,7 @@
 		"@biomejs/biome": "^1.9.4",
 		"@repo/config": "*",
 		"tsup": "^8.3.5",
-		"typescript": "^5.6.3"
+		"typescript": "^5.7.3"
 	},
 	"author": "Proto Digital",
 	"license": "MIT",
@@ -64,7 +64,7 @@
 	],
 	"homepage": "https://lucidjs.build/elements",
 	"volta": {
-		"node": "20.18.0"
+		"node": "22.13.1"
 	},
 	"dependencies": {
 		"solid-js": "^1.9.3"
