@@ -8,15 +8,20 @@ import Layout from "../layouts/Layout.astro";
         <li>
             <a href="/" rel="prefetch:moderate">Home</a>
         </li>
-        <li class="h-[1000px]">
+        <li>
             <a href="/elements" rel="prerender:moderate">Elements</a>
         </li>
         <li>
             <a href="/about" rel="prerender:moderate">About</a>
         </li>
-        <li>
-            <button id="load-data-prefetch">Load Data (prefetch)</button>
-            <button id="load-data">Load Data (standard)</button>
-        </li>
     </ul>
+
+    <div class="mt-10 flex gap-2.5">
+        <button data-page="1">Page 1</button>
+        <button data-page="2">Page 2</button>
+        <button data-page="3">Page 3</button>
+        <button data-page="4">Page 4</button>
+        <button data-page="5">Page 5</button>
+        <button data-page="6">Page 6</button>
+    </div>
 </Layout>

@@ -74,10 +74,7 @@ const { title } = Astro.props;
                 registerHandler,
                 createSignal,
             } from "@lucidclient/elements";
-            import {
-                speculateLinks,
-                PrefetchData,
-            } from "@lucidclient/speculate";
+            import { speculateLinks, Speculator } from "@lucidclient/speculate";
 
             registerHandler(events);
             registerHandler(dom);
@@ -191,40 +188,26 @@ const { title } = Astro.props;
             });
 
             speculateLinks();
-            new PrefetchData({
-                target: "#load-data-prefetch",
-                fetch: async () => {
-                    return fetch("https://api.sampleapis.com/wines/reds").then(
-                        (res) => res.json(),
-                    ) as Promise<
-                        Array<{
-                            winery: string;
-                            wine: string;
-                            rating: {
-                                average: string;
-                                reviews: string;
-                            };
-                            location: string;
-                            image: string;
-                            id: number;
-                        }>
-                    >;
-                },
-                onClick: (data) => {
-                    console.log(data);
-                },
-                staletime: 10000,
-            });
+            new Speculator({
+                targets: document.querySelectorAll("[data-page]"),
+                onIntent: async (element) => {
+                    const page = element.getAttribute("data-page");
 
-            const loadmore = document.querySelector("#load-data");
-            if (loadmore) {
-                loadmore?.addEventListener("click", async () => {
-                    const data = await fetch(
-                        "https://api.sampleapis.com/wines/reds",
-                    ).then((res) => res.json());
-                    console.log(data);
-                });
-            }
+                    await new Promise((resolve) => setTimeout(resolve, 1000));
+                    console.log(page);
+
+                    return {
+                        page: Number(page),
+                    };
+                },
+                onClick: async (data, element) => {
+                    console.log("clicked", data, element);
+                },
+                cache: {
+                    maxSize: 2,
+                    staleTime: 100,
+                },
+            });
         </script>
     </body>
 </html>

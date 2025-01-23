@@ -17,7 +17,7 @@ export type OptimisticPreloadStrategy = {
 	/**
 	 * The target element(s) - triggers the onIntent callback immediately
 	 */
-	immediate: string | Element | Element[] | NodeListOf<Element>;
+	immediate: Element | NodeListOf<Element>;
 	/**
 	 * Intent callback fire priority (1 being the highest)
 	 */
@@ -32,7 +32,7 @@ export type SpeculatorConfig<T> = {
 	/**
 	 * Targets to trigger the onIntent callback, when user intent is determined
 	 */
-	targets: string | Element | Element[] | NodeListOf<Element>;
+	targets: Element | NodeListOf<Element>;
 	/**
 	 * Optimistic preload targets and strategy
 	 */
@@ -60,9 +60,14 @@ export type SpeculatorConfig<T> = {
 		staleTime?: number;
 	};
 	/**
-	 * Control the cache key thats used. This defaults to the ID, then Node posisiton.
+	 * Control the cache key thats used. This will fallback to the elements ID.
+	 * If no cache key exists, the onIntent promise wont be cached.
 	 */
 	getCacheKey?: (element: Element) => string;
+	/**
+	 * Intent debounce
+	 */
+	intentDebounceTimeout?: number;
 };
 
 // old

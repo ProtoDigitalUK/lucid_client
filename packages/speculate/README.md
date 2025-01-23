@@ -2,13 +2,12 @@
 
 > Part of the Lucid Client suite
 
-A simple library designed to enhance anchor elements by adding support for prefetching and prerendering. By default this uses the new experimental [Speculation Rules](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/speculationrules) API, but falls back to `<link rel="prefetch">` or `fetch` when not supported. Additionally, the library features a `PrefetchData` class, enabling asynchronous data fetching based on user interactions with specified targets.
+A simple library designed to enhance anchor elements by adding support for prefetching and prerendering. By default this uses the new experimental [Speculation Rules](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/speculationrules) API, but falls back to `<link rel="prefetch">` or `fetch` when not supported. 
 
 ## Features
 
 - Prefetch or prerender documents using Speculation Rules, `<link rel="prefetch">` or `fetch` as a fallback.
 - Support for `visible`, `immediate`, `eager`, `moderate` and `conservative` triggers.
-- PrefetchData class for asynchronous data fetching based on user intent.
 
 ## Getting Started
 
@@ -61,31 +60,3 @@ Firefox does not support the Speculations API, but does support `<link rel="pref
 #### Safari
 
 Safari doesn't support either the Speculation Rules API or `<link rel="prefetch">`. Instead, it uses a low-priority fetch, which requires cache headers (such as Cache-Control, Expires, or ETag) to function properly.
-
-### Prefetch Data Usage
-
-To use the PrefetchData class, import the `PrefetchData` class and intialise a new instance of it per target.
-
-```typescript
-import { PrefetchData } from "@lucidclient/speculate";
-
-new PrefetchData({
-    target: "#load-data",
-    fetch: () => {
-        return fetch("/api/users").then((res) => res.json());
-    },
-    onClick: (data) => {
-        console.log(data);
-    },
-    staletime: 60000, // optional
-});
-```
-
-```html
-<button 
-    id="load-data"
-    type="button"
->
-    Load Data
-</button>
-```
