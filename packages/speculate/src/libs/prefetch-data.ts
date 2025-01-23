@@ -1,7 +1,10 @@
+import type { PrefetchDataConfig } from "../types.js";
+
 export default class PrefetchData<T> {
 	config: PrefetchDataConfig<T> | null = null;
 	promise: Promise<T> | null = null;
 	time: number | null = null;
+	abortController = new AbortController();
 	constructor(config: PrefetchDataConfig<T>) {
 		this.config = config;
 		this.initialise();
@@ -10,29 +13,31 @@ export default class PrefetchData<T> {
 	// ----------------
 	// Private methods
 	private initialise() {
-		this.prefetch = this.prefetch.bind(this);
-		this.click = this.click.bind(this);
-		this.getTarget?.addEventListener("click", this.click);
-		this.getTarget?.addEventListener("mouseover", this.prefetch);
+		this.getTarget?.addEventListener("click", this.click, {
+			signal: this.abortController.signal,
+		});
+		this.getTarget?.addEventListener("mouseover", this.prefetch, {
+			signal: this.abortController.signal,
+		});
 	}
-	private prefetch(e: MouseEvent) {
+	private prefetch = (e: MouseEvent) => {
 		if (!this.config?.fetch) return;
 		if (!this.promise || this.stale) {
 			this.promise = this.config.fetch();
 			this.time = Date.now();
 		}
-	}
-	private click(e: MouseEvent) {
+	};
+	private click = (e: MouseEvent) => {
 		if (!this.config?.onClick) return;
 		if (!this.promise) return;
 		this.promise.then(this.config.onClick);
-	}
+	};
 
 	// ----------------
 	// Public methods
 	destroy() {
-		this.getTarget?.removeEventListener("click", this.click);
-		this.getTarget?.removeEventListener("mouseover", this.prefetch);
+		this.abortController.abort();
+		this.abortController = new AbortController();
 	}
 	// ----------------
 	// Getters
@@ -47,14 +52,4 @@ export default class PrefetchData<T> {
 		if (!this.config?.staletime) return false;
 		return Date.now() - this.time > this.config.staletime;
 	}
-}
-
-// ----------------
-// Types
-
-interface PrefetchDataConfig<T> {
-	target: string;
-	fetch: () => Promise<T>;
-	onClick: (res: T) => void;
-	staletime?: number;
 }
