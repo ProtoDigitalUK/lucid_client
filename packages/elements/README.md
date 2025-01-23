@@ -189,4 +189,5 @@ Any attributes that are suffixed with `[]` will be stored as an array of element
 ## Missing Features
 
 - Detailed documentation and examples via the [Lucid JS webiste](https://lucidjs.build/elements).
+- A `destroy` store module action thats called whenever a store is destroyed or refreshed. 
 - Handlers for focus trapping, intersection observers, etc. These may be released separately.
