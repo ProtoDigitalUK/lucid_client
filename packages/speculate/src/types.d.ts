@@ -13,67 +13,78 @@ export type SpeculationActions = "prefetch" | "prerender";
 // --------------------------------------------------------
 // Speculator
 
-export type OptimisticPreloadStrategy = {
+export type IntentError<D> = {
+	message: string;
+	exception?: unknown;
+	details?: D;
+};
+
+export type IntentResult<T, D> =
+	| { error: IntentError<D>; data: undefined }
+	| { error: undefined; data: NonNullable<T> };
+
+export type IntentResponse<T, D> = Promise<IntentResult<T, D>>;
+
+export type TargetElements = Element | NodeListOf<Element> | Element[];
+
+export type OptimisticPrefetchStrategy = {
 	/**
-	 * The target element(s) - triggers the onIntent callback immediately
+	 * Elements to prefetch immediately when the strategy is active
 	 */
-	immediate: Element | NodeListOf<Element>;
+	elements: TargetElements;
 	/**
-	 * Intent callback fire priority (1 being the highest)
+	 * Priority order for prefetching (lower numbers = higher priority)
 	 */
 	priority?: number;
 	/**
-	 * Determines if the onIntent callback should be fired
+	 * A condition that must be true for this strategy to be active
 	 */
 	condition?: () => boolean;
 };
 
-export type SpeculatorConfig<T> = {
+export type SpeculatorConfig<T, D> = {
 	/**
-	 * Targets to trigger the onIntent callback, when user intent is determined
+	 * Elements that will trigger prefetching when user intent is determined
 	 */
-	targets: Element | NodeListOf<Element>;
+	elements: TargetElements;
 	/**
-	 * Optimistic preload targets and strategy
+	 * Strategies for optimistically prefetching on initialisation when idle
 	 */
-	optimistic?: OptimisticPreloadStrategy | OptimisticPreloadStrategy[];
+	optimistic?: OptimisticPrefetchStrategy | OptimisticPrefetchStrategy[];
 	/**
-	 * Fires when use intent is determined or optimisitcally fired
+	 * Callback that fetches the data for an element when user intent is determined
+	 * @returns Promise that resolves with either data or an error
 	 */
-	onIntent: (element: Element) => Promise<T>;
+	fetch: (element: Element) => IntentResponse<T, D>;
 	/**
-	 * The on click callback for the targets
+	 * Called when a target element is clicked
 	 */
-	onClick?: (data: T, element: Element) => void;
+	onClick?: (result: IntentResult<T, D>, element: Element) => void;
 	/**
-	 * Cache config
+	 * Cache configuration to control data freshness and memory usage
 	 */
 	cache?: {
 		/**
+		 * Maximum number of responses to keep in cache
 		 * @default 5
 		 */
 		maxSize?: number;
 		/**
-		 * Time in milliseconds
+		 * How long cached responses remain valid (in milliseconds)
 		 * @default 120000
 		 */
 		staleTime?: number;
 	};
 	/**
-	 * Control the cache key thats used. This will fallback to the elements ID.
-	 * If no cache key exists, the onIntent promise wont be cached.
+	 * Generate a cache key for an element. Used to store and retrieve cached responses.
+	 * By default, it will fallback to the elements ID if it has one, otherwise responses will not be cached.
+	 * Return null/undefined to skip caching for an element.
 	 */
-	getCacheKey?: (element: Element) => string;
+	getCacheKey?: (element: Element) => string | undefined | null;
 	/**
-	 * Intent debounce
+	 * Delay before prefetching on hover (in milliseconds).
+	 * Helps avoid unnecessary loads during quick mouse movements.
+	 * @default 200
 	 */
-	intentDebounceTimeout?: number;
-};
-
-// old
-export type PrefetchDataConfig<T> = {
-	target: string;
-	fetch: () => Promise<T>;
-	onClick: (res: T) => void;
-	staletime?: number;
+	hoverDelay?: number;
 };

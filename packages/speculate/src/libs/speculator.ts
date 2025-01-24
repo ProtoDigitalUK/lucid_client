@@ -1,12 +1,17 @@
-import type { SpeculatorConfig, OptimisticPreloadStrategy } from "../types.js";
+import type {
+	SpeculatorConfig,
+	OptimisticPrefetchStrategy,
+	IntentResponse,
+	TargetElements,
+} from "../types.js";
 import validConnection from "../utils/valid-connection.js";
 
-class Speculator<T> {
+class Speculator<T, D> {
 	private cache = new Map<
 		string,
 		{
 			timestamp: number;
-			promise: Promise<T>;
+			promise: IntentResponse<T, D>;
 		}
 	>();
 	private abortController = new AbortController();
@@ -14,15 +19,15 @@ class Speculator<T> {
 		target: Element;
 		timeout: ReturnType<typeof setTimeout>;
 	} | null = null;
-	constructor(private config: SpeculatorConfig<T>) {
+	constructor(private config: SpeculatorConfig<T, D>) {
 		this.registerEvents();
-		this.handleOptimisticPreload();
+		this.handleOptimisticPrefetch();
 	}
 	/**
 	 * Registers all required events
 	 */
 	private registerEvents() {
-		for (const target of this.targets) {
+		for (const target of this.normaliseTargets(this.config.elements)) {
 			target.addEventListener("mouseover", this.mouseOverEventHandler, {
 				signal: this.abortController.signal,
 			});
@@ -37,6 +42,8 @@ class Speculator<T> {
 	private mouseOverEventHandler = (e: Event) => {
 		if (!validConnection()) return;
 		const target = e.target as Element;
+		const cacheKey = this.getCacheKey(target);
+		if (!cacheKey) return;
 
 		if (this.intentDebounce && this.intentDebounce.target !== target) {
 			clearTimeout(this.intentDebounce.timeout);
@@ -49,7 +56,7 @@ class Speculator<T> {
 				timeout: setTimeout(() => {
 					this.prefetch(target);
 					this.intentDebounce = null;
-				}, this.config.intentDebounceTimeout ?? 100),
+				}, this.hoverDelay),
 			};
 		}
 	};
@@ -57,55 +64,15 @@ class Speculator<T> {
 	 * The target click event handler
 	 */
 	private clickEventHandler = async (e: Event) => {
-		const target = e.target as Element;
-		const data = await this.prefetch(target);
-
-		if (this.config.onClick && data) {
-			this.config.onClick(data, target);
-		}
+		const result = await this.prefetch(e.target as Element);
+		if (this.config.onClick) this.config.onClick(result, e.target as Element);
 	};
-	/**
-	 * Prefetch on intent
-	 */
-	private async prefetch(element: Element): Promise<T | undefined> {
-		try {
-			const cacheKey = this.getCacheKey(element);
-
-			//* return cache if it exists and not stale
-			if (cacheKey) {
-				const cached = this.cache.get(cacheKey);
-				if (cached && !this.isStale(cached.timestamp)) {
-					return cached.promise;
-				}
-			}
-
-			const promise = this.config.onIntent(element);
-
-			//* cache and manage cache size
-			if (cacheKey) {
-				this.manageCacheSize();
-				this.cache.set(cacheKey, {
-					timestamp: Date.now(),
-					promise,
-				});
-			}
-
-			return promise;
-		} catch (error) {
-			console.error(
-				error instanceof Error
-					? error.message
-					: "An unknown error occured while prefetching the onIntent callback.",
-			);
-			return undefined;
-		}
-	}
 	/**
 	 * Gets a cache key for an element
 	 */
 	private getCacheKey(element: Element): string | null {
 		if (this.config.getCacheKey) {
-			return this.config.getCacheKey(element);
+			return this.config.getCacheKey(element) ?? null;
 		}
 		return element.id || null;
 	}
@@ -136,20 +103,9 @@ class Speculator<T> {
 		}
 	}
 	/**
-	 * Gets elements from an optimistic strategy
+	 * Handles optimistic prefetching based on configured strategies
 	 */
-	private getOptimisticElements(
-		strategy: OptimisticPreloadStrategy,
-	): Element[] {
-		if (strategy.immediate instanceof NodeList) {
-			return Array.from(strategy.immediate);
-		}
-		return [strategy.immediate];
-	}
-	/**
-	 * Handles optimistic preloading based on configured strategies
-	 */
-	private handleOptimisticPreload() {
+	private handleOptimisticPrefetch() {
 		const sortedStrategies = [...this.optimisticStrategies].sort(
 			(a, b) =>
 				(a.priority ?? Number.POSITIVE_INFINITY) -
@@ -159,50 +115,140 @@ class Speculator<T> {
 		for (const strategy of sortedStrategies) {
 			if (strategy.condition && !strategy.condition()) continue;
 
-			const targets = this.getOptimisticElements(strategy);
+			const targets = this.normaliseTargets(strategy.elements);
 			for (const target of targets) {
-				Promise.resolve().then(() => this.prefetch(target));
+				this.schedulePrefetch(target);
 			}
 		}
 	}
 	/**
-	 * Destroys and resets the Speculator instance
+	 * Wraps the fetch callback to ensure consistent error handling
 	 */
-	public destroy() {
-		this.abortController.abort();
-		if (this.intentDebounce?.timeout) clearTimeout(this.intentDebounce.timeout);
-		this.cache.clear();
+	private async executeFetchCallback(element: Element) {
+		try {
+			return await this.config.fetch(element);
+		} catch (error) {
+			return {
+				error: {
+					message:
+						error instanceof Error
+							? error.message
+							: "An unknown error was caught while executing the fetch callback.",
+					exception: error,
+				},
+				data: undefined,
+			};
+		}
 	}
 	/**
-	 * Programmatically trigger prefetch for a target element
+	 * Scheduels the prefetch for when idle
 	 */
-	public prefetchTarget(element: Element): Promise<T | undefined> {
-		return this.prefetch(element);
+	private schedulePrefetch(element: Element) {
+		const prefetch = () => this.prefetch(element);
+
+		typeof requestIdleCallback !== "undefined"
+			? requestIdleCallback(prefetch)
+			: setTimeout(prefetch, 0);
 	}
-	// ----------------
-	// Gettters
+	/**
+	 * Normalises a TargetElements value
+	 */
+	private normaliseTargets(elements?: TargetElements) {
+		if (!elements) {
+			return [];
+		}
+		if (elements instanceof NodeList) {
+			return Array.from(elements);
+		}
+		if (Array.isArray(elements)) return elements;
+		return [elements];
+	}
+	/**
+	 * Cache config w/ defaults
+	 */
 	private get cacheConfig() {
 		return {
 			maxSize: this.config.cache?.maxSize ?? 5,
 			staleTime: this.config.cache?.staleTime ?? 120000,
 		};
 	}
-	private get targets(): Element[] {
-		if (!this.config.targets) {
-			return [];
-		}
-		if (this.config.targets instanceof NodeList) {
-			return Array.from(this.config.targets);
-		}
-		return [this.config.targets];
-	}
-	private get optimisticStrategies(): OptimisticPreloadStrategy[] {
+	/**
+	 * Normalises optimistic strategies
+	 */
+	private get optimisticStrategies(): OptimisticPrefetchStrategy[] {
 		if (!this.config.optimistic) {
 			return [];
 		}
 		return Array.isArray(this.config.optimistic)
 			? this.config.optimistic
 			: [this.config.optimistic];
+	}
+	/**
+	 * Hover delay w/ config
+	 */
+	private get hoverDelay() {
+		return this.config.hoverDelay ?? 100;
+	}
+
+	// ----------------
+	// Public API
+
+	/**
+	 * Destroys and resets the Speculator instance
+	 */
+	public destroy() {
+		this.abortController.abort();
+		this.clearCache();
+		if (this.intentDebounce) {
+			clearTimeout(this.intentDebounce.timeout);
+			this.intentDebounce = null;
+		}
+	}
+	/**
+	 * Prefetch fetch callback for a given element.
+	 */
+	public async prefetch(element: Element) {
+		const cacheKey = this.getCacheKey(element);
+
+		//* return cache if it exists and not stale
+		if (cacheKey) {
+			const cached = this.cache.get(cacheKey);
+			if (cached && !this.isStale(cached.timestamp)) {
+				return cached.promise;
+			}
+		}
+
+		const promise = this.executeFetchCallback(element);
+
+		//* cache and manage cache size
+		if (cacheKey) {
+			this.manageCacheSize();
+			this.cache.set(cacheKey, {
+				timestamp: Date.now(),
+				promise,
+			});
+		}
+
+		return promise;
+	}
+	/**
+	 * Prefetch multiple elements at once
+	 */
+	public async prefetchAll(elements: Element[] | NodeListOf<Element>) {
+		const elementArray = Array.from(elements);
+		return Promise.all(elementArray.map((element) => this.prefetch(element)));
+	}
+	/**
+	 * Clears a cache entry. If no element is provided, clears entire cache
+	 */
+	public clearCache(element?: Element): void {
+		if (!element) {
+			this.cache.clear();
+			return;
+		}
+
+		const cacheKey = this.getCacheKey(element);
+		if (cacheKey) this.cache.delete(cacheKey);
 	}
 }
 
