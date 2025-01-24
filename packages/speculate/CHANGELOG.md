@@ -1,5 +1,12 @@
 # @lucidclient/speculate
 
+## v1.0.0
+
+### Major Changes
+
+- Reworked the `PrefetchData` class into `Speculator`.
+- `Speculator` includes better cache management, support for multiple elements, error handling and optimistic prefetching.
+
 ## v0.3.0
 
 ### Minor Changes

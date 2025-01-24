@@ -74,10 +74,7 @@ const { title } = Astro.props;
                 registerHandler,
                 createSignal,
             } from "@lucidclient/elements";
-            import {
-                speculateLinks,
-                PrefetchData,
-            } from "@lucidclient/speculate";
+            import { speculateLinks, Speculator } from "@lucidclient/speculate";
 
             registerHandler(events);
             registerHandler(dom);
@@ -191,40 +188,55 @@ const { title } = Astro.props;
             });
 
             speculateLinks();
-            new PrefetchData({
-                target: "#load-data-prefetch",
-                fetch: async () => {
-                    return fetch("https://api.sampleapis.com/wines/reds").then(
-                        (res) => res.json(),
-                    ) as Promise<
-                        Array<{
-                            winery: string;
-                            wine: string;
-                            rating: {
-                                average: string;
-                                reviews: string;
-                            };
-                            location: string;
-                            image: string;
-                            id: number;
-                        }>
-                    >;
+            const speculator = new Speculator({
+                elements: document.querySelectorAll("[data-page]"),
+                optimistic: {
+                    elements: document.querySelectorAll("[data-page='2']"),
+                    condition: () => true,
                 },
-                onClick: (data) => {
-                    console.log(data);
+                fetch: async (element) => {
+                    const page = element.getAttribute("data-page");
+
+                    await new Promise((resolve) => setTimeout(resolve, 1000));
+                    console.log(page);
+
+                    if (page === "1") {
+                        return {
+                            data: undefined,
+                            error: {
+                                message: "WE DONT ALLOW PAGE 1!!" as const,
+                                details: {
+                                    helloWOrld: true,
+                                },
+                            },
+                        };
+                    }
+
+                    return {
+                        data: {
+                            page: Number(page),
+                        },
+                        error: undefined,
+                    };
                 },
-                staletime: 10000,
+                getCacheKey: (element) => {
+                    return element.getAttribute("data-page");
+                },
+                onClick: async (data, element) => {
+                    if (data.error) {
+                        console.log("error", data.error);
+                        return;
+                    }
+
+                    console.log("clicked", data.data, element);
+                },
+                cache: {
+                    maxSize: 2,
+                },
             });
 
-            const loadmore = document.querySelector("#load-data");
-            if (loadmore) {
-                loadmore?.addEventListener("click", async () => {
-                    const data = await fetch(
-                        "https://api.sampleapis.com/wines/reds",
-                    ).then((res) => res.json());
-                    console.log(data);
-                });
-            }
+            const page3 = document.querySelector("[data-page='3']");
+            if (page3) speculator.prefetch(page3);
         </script>
     </body>
 </html>
