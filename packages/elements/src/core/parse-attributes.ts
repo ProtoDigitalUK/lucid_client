@@ -94,8 +94,10 @@ const parseAttributes = (): {
 					.slice(prefix.handler.length)
 					.split(Elements.options.attributes.seperators.handler);
 
-				if (handlerParts.length === 2) {
-					const [namespace, specifier] = handlerParts;
+				if (handlerParts.length >= 2) {
+					const namespace = handlerParts[0];
+					const specifier = handlerParts.slice(1).join(".");
+
 					if (!namespace || !specifier) continue;
 
 					if (!handlerAttributes.has(namespace)) {

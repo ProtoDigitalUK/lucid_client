@@ -24,6 +24,7 @@ const { title } = Astro.props;
             data-store="nav"
             data-state--open="false"
             class="h-10 bg-black text-white"
+            data-handler--event.document.scroll="nav:documentScroll"
         >
             <div class="flex justify-between items-center">
                 <div class="flex items-center">
@@ -134,6 +135,7 @@ const { title } = Astro.props;
                 toggle: (e: Event) => void;
                 closed: () => boolean;
                 buttonLabel: () => string;
+                documentScroll: (e: Event) => void;
             };
 
             storeModule<NavStoreState, NavStoreActions>("nav", (store) => ({
@@ -179,6 +181,9 @@ const { title } = Astro.props;
                     },
                     oldClick: () => {
                         console.log("oldClick");
+                    },
+                    documentScroll: (e) => {
+                        console.log("document scrolled", e);
                     },
                 },
             }));

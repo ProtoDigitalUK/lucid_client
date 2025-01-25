@@ -46,6 +46,7 @@ Elements.start();
     data-store="nav"
     data-state--open="false"
     class="h-10 bg-black text-white"
+    data-handler--event.document.scroll="nav:documentScroll"
 >
     <div class="flex justify-between items-center">
         <h1>Elements</h1>
@@ -86,6 +87,7 @@ type NavStoreState = {
 type NavStoreActions = {
     toggle: (e: Event) => void;
     closed: () => boolean;
+    documentScroll: (e: Event) => void;
 }
 
 storeModule<NavStoreState, NavStoreActions>("nav", (store) => ({
@@ -106,6 +108,9 @@ storeModule<NavStoreState, NavStoreActions>("nav", (store) => ({
         closed: () => {
             const [getOpen] = store.state.open;
             return !getOpen(); 
+        },
+        documentScroll: (e) => {
+            console.log("document scrolled", e);
         },
         buttonLabel: () => {
             const [getOpen] = store.state.open;

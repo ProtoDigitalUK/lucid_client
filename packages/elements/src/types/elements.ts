@@ -5,7 +5,6 @@ import type {
 	StoreState,
 	Handlers,
 	HandlerAttributesMap,
-	StoreAttributesMap,
 } from "./index.js";
 
 export type ElementsInstance = {
