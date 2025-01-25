@@ -1,7 +1,12 @@
 import Elements from "../../core/elements.js";
-import { buildHandlerSelector, findStoreAction } from "../../helpers.js";
+import { buildHandlerSelector, findStoreMember } from "../../helpers.js";
 import type { EventConfig } from "./types.js";
-import type { Handler, HandlerAttributes, Action } from "../../types/index.js";
+import type {
+	Handler,
+	HandlerAttributes,
+	Action,
+	StoreMember,
+} from "../../types/index.js";
 
 /**
  * The namespace for the event handler
@@ -14,8 +19,9 @@ const eventListenerMap = new Map<string, Map<Element | Document, Action>>();
 /**
  * Create an event handler function that can be stored and removed later
  */
-const createEventHandler = (action: (e: Event) => void): Action => {
-	return (e: Event) => action(e);
+const createEventHandler = (member: StoreMember): Action => {
+	if (member.type === "action") return (e: Event) => member.member(e);
+	return (e: Event) => console.log(member.member);
 };
 
 /**
@@ -74,8 +80,8 @@ const registerEvents = (attributes: HandlerAttributes) => {
 		if (!config.eventName) continue;
 
 		for (const key of actions) {
-			const action = findStoreAction(key);
-			if (!action) continue;
+			const member = findStoreMember(key);
+			if (!member) continue;
 
 			const eventKey = createEventKey(eventSpecifier, key);
 
@@ -93,7 +99,7 @@ const registerEvents = (attributes: HandlerAttributes) => {
 				for (const target of targets) {
 					if (elementMap.has(target)) continue;
 
-					const handler = createEventHandler(action);
+					const handler = createEventHandler(member);
 					target.addEventListener(config.eventName, handler, {
 						signal: abortController?.signal,
 					});
@@ -103,7 +109,7 @@ const registerEvents = (attributes: HandlerAttributes) => {
 				const target = getTargetElement(config);
 				if (elementMap.has(target)) continue;
 
-				const handler = createEventHandler(action);
+				const handler = createEventHandler(member);
 				target.addEventListener(config.eventName, handler, {
 					signal: abortController?.signal,
 				});

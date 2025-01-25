@@ -7,7 +7,13 @@ const buildHandlerSelector = (
 	namespace: string,
 	specifier: string,
 	action: string,
-) =>
-	`[${Elements.options.attributes.prefix}${Elements.options.attributes.selectors.handler}${namespace}\\.${specifier.replace(/\./g, "\\.")}="${action}"]`;
+) => {
+	const baseSelector = `${Elements.options.attributes.prefix}${Elements.options.attributes.selectors.handler}${namespace}`;
+
+	const specifierPart =
+		specifier === "" ? "" : `\\.${specifier.replace(/\./g, "\\.")}`;
+
+	return `[${baseSelector}${specifierPart}="${action}"]`;
+};
 
 export default buildHandlerSelector;

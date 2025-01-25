@@ -68,6 +68,8 @@ const parseAttributes = (): {
 			if (name.startsWith(prefix.bind)) {
 				const bindName = name.slice(prefix.bind.length);
 				const bindValue = parseBindValue(value);
+				if (bindValue === null) continue;
+
 				const attrScopeValue = scope.splitValue(bindValue.value)[0];
 
 				//* skip if scope doesn't match current store
@@ -81,7 +83,7 @@ const parseAttributes = (): {
 					storeMap.bindState.get(bindValue.value)?.add(bindName);
 				}
 				//* handle action bindings
-				else {
+				if (bindValue.type === "action") {
 					if (!storeMap.bindActions.has(bindValue.value)) {
 						storeMap.bindActions.set(bindValue.value, new Set());
 					}
@@ -94,11 +96,19 @@ const parseAttributes = (): {
 					.slice(prefix.handler.length)
 					.split(Elements.options.attributes.seperators.handler);
 
-				if (handlerParts.length >= 2) {
+				//* has atleast a handler namespace
+				if (handlerParts.length >= 1) {
 					const namespace = handlerParts[0];
-					const specifier = handlerParts.slice(1).join(".");
 
-					if (!namespace || !specifier) continue;
+					//* default to "" when no specifier is passed
+					const specifier =
+						handlerParts.length >= 2
+							? handlerParts
+									.slice(1)
+									.join(Elements.options.attributes.seperators.handler)
+							: "";
+
+					if (!namespace) continue;
 
 					if (!handlerAttributes.has(namespace)) {
 						handlerAttributes.set(namespace, new Map());

@@ -1,7 +1,8 @@
 import {
 	buildHandlerSelector,
 	stringifyState,
-	findStoreAction,
+	findStoreMember,
+	resolveMember,
 } from "../../helpers.js";
 import { createEffect, createRoot } from "solid-js";
 import type { Handler } from "../../types/index.js";
@@ -148,8 +149,8 @@ const domHandler: Handler = {
 			for (const event of attributes) {
 				const [eventName, actions] = event;
 				for (const key of actions) {
-					const action = findStoreAction(key);
-					if (!action) continue;
+					const member = findStoreMember(key);
+					if (!member) continue;
 
 					const targets = document.querySelectorAll(
 						buildHandlerSelector(namespace, eventName, key),
@@ -158,9 +159,8 @@ const domHandler: Handler = {
 
 					createEffect(async () => {
 						try {
-							const reponse = action();
-							const data = await Promise.resolve(reponse);
-							specifier(targets, data);
+							const response = await resolveMember(member);
+							specifier(targets, response);
 						} catch (error) {
 							console.error(error);
 						}

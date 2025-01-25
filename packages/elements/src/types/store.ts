@@ -45,3 +45,7 @@ export type StoreModule<S extends StoreState, A extends StoreActions> = (
 	state?: Partial<{ [K in keyof S]: Signal<S[K]> }>;
 	actions: A;
 };
+
+export type StoreMember =
+	| { type: "action"; key: string; member: Action }
+	| { type: "state"; key: string; member: Signal<unknown> };

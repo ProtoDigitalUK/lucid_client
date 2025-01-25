@@ -46,17 +46,17 @@ Elements.start();
     data-store="nav"
     data-state--open="false"
     class="h-10 bg-black text-white"
-    data-handler--event.document.scroll="nav:documentScroll"
+    data-handler--event.document.scroll="nav:@documentScroll"
 >
     <div class="flex justify-between items-center">
         <h1>Elements</h1>
         <button
-            data-handler--event.click="nav:toggle"
-            data-bind--aria-expanded="nav:open"
-            data-bind--aria-label="nav:ariaLabel"
+            data-handler--event.click="nav:@toggle"
+            data-bind--aria-expanded="nav:$open"
+            data-bind--aria-label="nav:$ariaLabel"
             aria-controls="main-nav"
         >
-            <span data-handler--dom.text="nav:buttonLabel"> Open Navigation </span>
+            <span data-handler--dom.text="nav:@buttonLabel"> Open Navigation </span>
         </button>
     </div>
     <nav
@@ -144,9 +144,9 @@ Stores can be nested, so you can have a parent element with a store and a child 
     <div
         data-store="content"
         data-state--label="Hello World"
-        data-bind--aria-expanded="nav:open"
+        data-bind--aria-expanded="nav:$open"
     >
-        <button data-handler--dom.text="content:label"></button>
+        <button data-handler--dom.text="content:$label"></button>
     </div>
 </header>
 ```
@@ -171,19 +171,19 @@ These are two way binded, meaning if the attribute value is changed outside of t
 
 This syntax indicates an attribute binding and takes the name of the state or action you want to bind to the attribute. When the state is mutated, the attribute will be updated to reflect the new value.
 
-For example, if you had an attribute binding of `data-bind--disabled="example:state"`, whenever the state signal changes on the example store, the attribute of `disabled` will be updated to reflect that new value. You can also bind to actions, so if you had an action called `isDisabled` in your store module, you could bind to it with `data-bind--disabled="example:@isDisabled"` which use the returned value as the attribute value.
+For example, if you had an attribute binding of `data-bind--disabled="example:$state"`, whenever the state signal changes on the example store, the attribute of `disabled` will be updated to reflect that new value. You can also bind to actions, so if you had an action called `isDisabled` in your store module, you could bind to it with `data-bind--disabled="example:@isDisabled"` which use the returned value as the attribute value.
 
-For `array` and `object` state types you can reference values and indexes using dot and bracket notation respectively. Ie. `data-bind--data-object="example:object.hello"` and `data-bind--data-array="example:array[0]"`.
+For `array` and `object` state types you can reference values and indexes using dot and bracket notation respectively. Ie. `data-bind--data-object="example:$object.hello"` and `data-bind--data-array="example:$array[0]"`.
 
-Note you cannot do any conditional logic in binds, so something like `data-bind--disabled="example:boolean1 != example:boolean2"` will not work. This is because for the time being we are not able to make use of `eval` or function constructors to evaluate the expression due to the `unsafe-eval` CSP policy. If you want to do something like this, you can set the value to that of a action on your store module and have the action return the condition instead.
+Note you cannot do any conditional logic in binds, so something like `data-bind--disabled="example:$boolean1 != example:$boolean2"` will not work. This is because for the time being we are not able to make use of `eval` or function constructors to evaluate the expression due to the `unsafe-eval` CSP policy. If you want to do something like this, you can set the value to that of a action on your store module and have the action return the condition instead.
 
 ### Handler `data-handler--`
 
 All handlers are prefixed with `data-handler--` and are registered through plugins. By default Elements doesnt register any handlers, but includes a few first-party built-in plugins for event handling, basic DOM manipulation and potentially more down the line.
 
-The naming is `data-handler--namesapce.specifier="action"`.
+The naming is `data-handler--namesapce.specifier="member"`.
 
-These call user defined actions that are registered via store modules. Much like the `bind` attribute, you cannot do any conditional logic in handlers, so something like `data-handler--dom.text="example:open ? 'Open' : 'Close'"` will not work. This may change in the future, but for now we've decided to not support this due to the `unsafe-eval` CSP policy.
+These call user defined actions that are registered via store modules. Much like the `bind` attribute, you cannot do any conditional logic in handlers, so something like `data-handler--dom.text="example:$open ? 'Open' : 'Close'"` will not work. This may change in the future, but for now we've decided to not support this due to the `unsafe-eval` CSP policy.
 
 ### Refs `data-ref="name"`
 

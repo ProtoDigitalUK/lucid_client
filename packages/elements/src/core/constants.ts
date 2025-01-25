@@ -17,6 +17,7 @@ const C = {
 			},
 			denote: {
 				action: "@",
+				state: "$",
 			},
 		},
 	},

@@ -24,30 +24,30 @@ const { title } = Astro.props;
             data-store="nav"
             data-state--open="false"
             class="h-10 bg-black text-white"
-            data-handler--event.document.scroll="nav:documentScroll"
+            data-handler--event.document.scroll="nav:@documentScroll"
         >
             <div class="flex justify-between items-center">
                 <div class="flex items-center">
                     <h1>Elements</h1>
                     <div data-ref="nav:testEleRefresh" class="ml-2.5">
-                        <button data-handler--event.click="nav:oldClick">
+                        <button data-handler--event.click="nav:@oldClick">
                             before
                         </button>
                     </div>
                     <button
-                        data-handler--event.click="nav:replaceChild"
+                        data-handler--event.click="nav:@replaceChild"
                         class="ml-2.5"
                     >
                         Refresh Elements
                     </button>
                 </div>
                 <button
-                    data-handler--event.click="nav:toggle"
-                    data-bind--aria-expanded="nav:open"
-                    data-bind--aria-label="nav:ariaLabel"
+                    data-handler--event.click="nav:@toggle"
+                    data-bind--aria-expanded="nav:$open"
+                    data-bind--aria-label="nav:$ariaLabel"
                     aria-controls="main-nav"
                 >
-                    <span data-handler--dom.text="nav:buttonLabel">
+                    <span data-handler--dom.text="nav:@buttonLabel">
                         Open Navigation
                     </span>
                 </button>
@@ -58,6 +58,7 @@ const { title } = Astro.props;
                 class="[&[aria-hidden='false']]:translate-x-0 fixed inset-0 top-10 bg-gray-800 z-50 transition-transform duration-200 translate-x-full p-2.5"
                 aria-label="Main navigation"
                 aria-hidden="true"
+                data-handler--trap="nav:$open"
             >
                 <a href="/">Home</a>
                 <a href="/about">About</a>
@@ -69,7 +70,7 @@ const { title } = Astro.props;
         <CookieController />
 
         <script>
-            import { events, dom } from "@lucidclient/elements/handlers";
+            import { events, dom, trap } from "@lucidclient/elements/handlers";
             import Elements, {
                 storeModule,
                 registerHandler,
@@ -79,6 +80,7 @@ const { title } = Astro.props;
 
             registerHandler(events);
             registerHandler(dom);
+            registerHandler(trap);
 
             storeModule<
                 {
@@ -100,6 +102,11 @@ const { title } = Astro.props;
                 actions: {
                     init() {
                         store.actions.handleClick(); // or this.handleClick()
+                    },
+                    contentCopy: () => {
+                        const [getBoolean] = store.state.boolean;
+                        if (getBoolean()) return "yea im open";
+                        else return "no imma closed";
                     },
                     handleClick: () => {
                         const [_, setBoolean] = store.state.boolean;
@@ -159,6 +166,10 @@ const { title } = Astro.props;
                         const [getOpen] = store.state.open;
                         return !getOpen();
                     },
+                    isOpen: () => {
+                        const [getOpen] = store.state.open;
+                        return getOpen();
+                    },
                     buttonLabel: () => {
                         const [getOpen] = store.state.open;
                         return getOpen()
@@ -170,7 +181,7 @@ const { title } = Astro.props;
                         const target = store.refs.get("testEleRefresh");
                         if (target instanceof HTMLElement) {
                             target.innerHTML =
-                                "<button data-handler--event.click='nav:newClick'>after</button>";
+                                "<button data-handler--event.click='nav:@newClick'>after</button>";
                         }
 
                         console.log("refreshElements");
@@ -182,8 +193,8 @@ const { title } = Astro.props;
                     oldClick: () => {
                         console.log("oldClick");
                     },
-                    documentScroll: (e) => {
-                        console.log("document scrolled", e);
+                    documentScroll: () => {
+                        // console.log("document scrolled", e);
                     },
                 },
             }));
