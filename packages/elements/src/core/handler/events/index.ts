@@ -11,6 +11,7 @@ import utils from "../../../utils/index.js";
  */
 const namespace = "event";
 
+let abortController: AbortController | null = null;
 const eventListenerMap = new Map<string, Map<Element, Action>>();
 
 /**
@@ -30,9 +31,10 @@ const createEventKey = (eventName: string, actionKey: string): string => {
 /**
  * Handles registering and unregistering event listeners
  */
-const registerEvents = (attributes: HandlerAttributes, register: boolean) => {
+const registerEvents = (attributes: HandlerAttributes) => {
 	for (const event of attributes) {
 		const [eventName, actions] = event;
+
 		for (const key of actions) {
 			const action = store.findAction(key);
 			if (!action) continue;
@@ -42,25 +44,22 @@ const registerEvents = (attributes: HandlerAttributes, register: boolean) => {
 			);
 			const eventKey = createEventKey(eventName, key);
 
+			console.log(eventKey);
+
 			if (!eventListenerMap.has(eventKey)) {
 				eventListenerMap.set(eventKey, new Map());
 			}
 			const elementMap = eventListenerMap.get(eventKey);
 			if (!elementMap) continue;
 
-			if (register) {
-				for (const target of targets) {
-					if (elementMap.has(target)) return;
+			for (const target of targets) {
+				if (elementMap.has(target)) return;
 
-					const handler = createEventHandler(action);
-					target.addEventListener(eventName, handler);
-					elementMap.set(target, handler);
-				}
-			} else {
-				elementMap.forEach((handler, element) => {
-					element.removeEventListener(eventName, handler);
+				const handler = createEventHandler(action);
+				target.addEventListener(eventName, handler, {
+					signal: abortController?.signal,
 				});
-				elementMap.clear();
+				elementMap.set(target, handler);
 			}
 		}
 	}
@@ -77,8 +76,15 @@ const registerEvents = (attributes: HandlerAttributes, register: boolean) => {
  */
 const eventsHandler: Handler = {
 	namespace: namespace,
-	initialise: (attributes) => registerEvents(attributes, true),
-	destroy: (attributes) => registerEvents(attributes, false),
+	initialise: (attributes) => {
+		if (!abortController) abortController = new AbortController();
+		registerEvents(attributes);
+	},
+	destroy: () => {
+		abortController?.abort();
+		abortController = null;
+		eventListenerMap.clear();
+	},
 };
 
 export default eventsHandler;
