@@ -29,10 +29,11 @@ Import `Elements`, register any required handlers and store modules and call the
 
 ```typescript
 import Elements, { registerHandler } from "@lucidclient/elements";
-import { events, dom } from "@lucidclient/elements/handlers";
+import { events, dom, trap } from "@lucidclient/elements/handlers";
 
 registerHandler(events);
 registerHandler(dom);
+registerHandler(trap);
 
 Elements.start();
 ```
@@ -65,6 +66,7 @@ Elements.start();
         class="[&[aria-hidden='false']]:translate-x-0 fixed inset-0 top-10 bg-gray-800 z-50 transition-transform duration-200 translate-x-full p-2.5"
         aria-label="Main navigation"
         aria-hidden="true"
+        data-handler--trap="nav:$open"
     >
         <a href="/">Home</a>
         <a href="/about">About</a>

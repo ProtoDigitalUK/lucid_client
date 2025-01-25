@@ -6,7 +6,6 @@ export { default as inferValueType } from "./helpers/infer-value-type.js";
 export { default as stringifyState } from "./helpers/stringify-state.js";
 export { default as parseStateString } from "./helpers/parse-state-string.js";
 export { default as buildAttribute } from "./helpers/build-attribute.js";
-export { default as findStoreAction } from "./helpers/find-store-action.js";
 export { default as inferMemberValue } from "./helpers/infer-member-value.js";
 export { default as findStoreMember } from "./helpers/find-store-member.js";
 export { default as resolveMember } from "./helpers/resolve-member.js";
