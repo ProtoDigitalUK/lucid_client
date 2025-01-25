@@ -2,7 +2,12 @@ import type {
 	HandlerAttributesMap,
 	StoreAttributesMap,
 } from "../types/index.js";
-import utils from "../utils/index.js";
+import {
+	deepCollectAttributes,
+	parseBindValue,
+	parseStateString,
+	buildAttribute,
+} from "../helpers.js";
 import Elements from "./elements.js";
 import scope from "./scope/index.js";
 
@@ -21,18 +26,10 @@ const parseAttributes = (): {
 	const storeAttributes: StoreAttributesMap = new Map();
 
 	const prefix = {
-		store: utils.helpers.buildAttribute(
-			Elements.options.attributes.selectors.store,
-		),
-		state: utils.helpers.buildAttribute(
-			Elements.options.attributes.selectors.state,
-		),
-		bind: utils.helpers.buildAttribute(
-			Elements.options.attributes.selectors.bind,
-		),
-		handler: utils.helpers.buildAttribute(
-			Elements.options.attributes.selectors.handler,
-		),
+		store: buildAttribute(Elements.options.attributes.selectors.store),
+		state: buildAttribute(Elements.options.attributes.selectors.state),
+		bind: buildAttribute(Elements.options.attributes.selectors.bind),
+		handler: buildAttribute(Elements.options.attributes.selectors.handler),
 	};
 
 	const storeEles = document.querySelectorAll(`[${prefix.store}]`);
@@ -57,12 +54,12 @@ const parseAttributes = (): {
 			const { name, value } = attribute;
 			if (name.startsWith(prefix.state)) {
 				const stateName = name.slice(prefix.state.length);
-				storeMap.state.set(stateName, utils.helpers.parseStateString(value));
+				storeMap.state.set(stateName, parseStateString(value));
 			}
 		}
 
 		//* process all of the stores attributes and childrens attributes recursively
-		const allAttributes = utils.helpers.deepCollectAttr(storeEle);
+		const allAttributes = deepCollectAttributes(storeEle);
 
 		for (const attribute of allAttributes) {
 			const { name, value } = attribute;
@@ -70,7 +67,7 @@ const parseAttributes = (): {
 			//* handle binds
 			if (name.startsWith(prefix.bind)) {
 				const bindName = name.slice(prefix.bind.length);
-				const bindValue = utils.helpers.parseBindValue(value);
+				const bindValue = parseBindValue(value);
 				const attrScopeValue = scope.splitValue(bindValue.value)[0];
 
 				//* skip if scope doesn't match current store
@@ -121,9 +118,7 @@ const parseAttributes = (): {
 		elements: Array.from(storeEles).map((element) => [
 			element,
 			element.getAttribute(
-				utils.helpers.buildAttribute(
-					Elements.options.attributes.selectors.store,
-				),
+				buildAttribute(Elements.options.attributes.selectors.store),
 			),
 		]),
 		handlerAttributes,

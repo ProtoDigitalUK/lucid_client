@@ -1,6 +1,6 @@
-import utils from "../../utils/index.js";
 import Elements from "../elements.js";
 import s from "./index.js";
+import { buildAttribute } from "../../helpers.js";
 
 /**
  * Sets up a mutation observer on the body element
@@ -28,7 +28,7 @@ const registerStoreObserver = () => {
  */
 const removeElement = (element: HTMLElement) => {
 	const storeKey = element.getAttribute(
-		utils.helpers.buildAttribute(Elements.options.attributes.selectors.store),
+		buildAttribute(Elements.options.attributes.selectors.store),
 	);
 	if (!storeKey) return;
 

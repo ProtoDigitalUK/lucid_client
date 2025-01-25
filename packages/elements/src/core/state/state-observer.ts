@@ -1,6 +1,5 @@
 import type { Store, StoreState, StoreActions } from "../../types/index.js";
-import utils from "../../utils/index.js";
-import helpers from "../../utils/helpers.js";
+import { parseStateString, buildAttribute } from "../../helpers.js";
 import bind from "../bind/index.js";
 import Elements from "../elements.js";
 
@@ -20,7 +19,7 @@ const handleMutation = (
 	const attributeValue = target.getAttribute(attribute);
 	if (attributeValue === oldValue) return;
 
-	const value = helpers.parseStateString(attributeValue);
+	const value = parseStateString(attributeValue);
 
 	get.state[key]?.[1](value);
 	bind.updateAttributes(target, { key, value }, get.attributeMaps);
@@ -37,7 +36,7 @@ const stateObserver = (
 	store: Store<StoreState, StoreActions>,
 ): MutationObserver => {
 	const [get] = store;
-	const statePrefix = utils.helpers.buildAttribute(
+	const statePrefix = buildAttribute(
 		Elements.options.attributes.selectors.state,
 	);
 	const stateAttributes = Array.from(get.attributeMaps?.state.keys() ?? []).map(

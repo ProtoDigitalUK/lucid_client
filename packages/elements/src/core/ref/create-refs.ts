@@ -6,7 +6,7 @@ import type {
 } from "../../types/index.js";
 import s from "../scope/index.js";
 import Elements from "../elements.js";
-import utils from "../../utils/index.js";
+import { buildAttribute } from "../../helpers.js";
 
 /**
  * Selects all of the data-ref elements and creates Map of key to element / elements
@@ -17,9 +17,7 @@ const createRefs = (
 	element: Element,
 	store: Store<StoreState, StoreActions>,
 ) => {
-	const refPrefix = utils.helpers.buildAttribute(
-		Elements.options.attributes.selectors.ref,
-	);
+	const refPrefix = buildAttribute(Elements.options.attributes.selectors.ref);
 	const scope = store[0].attributeMaps?.scope;
 	const refElements = element.querySelectorAll(`[${refPrefix}]`);
 

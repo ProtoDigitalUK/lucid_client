@@ -1,8 +1,8 @@
 import parseAttributes from "./parse-attributes.js";
 import Elements from "./elements.js";
-import utils from "../utils/index.js";
 import handler from "./handler/index.js";
 import store from "./store/index.js";
+import { log } from "../helpers.js";
 
 /**
  * Refreshes the library
@@ -19,7 +19,7 @@ const refresh = (targetStore?: string) => {
 
 	for (const item of elements) {
 		if (!item[1]) {
-			utils.log.warn(
+			log.warn(
 				"Please ensure all 'data-store' attributes have a value. This is needed to scope state, binds and handler actions.",
 			);
 			continue;
@@ -37,7 +37,7 @@ const refresh = (targetStore?: string) => {
 
 	handler.initialiseHandlers();
 
-	utils.log.debug("Library refreshed.");
+	log.debug("Library refreshed.");
 };
 
 export default refresh;

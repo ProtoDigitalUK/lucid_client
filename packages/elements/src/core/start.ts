@@ -1,9 +1,9 @@
-import utils from "../utils/index.js";
 import C from "./constants.js";
 import Elements from "./elements.js";
 import store from "./store/index.js";
 import handler from "./handler/index.js";
 import parseAttributes from "./parse-attributes.js";
+import { log } from "../helpers.js";
 
 /**
  * Sets up and starts the Elements library
@@ -26,7 +26,7 @@ const start = (options?: {
 	};
 }) => {
 	if (Elements.started) {
-		utils.log.warn(
+		log.warn(
 			"The library has already been started. Please don't call start() more than once.",
 		);
 		return;
@@ -73,7 +73,7 @@ const start = (options?: {
 	// initialise elements stores
 	for (const item of elements) {
 		if (!item[1]) {
-			utils.log.warn(
+			log.warn(
 				"Please ensure all 'data-store' attributes have a value. This is needed to scope state, binds and handler actions.",
 			);
 			continue;
@@ -86,7 +86,7 @@ const start = (options?: {
 	store.registerStoreObserver();
 
 	Elements.started = true;
-	utils.log.debug("Library started.");
+	log.debug("Library started.");
 };
 
 export default start;

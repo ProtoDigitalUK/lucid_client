@@ -1,7 +1,12 @@
 import type { AttributeMaps } from "../../types/index.js";
 import Elements from "../elements.js";
 import scope from "../scope/index.js";
-import utils from "../../utils/index.js";
+import {
+	evaluatePathValue,
+	inferValueType,
+	stringifyState,
+	buildAttribute,
+} from "../../helpers.js";
 
 /**
  * Updates a single element's attribute based on its binding value
@@ -27,7 +32,7 @@ const resolveBindingValue = (
 		let stringifyValue: unknown;
 
 		if (valueType === "object" || valueType === "array") {
-			stringifyValue = utils.helpers.evaluatePathValue(
+			stringifyValue = evaluatePathValue(
 				state.value as Record<string, unknown> | Array<unknown>,
 				bindValue,
 			);
@@ -35,7 +40,7 @@ const resolveBindingValue = (
 			stringifyValue = state.value;
 		}
 
-		value = utils.helpers.stringifyState(stringifyValue);
+		value = stringifyState(stringifyValue);
 		valueCache.set(bindValue, value);
 	}
 	element.setAttribute(targetKey, value);
@@ -61,10 +66,8 @@ const updateAttributes = (
 	const affectedAttributes = attributeMaps.bindState.get(stateKey);
 	if (!affectedAttributes) return;
 
-	const bindPrefix = utils.helpers.buildAttribute(
-		Elements.options.attributes.selectors.bind,
-	);
-	const valueType = utils.helpers.valueType(state.value);
+	const bindPrefix = buildAttribute(Elements.options.attributes.selectors.bind);
+	const valueType = inferValueType(state.value);
 	const valueCache = new Map<string, string>();
 
 	for (const targetKey of affectedAttributes) {

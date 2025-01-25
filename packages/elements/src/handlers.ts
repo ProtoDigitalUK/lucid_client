@@ -1,2 +1,2 @@
-export { default as events } from "./core/handler/events/index.js";
-export { default as dom } from "./core/handler/dom/index.js";
+export { default as events } from "./handlers/events/index.js";
+export { default as dom } from "./handlers/dom/index.js";

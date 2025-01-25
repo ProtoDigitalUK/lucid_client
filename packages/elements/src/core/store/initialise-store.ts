@@ -8,7 +8,7 @@ import type {
 	StoreState,
 	AttributeMaps,
 } from "../../types/store.js";
-import utils from "../../utils/index.js";
+import { log } from "../../helpers.js";
 import state from "../state/index.js";
 import ref from "../ref/index.js";
 import Elements from "../elements.js";
@@ -47,7 +47,7 @@ const initialiseStore = (
 			>; // wrong generic type - doesnt matter currently
 			const storeModule = storeModuleFn(getStoreInterface(store));
 
-			utils.log.debug(`Store module found for key "${storeKey}"`);
+			log.debug(`Store module found for key "${storeKey}"`);
 
 			if (storeModule.state) store[1]("state", storeModule.state);
 			if (storeModule.actions) store[1]("actions", storeModule.actions);
@@ -72,7 +72,7 @@ const initialiseStore = (
 		store[1]("initialised", true);
 		void store[0].actions.init?.();
 
-		utils.log.debug(
+		log.debug(
 			`Store initialised for element "${element.id || element.tagName}" with key "${storeKey}"`,
 		);
 	});

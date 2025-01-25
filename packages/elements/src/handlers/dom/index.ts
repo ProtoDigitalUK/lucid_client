@@ -1,7 +1,10 @@
-import type { Handler } from "../../../types/index.js";
-import utils from "../../../utils/index.js";
-import store from "../../store/index.js";
+import {
+	buildHandlerSelector,
+	stringifyState,
+	findStoreAction,
+} from "../../helpers.js";
 import { createEffect, createRoot } from "solid-js";
+import type { Handler } from "../../types/index.js";
 
 const namespace = "dom";
 let disposeHandler: () => void;
@@ -14,7 +17,7 @@ const textSpecifier = (
 	targets: NodeListOf<Element>,
 	actionResponse: unknown,
 ) => {
-	const stringify = utils.helpers.stringifyState(actionResponse);
+	const stringify = stringifyState(actionResponse);
 	for (const target of targets) {
 		if (target instanceof HTMLElement) {
 			target.innerText = stringify;
@@ -30,7 +33,7 @@ const htmlSpecifier = (
 	targets: NodeListOf<Element>,
 	actionResponse: unknown,
 ) => {
-	const stringify = utils.helpers.stringifyState(actionResponse);
+	const stringify = stringifyState(actionResponse);
 	for (const target of targets) {
 		if (target instanceof HTMLElement) {
 			target.innerHTML = stringify;
@@ -46,7 +49,7 @@ const valueSpecifier = (
 	targets: NodeListOf<Element>,
 	actionResponse: unknown,
 ) => {
-	const stringify = utils.helpers.stringifyState(actionResponse);
+	const stringify = stringifyState(actionResponse);
 	for (const target of targets) {
 		if (
 			target instanceof HTMLInputElement ||
@@ -145,11 +148,11 @@ const domHandler: Handler = {
 			for (const event of attributes) {
 				const [eventName, actions] = event;
 				for (const key of actions) {
-					const action = store.findAction(key);
+					const action = findStoreAction(key);
 					if (!action) continue;
 
 					const targets = document.querySelectorAll(
-						utils.helpers.handlerSelector(namespace, eventName, key),
+						buildHandlerSelector(namespace, eventName, key),
 					);
 					const specifier = specifierDeligate(eventName);
 

@@ -17,9 +17,7 @@ const warn = (msg: string) => console.warn(`${C.prefix} ${msg}`);
 /**
  * Logging object
  */
-const log = {
+export default {
 	debug,
 	warn,
 };
-
-export default log;

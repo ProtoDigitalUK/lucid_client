@@ -1,10 +1,5 @@
-import type {
-	Handler,
-	HandlerAttributes,
-	Action,
-} from "../../../types/index.js";
-import store from "../../store/index.js";
-import utils from "../../../utils/index.js";
+import { buildHandlerSelector, findStoreAction } from "../../helpers.js";
+import type { Handler, HandlerAttributes, Action } from "../../types/index.js";
 
 /**
  * The namespace for the event handler
@@ -29,22 +24,20 @@ const createEventKey = (eventName: string, actionKey: string): string => {
 };
 
 /**
- * Handles registering and unregistering event listeners
+ * Handles registering event listeners
  */
 const registerEvents = (attributes: HandlerAttributes) => {
 	for (const event of attributes) {
 		const [eventName, actions] = event;
 
 		for (const key of actions) {
-			const action = store.findAction(key);
+			const action = findStoreAction(key);
 			if (!action) continue;
 
 			const targets = document.querySelectorAll(
-				utils.helpers.handlerSelector(namespace, eventName, key),
+				buildHandlerSelector(namespace, eventName, key),
 			);
 			const eventKey = createEventKey(eventName, key);
-
-			console.log(eventKey);
 
 			if (!eventListenerMap.has(eventKey)) {
 				eventListenerMap.set(eventKey, new Map());

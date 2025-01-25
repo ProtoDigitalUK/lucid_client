@@ -1,6 +1,6 @@
-import Elements from "../elements.js";
-import scope from "../scope/index.js";
-import type { Action } from "../../types/index.js";
+import Elements from "../core/elements.js";
+import scope from "../core/scope/index.js";
+import type { Action } from "../types/index.js";
 
 /**
  * Find the store action based on the scoped key
