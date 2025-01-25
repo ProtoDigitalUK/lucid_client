@@ -26,6 +26,7 @@ export type StoreData<S extends StoreState, A extends StoreActions> = {
 	state: { [K in keyof S]: Signal<S[K]> };
 	actions: A;
 	refs: Refs;
+	cleanup?: () => void;
 };
 
 export type Store<S extends StoreState, A extends StoreActions> = [
@@ -44,6 +45,7 @@ export type StoreModule<S extends StoreState, A extends StoreActions> = (
 ) => {
 	state?: Partial<{ [K in keyof S]: Signal<S[K]> }>;
 	actions: A;
+	cleanup?: () => void;
 };
 
 export type StoreMember =

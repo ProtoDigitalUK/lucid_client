@@ -29,7 +29,7 @@ const initialiseStore = (
 ) => {
 	createRoot((dispose) => {
 		// -----------------
-		// sreate store
+		// create store
 		const store = createStore<StoreData<StoreState, StoreActions>>({
 			initialised: false,
 			dispose: dispose,
@@ -51,6 +51,7 @@ const initialiseStore = (
 
 			if (storeModule.state) store[1]("state", storeModule.state);
 			if (storeModule.actions) store[1]("actions", storeModule.actions);
+			if (storeModule.cleanup) store[1]("cleanup", () => storeModule.cleanup);
 		}
 
 		// -----------------

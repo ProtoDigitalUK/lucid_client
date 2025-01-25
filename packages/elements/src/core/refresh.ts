@@ -8,7 +8,7 @@ import { log } from "../helpers.js";
  * Refreshes the library
  * - Re-creates attribute maps
  * - Re-initialises stores
- * - Re=initialises handlers
+ * - Re-initialises handlers
  */
 const refresh = (targetStore?: string) => {
 	const { elements, handlerAttributes, storeAttributes } = parseAttributes();
