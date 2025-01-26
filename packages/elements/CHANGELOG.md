@@ -1,5 +1,11 @@
 # @lucidclient/elements
 
+## v0.3.1
+
+### Patch Changes
+
+- Fixed indentation in README.
+
 ## v0.3.0
 
 ### Minor Changes
