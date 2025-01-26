@@ -9,10 +9,7 @@ import handler from "./handler/index.js";
  * - Removes the observer
  */
 const destroy = () => {
-	//* destroy handlers
 	handler.destroyHandlers();
-
-	//* remove stores
 	Elements.stores.forEach((store, key) => s.destroyStore(key, store));
 };
 

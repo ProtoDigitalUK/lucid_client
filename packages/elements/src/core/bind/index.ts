@@ -1,8 +1,8 @@
-import updateAttributes from "./update-attributes.js";
+import updateStateAttributes from "./update-state-attributes.js";
 import registerActionEffects from "./register-action-effects.js";
 
 const bind = {
-	updateAttributes,
+	updateAttributes: updateStateAttributes,
 	registerActionEffects,
 };
 

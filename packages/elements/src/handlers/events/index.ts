@@ -14,7 +14,10 @@ import type {
 const namespace = "event";
 
 let abortController: AbortController | null = null;
-const eventListenerMap = new Map<string, Map<Element | Document, Action>>();
+const eventListenerMap = new Map<
+	string,
+	Map<Element | Document | Window, Action>
+>();
 
 /**
  * Create an event handler function that can be stored and removed later
@@ -43,7 +46,7 @@ const parseEventSpecifier = (specifier: string): EventConfig => {
 	};
 
 	if (parts[0] && parts.length > 1) {
-		const possibleTargets = ["document", "body", "head"];
+		const possibleTargets = ["document", "body", "head", "window"];
 
 		if (possibleTargets.includes(parts[0])) {
 			config.target = parts[0] as EventConfig["target"];
@@ -57,7 +60,9 @@ const parseEventSpecifier = (specifier: string): EventConfig => {
 /**
  * Returns the correct target based
  */
-const getTargetElement = (config: EventConfig): HTMLElement | Document => {
+const getTargetElement = (
+	config: EventConfig,
+): HTMLElement | Document | Window => {
 	switch (config.target) {
 		case "document":
 			return document;
@@ -65,6 +70,8 @@ const getTargetElement = (config: EventConfig): HTMLElement | Document => {
 			return document.body;
 		case "head":
 			return document.head;
+		case "window":
+			return window;
 		default:
 			return document;
 	}

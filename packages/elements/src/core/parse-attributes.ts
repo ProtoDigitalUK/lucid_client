@@ -10,6 +10,7 @@ import {
 } from "../helpers.js";
 import Elements from "./elements.js";
 import scope from "./scope/index.js";
+import C from "./constants.js";
 
 /**
  * Responsible for extracting all the Elements attributes and config required for setup
@@ -106,7 +107,7 @@ const parseAttributes = (): {
 							? handlerParts
 									.slice(1)
 									.join(Elements.options.attributes.seperators.handler)
-							: "";
+							: C.defaults.specifier;
 
 					if (!namespace) continue;
 

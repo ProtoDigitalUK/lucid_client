@@ -44,13 +44,14 @@ const resolveBindingValue = (
 		value = stringifyState(stringifyValue);
 		valueCache.set(bindValue, value);
 	}
+
 	element.setAttribute(targetKey, value);
 };
 
 /**
  * Updates the attribute bindings for state. Updates the target element and all children.
  */
-const updateAttributes = (
+const updateStateAttributes = (
 	parent: Element,
 	state: {
 		key: string;
@@ -101,4 +102,4 @@ const updateAttributes = (
 	}
 };
 
-export default updateAttributes;
+export default updateStateAttributes;

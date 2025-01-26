@@ -14,7 +14,7 @@ const storeModule = <S extends StoreState, A extends StoreActions>(
 		return;
 	}
 
-	// @ts-expect-error - TODO: fix typing
+	// @ts-expect-error
 	Elements.storeModules.set(key, storeModule);
 };
 

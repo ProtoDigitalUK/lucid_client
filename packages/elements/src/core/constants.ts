@@ -20,6 +20,7 @@ const C = {
 				state: "$",
 			},
 		},
+		specifier: "",
 	},
 };
 
