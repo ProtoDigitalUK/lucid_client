@@ -45,10 +45,11 @@ Stores are the foundation of Elements. They manage state and logic for sections 
 
 ```html
 <div 
-	data-store="counter"
-	data-state--count="0"
-	data-state--is-active="true">
-	<!-- Store content -->
+    data-store="counter"
+    data-state--count="0"
+    data-state--is-active="true"
+>
+    <!-- Store content -->
 </div>
 ```
 
@@ -56,9 +57,9 @@ Stores can be nested, allowing child elements to access parent store state:
 
 ```html
 <div data-store="parent" data-state--expanded="true">
-	<button data-store="child" data-bind--aria-expanded="parent:$expanded">
-		<!-- Nested store -->
-	</button>
+    <button data-store="child" data-bind--aria-expanded="parent:$expanded">
+        <!-- Nested store -->
+    </button>
 </div>
 ```
 
@@ -87,10 +88,10 @@ Bind state `$` and actions `@` to HTML attributes using `data-bind--`:
 
 ```html
 <button 
-	data-bind--disabled="store:$loading"
-	data-bind--aria-label="store:@getButtonLabel"
+    data-bind--disabled="store:$loading"
+    data-bind--aria-label="store:@getButtonLabel"
 >
-	Submit
+    Submit
 </button>
 ```
 
@@ -149,35 +150,35 @@ Store modules contain your application logic and state management:
 import { storeModule, createSignal } from "@lucidclient/elements";
 
 type NavStore = {
-  state: {
-    isOpen: boolean;
-    ariaLabel: string;
-  };
-  actions: {
-    toggle: () => void;
-    getButtonLabel: () => string;
-  };
+    state: {
+        isOpen: boolean;
+        ariaLabel: string;
+    };
+    actions: {
+        toggle: () => void;
+        getButtonLabel: () => string;
+    };
 }
 
 storeModule<NavStore>("nav", (store) => ({
-	state: {
-		ariaLabel: createSignal("Open Navigation"),
-	},
-	actions: {
-		toggle: () => {
-			const [getOpen, setOpen] = store.state.isOpen;
-			const [_, setAriaLabel] = store.state.ariaLabel;
+    state: {
+        ariaLabel: createSignal("Open Navigation"),
+    },
+    actions: {
+        toggle: () => {
+            const [getOpen, setOpen] = store.state.isOpen;
+            const [_, setAriaLabel] = store.state.ariaLabel;
 
-			setOpen(prev => !prev);
-			setAriaLabel(getOpen() ? "Close Navigation" : "Open Navigation");
+            setOpen(prev => !prev);
+            setAriaLabel(getOpen() ? "Close Navigation" : "Open Navigation");
 		},
-		getButtonLabel: () => {
-			const [getOpen] = store.state.isOpen;
-			return getOpen() ? "Close Navigation" : "Open Navigation";
-		}
-	},
+        getButtonLabel: () => {
+            const [getOpen] = store.state.isOpen;
+            return getOpen() ? "Close Navigation" : "Open Navigation";
+        }
+    },
     effects: {},
-	cleanup: () => {}
+    cleanup: () => {}
 }));
 ```
 
@@ -207,15 +208,15 @@ Use `data-effect` to register effects in your store:
 
 ```typescript
 storeModule("store", (store) => ({
-	state: {},
-	actions: {},
+    state: {},
+    actions: {},
     effects: {
         onOpenChange: (context) => {
             const [getOpen] = store.state.isOpen;
             console.log('Open?', getOpen(), context.isInitial);
         }
     },
-	cleanup: () => {}
+    cleanup: () => {}
 }));
 ```
 
