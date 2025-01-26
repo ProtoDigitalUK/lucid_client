@@ -22,7 +22,7 @@ const handleMutation = (
 	const value = parseStateString(attributeValue);
 
 	get.state[key]?.[1](value);
-	bind.updateAttributes(target, { key, value }, get.attributeMaps);
+	bind.updateStateAttributes(target, { key, value }, get.attributeMaps);
 };
 
 /**

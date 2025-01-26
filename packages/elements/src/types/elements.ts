@@ -16,6 +16,7 @@ export type ElementsInstance = {
 				store: string;
 				state: string;
 				bind: string;
+				effect: string;
 				handler: string;
 				ref: string;
 			};

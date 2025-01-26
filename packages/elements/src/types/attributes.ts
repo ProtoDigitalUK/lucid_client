@@ -37,3 +37,8 @@ type AttributeName = string;
  */
 export type BindStateAttributesMap = Map<StateKey, Set<AttributeName>>;
 export type BindActionAttributeMap = Map<HandlerAction, Set<AttributeName>>;
+
+// ----------------
+// Effect Attributes
+
+export type EffectAttributes = Set<string>;

@@ -9,6 +9,7 @@ const C = {
 				ref: "ref",
 				state: "state--",
 				bind: "bind--",
+				effect: "effect",
 				handler: "handler--",
 			},
 			seperators: {

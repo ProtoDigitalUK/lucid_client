@@ -18,6 +18,7 @@ const start = (options?: {
 			bind?: string;
 			handler?: string;
 			ref?: string;
+			effect?: string;
 		};
 		seperators?: {
 			scope?: string;
@@ -47,6 +48,9 @@ const start = (options?: {
 				bind:
 					options?.attributes?.selectors?.bind ??
 					C.defaults.attributes.selectors.bind,
+				effect:
+					options?.attributes?.selectors?.effect ??
+					C.defaults.attributes.selectors.effect,
 				handler:
 					options?.attributes?.selectors?.handler ??
 					C.defaults.attributes.selectors.handler,

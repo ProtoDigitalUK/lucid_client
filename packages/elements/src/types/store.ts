@@ -1,10 +1,15 @@
 import type { SetStoreFunction } from "solid-js/store";
 import type { Signal } from "solid-js";
-import type { BindStateAttributesMap, StateAttribtuesMap } from "./index.js";
+import type {
+	BindStateAttributesMap,
+	StateAttribtuesMap,
+	EffectAttributes,
+} from "./index.js";
 
 export type AttributeMaps = {
 	scope: string | null;
 	state: StateAttribtuesMap;
+	effects: EffectAttributes;
 	bindState: BindStateAttributesMap;
 	bindActions: BindStateAttributesMap;
 };
@@ -18,6 +23,11 @@ export type StoreState = Record<string, unknown>;
 export type Action = (...args: any[]) => unknown;
 export type StoreActions = Record<string, Action>;
 
+export type Effect = (context: {
+	isInitial: boolean;
+}) => void;
+export type StoreEffects = Record<string, Effect>;
+
 export type StoreData<S extends StoreState, A extends StoreActions> = {
 	initialised: boolean;
 	dispose: () => void;
@@ -25,6 +35,7 @@ export type StoreData<S extends StoreState, A extends StoreActions> = {
 	stateObserver?: MutationObserver;
 	state: { [K in keyof S]: Signal<S[K]> };
 	actions: A;
+	effects: StoreEffects;
 	refs: Refs;
 	cleanup?: () => void;
 };
@@ -45,6 +56,7 @@ export type StoreModule<S extends StoreState, A extends StoreActions> = (
 ) => {
 	state?: Partial<{ [K in keyof S]: Signal<S[K]> }>;
 	actions: A;
+	effects?: StoreEffects;
 	cleanup?: () => void;
 };
 

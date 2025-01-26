@@ -174,6 +174,7 @@ storeModule<NavStore>("nav", (store) => ({
 			return getOpen() ? "Close Navigation" : "Open Navigation";
 		}
 	},
+    effects: {},
 	cleanup: () => {}
 }));
 ```
@@ -194,6 +195,30 @@ const button = store.refs.get("submitButton");
 const items = store.refs.get("items"); // Array of elements
 ```
 
+### Effects
+
+Use `data-effect` to register effects in your store:
+
+```html
+<div data-effect="store:onOpenChange"></div>
+```
+
+```typescript
+storeModule("store", (store) => ({
+	state: {},
+	actions: {},
+    effects: {
+        onOpenChange: (context) => {
+            const [getOpen] = store.state.isOpen;
+            console.log('Open?', getOpen(), context.isInitial);
+        }
+    },
+	cleanup: () => {}
+}));
+```
+
+With effects, whenever a dependency updates (in the above case the isOpen signal), the effect will re-run.
+
 ## Limitations
 
-- Array and object state mutations don't update their state attribute value. They do still trigger side-effect thought, so any binding or handler that subscribed to them will still re-trigger.
+- Array and object state mutations don't update their state attribute value. They do still trigger side-effect though, so any binding or handler that subscribed to them will still re-trigger.

@@ -14,6 +14,7 @@ import ref from "../ref/index.js";
 import Elements from "../elements.js";
 import getStoreInterface from "./get-store-interface.js";
 import bind from "../bind/index.js";
+import effect from "../effect/index.js";
 
 /**
  * Creates a store for the given element if one hasnt already been specified.
@@ -36,6 +37,7 @@ const initialiseStore = (
 			attributeMaps: attributeMaps,
 			state: {},
 			actions: {},
+			effects: {},
 			refs: new Map(),
 		}) satisfies Store<StoreState, StoreActions>;
 
@@ -51,6 +53,7 @@ const initialiseStore = (
 
 			if (storeModule.state) store[1]("state", storeModule.state);
 			if (storeModule.actions) store[1]("actions", storeModule.actions);
+			if (storeModule.effects) store[1]("effects", storeModule.effects);
 			if (storeModule.cleanup) store[1]("cleanup", () => storeModule.cleanup);
 		}
 
@@ -64,6 +67,7 @@ const initialiseStore = (
 		state.watchState(element, store);
 		ref.createRefs(element, store);
 		bind.registerActionEffects(store);
+		effect.registerEffects(store);
 
 		// -----------------
 		// update Elements instance

@@ -11,4 +11,4 @@
 - All first-party handlers now support using state as well as actions. Just prefix the value with either a `$` or `@` to denote the member type.
 - Added a new first party handler for trapping focus. This can be used via the `data-handler--trap` attribute and supports both member types.
 - Added a new optional cleanup callback for store modules.
-
+- Added a new `data-effect` attribute for registering effects through attributes.

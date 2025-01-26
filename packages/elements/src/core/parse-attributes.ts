@@ -1,6 +1,7 @@
 import type {
 	HandlerAttributesMap,
 	StoreAttributesMap,
+	EffectAttributes,
 } from "../types/index.js";
 import {
 	deepCollectAttributes,
@@ -31,6 +32,7 @@ const parseAttributes = (): {
 		state: buildAttribute(Elements.options.attributes.selectors.state),
 		bind: buildAttribute(Elements.options.attributes.selectors.bind),
 		handler: buildAttribute(Elements.options.attributes.selectors.handler),
+		effect: buildAttribute(Elements.options.attributes.selectors.effect),
 	};
 
 	const storeEles = document.querySelectorAll(`[${prefix.store}]`);
@@ -45,6 +47,7 @@ const parseAttributes = (): {
 			state: new Map(),
 			bindState: new Map(),
 			bindActions: new Map(),
+			effects: new Set(),
 		});
 
 		const storeMap = storeAttributes.get(scopeValue);
@@ -123,6 +126,8 @@ const parseAttributes = (): {
 						namespaceMap.get(specifier)?.add(value);
 					}
 				}
+			} else if (name.startsWith(prefix.effect)) {
+				storeMap.effects.add(value);
 			}
 		}
 	}
