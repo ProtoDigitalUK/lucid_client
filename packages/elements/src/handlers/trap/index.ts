@@ -5,7 +5,7 @@ import {
 	resolveMember,
 } from "../../helpers.js";
 import type { Handler } from "../../types/index.js";
-import type { TrapState } from "./types.js";
+import type { TrapConfig, TrapState } from "./types.js";
 
 const namespace = "trap";
 let disposeHandler: () => void;
@@ -36,7 +36,12 @@ const getSiblingElements = (element: HTMLElement): HTMLElement[] => {
 /**
  * Manages the trap stae on a global level
  */
-const manageTrapState = (target: HTMLElement, shouldTrap: boolean) => {
+const manageTrapState = (
+	target: HTMLElement,
+	shouldTrap: boolean,
+	config: TrapConfig,
+) => {
+	//* make siblings inert and focus target
 	if (shouldTrap) {
 		const siblings = getSiblingElements(target);
 		const previousActive = document.activeElement as HTMLElement;
@@ -53,11 +58,14 @@ const manageTrapState = (target: HTMLElement, shouldTrap: boolean) => {
 		for (const sibling of siblings) {
 			sibling.setAttribute("inert", "");
 		}
+
+		target.removeAttribute("inert");
 		target.focus();
 		document.body.style.overflow = "hidden";
 		return;
 	}
 
+	//* remove inert from siblings
 	setActiveFocusTraps((traps) => {
 		const trapToRemove = traps.find((t) => t.element === target);
 		const newTraps = traps.filter((t) => t.element !== target);
@@ -75,6 +83,20 @@ const manageTrapState = (target: HTMLElement, shouldTrap: boolean) => {
 
 		return newTraps;
 	});
+
+	if (config.trapBothWays) {
+		//* make the target inert when not active
+		target.setAttribute("inert", "");
+	}
+};
+
+/**
+ * Parse the specifier for config
+ */
+const parseEventSpecifier = (specifier: string): TrapConfig => {
+	return {
+		trapBothWays: specifier.includes("both"),
+	};
 };
 
 /**
@@ -93,6 +115,8 @@ const trapHandler: Handler = {
 					const member = findStoreMember(key);
 					if (!member) continue;
 
+					const config = parseEventSpecifier(specifier);
+
 					const targets = document.querySelectorAll(
 						buildHandlerSelector(namespace, specifier, key),
 					);
@@ -101,7 +125,7 @@ const trapHandler: Handler = {
 						const shouldTrap = await resolveMember(member);
 						for (const target of targets) {
 							if (target instanceof HTMLElement) {
-								manageTrapState(target, Boolean(shouldTrap));
+								manageTrapState(target, Boolean(shouldTrap), config);
 							}
 						}
 					});

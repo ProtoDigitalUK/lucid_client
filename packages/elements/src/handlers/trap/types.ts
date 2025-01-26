@@ -3,3 +3,7 @@ export type TrapState = {
 	previousActiveElement: HTMLElement | null;
 	siblingElements: HTMLElement[];
 };
+
+export type TrapConfig = {
+	trapBothWays: boolean;
+};
