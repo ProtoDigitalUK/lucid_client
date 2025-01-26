@@ -4,12 +4,15 @@ import store from "./store/index.js";
 import handler from "./handler/index.js";
 import parseAttributes from "./parse-attributes.js";
 import { log } from "../helpers.js";
+import type { Handler } from "../types/handlers.js";
+import registerHandler from "./register-handler.js";
 
 /**
  * Sets up and starts the Elements library
  */
 const start = (options?: {
 	debug?: boolean;
+	handlers?: Array<Handler>;
 	attributes?: {
 		prefix?: string;
 		selectors?: {
@@ -68,6 +71,13 @@ const start = (options?: {
 			},
 		},
 	};
+
+	// register handlers
+	if (options?.handlers) {
+		for (const handler of options.handlers) {
+			registerHandler(handler);
+		}
+	}
 
 	// parse attributes
 	const { elements, handlerAttributes, storeAttributes } = parseAttributes();

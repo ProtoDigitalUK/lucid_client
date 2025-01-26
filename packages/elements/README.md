@@ -28,12 +28,14 @@ Basic setup:
 import Elements, { registerHandler } from "@lucidclient/elements";
 import { events, dom, trap } from "@lucidclient/elements/handlers";
 
-registerHandler(events);
-registerHandler(dom);
-registerHandler(trap);
+// registerHandler(events);
 
-Elements.start();
+Elements.start({
+    handlers: [events, dom, trap]
+});
 ```
+
+> Handlers can optionally be reigsterd with `registerHandler`. If you choose to do this, they must be registered before `Elements.start` is called.
 
 ## Core Concepts
 
