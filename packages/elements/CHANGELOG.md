@@ -1,5 +1,11 @@
 # @lucidclient/elements
 
+## v0.4.0
+
+### Minor Changes
+
+- Added the concept of global and manual effects. Global effects are always initialised, while manual one need to be called via a `data-effect="scope:manulEffect"` attribute.
+
 ## v0.3.1
 
 ### Patch Changes

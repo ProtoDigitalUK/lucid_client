@@ -37,7 +37,10 @@ const initialiseStore = (
 			attributeMaps: attributeMaps,
 			state: {},
 			actions: {},
-			effects: {},
+			effects: {
+				global: {},
+				manual: {},
+			},
 			refs: new Map(),
 		}) satisfies Store<StoreState, StoreActions>;
 

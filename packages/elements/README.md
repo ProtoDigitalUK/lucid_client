@@ -177,7 +177,10 @@ storeModule<NavStore>("nav", (store) => ({
             return getOpen() ? "Close Navigation" : "Open Navigation";
         }
     },
-    effects: {},
+    effects: {
+        global: {},
+        manual: {}
+    },
     cleanup: () => {}
 }));
 ```
@@ -211,9 +214,14 @@ storeModule("store", (store) => ({
     state: {},
     actions: {},
     effects: {
-        onOpenChange: (context) => {
-            const [getOpen] = store.state.isOpen;
-            console.log('Open?', getOpen(), context.isInitial);
+        // any effect registered in global is iniitalised automatically
+        global: {},
+        // any effect registered in manual is only intitialised when its referenced in a `data-effect` attribute
+        manual: {
+            onOpenChange: (context) => {
+                const [getOpen] = store.state.isOpen;
+                console.log('Open?', getOpen(), context.isInitial);
+            }
         }
     },
     cleanup: () => {}

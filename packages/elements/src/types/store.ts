@@ -35,7 +35,10 @@ export type StoreData<S extends StoreState, A extends StoreActions> = {
 	stateObserver?: MutationObserver;
 	state: { [K in keyof S]: Signal<S[K]> };
 	actions: A;
-	effects: StoreEffects;
+	effects: {
+		global: StoreEffects;
+		manual: StoreEffects;
+	};
 	refs: Refs;
 	cleanup?: () => void;
 };
@@ -56,7 +59,10 @@ export type StoreModule<S extends StoreState, A extends StoreActions> = (
 ) => {
 	state?: Partial<{ [K in keyof S]: Signal<S[K]> }>;
 	actions: A;
-	effects?: StoreEffects;
+	effects?: {
+		global?: StoreEffects;
+		manual?: StoreEffects;
+	};
 	cleanup?: () => void;
 };
 

@@ -128,8 +128,10 @@ const { title } = Astro.props;
                     },
                 },
                 effects: {
-                    elementEffect: (context) => {
-                        console.log("element effect", context);
+                    manual: {
+                        elementEffect: (context) => {
+                            console.log("element effect", context);
+                        },
                     },
                 },
             }));
@@ -199,10 +201,12 @@ const { title } = Astro.props;
                     },
                 },
                 effects: {
-                    customEffect: (context) => {
-                        const [getOpen] = store.state.open;
+                    manual: {
+                        customEffect: (context) => {
+                            const [getOpen] = store.state.open;
 
-                        console.log("effect", getOpen(), context);
+                            console.log("effect", getOpen(), context);
+                        },
                     },
                 },
                 cleanup: () => {
