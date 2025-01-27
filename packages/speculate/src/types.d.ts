@@ -25,7 +25,12 @@ export type IntentResult<T, D> =
 
 export type IntentResponse<T, D> = Promise<IntentResult<T, D>>;
 
-export type TargetElements = Element | NodeListOf<Element> | Element[];
+export type TargetElements =
+	| Element
+	| NodeListOf<Element>
+	| Element[]
+	| null
+	| undefined;
 
 export type OptimisticPrefetchStrategy = {
 	/**
