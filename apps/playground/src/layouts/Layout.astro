@@ -254,13 +254,14 @@ const { title } = Astro.props;
                 getCacheKey: (element) => {
                     return element.getAttribute("data-page");
                 },
-                onClick: async (data, element) => {
+                onClick: async (e, data) => {
+                    e.preventDefault();
                     if (data.error) {
                         console.log("error", data.error);
                         return;
                     }
 
-                    console.log("clicked", data.data, element);
+                    console.log("clicked", data.data);
                 },
                 cache: {
                     maxSize: 2,

@@ -65,7 +65,7 @@ class Speculator<T, D> {
 	 */
 	private clickEventHandler = async (e: Event) => {
 		const result = await this.prefetch(e.target as Element);
-		if (this.config.onClick) this.config.onClick(result, e.target as Element);
+		if (this.config.onClick) this.config.onClick(e, result);
 	};
 	/**
 	 * Gets a cache key for an element

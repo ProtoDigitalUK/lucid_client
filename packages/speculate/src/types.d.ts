@@ -59,7 +59,7 @@ export type SpeculatorConfig<T, D> = {
 	/**
 	 * Called when a target element is clicked
 	 */
-	onClick?: (result: IntentResult<T, D>, element: Element) => void;
+	onClick?: (e: Event, result: IntentResult<T, D>) => void;
 	/**
 	 * Cache configuration to control data freshness and memory usage
 	 */

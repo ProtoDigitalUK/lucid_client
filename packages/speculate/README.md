@@ -99,7 +99,7 @@ const paginator = new Speculator({
 			error: undefined,
 		};
 	},
-	onClick: async (data, element) => {
+	onClick: async (e, data) => {
 		// set loading state
 
 		// handle error case

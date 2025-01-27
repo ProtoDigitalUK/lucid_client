@@ -1,5 +1,11 @@
 # @lucidclient/speculate
 
+## v1.0.1
+
+## Minor Changes
+
+- `onClick` callback now returns `Event`.
+
 ## v1.0.0
 
 ### Major Changes
