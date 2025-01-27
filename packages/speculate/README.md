@@ -74,49 +74,49 @@ import { Speculator } from "@lucidclient/speculate";
 
 // A basic pagination example
 const paginator = new Speculator({
-	elements: document.querySelectorAll(".pagination-link"),
-	// these will fire ASAP
-	optimistic: [
-		{
-			elements: document.querySelector(".next-page"),
-			// condition: () => hasNextPage
-		},
-		{
-			elements: document.querySelector(".prev-page"),
-			// condition: () => hasPrevPage
-		},
-	],
-	getCacheKey: (element) => {
-		return element.getAttribute("data-page");
-	},
-	fetch: async (element) => {
-		const page = element.getAttribute("data-page");
-		const response = await fetch(`/api/posts?page=${page}`);
-		const posts = await response.json();
+    elements: document.querySelectorAll(".pagination-link"),
+    // these will fire ASAP
+    optimistic: [
+        {
+            elements: document.querySelector(".next-page"),
+            // condition: () => hasNextPage
+        },
+        {
+            elements: document.querySelector(".prev-page"),
+            // condition: () => hasPrevPage
+        },
+    ],
+    getCacheKey: (element) => {
+        return element.getAttribute("data-page");
+    },
+    fetch: async (element) => {
+        const page = element.getAttribute("data-page");
+        const response = await fetch(`/api/posts?page=${page}`);
+        const posts = await response.json();
 
-		return {
-			data: posts,
-			error: undefined,
-		};
-	},
-	onClick: async (e, data) => {
-		// set loading state
+        return {
+            data: posts,
+            error: undefined,
+        };
+    },
+    onClick: async (e, data) => {
+        // set loading state
 
-		// handle error case
-		if (data.error) {
-		}
+        // handle error case
+        if (data.error) {
+        }
 
-		// add filter/sort state to URL query params
-		// replace posts in DOM
-		// rebuild pagination
+        // add filter/sort state to URL query params
+        // replace posts in DOM
+        // rebuild pagination
 
-		// optimistically prefetch the next/prev pages again
-		paginator.prefetch(document.querySelector(".next-page"));
-		paginator.prefetch(document.querySelector(".prev-page"));
+        // optimistically prefetch the next/prev pages again
+        paginator.prefetch(document.querySelector(".next-page"));
+        paginator.prefetch(document.querySelector(".prev-page"));
 
-		// reset loading state
-		// etc...
-	},
+        // reset loading state
+        // etc...
+    },
 });
 ```
 
