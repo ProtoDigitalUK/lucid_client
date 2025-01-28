@@ -1,8 +1,14 @@
 # @lucidclient/speculate
 
-## v1.0.1
+## v1.1.0
 
 ## Minor Changes
+
+- Added a new `refresh` method to `Speculator`.
+
+## v1.0.1
+
+## Patch Changes
 
 - `onClick` callback now returns `Event`.
 - `TargetElements` now supports being null | undefined so you dont have to check prior to passing them to Speculator.

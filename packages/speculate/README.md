@@ -128,6 +128,7 @@ To see the available config, checkout the `SpeculatorConfig` type [here](https:/
 
 #### Public Methods
 
+- refresh(): void
 - destroy(): void
 - prefetch(element: Element): Promise<IntentResult<T, D>>
 - prefetchAll(elements: Element[] | NodeListOf<Element>): Promise<IntentResult<T, D>[]>

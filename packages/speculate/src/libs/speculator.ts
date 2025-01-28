@@ -205,6 +205,17 @@ class Speculator<T, D> {
 		}
 	}
 	/**
+	 * Refreshes the Speculator instance
+	 */
+	public refresh() {
+		this.destroy();
+		this.abortController = new AbortController();
+		this.cache = new Map();
+		this.intentDebounce = null;
+		this.registerEvents();
+		this.handleOptimisticPrefetch();
+	}
+	/**
 	 * Prefetch fetch callback for a given element.
 	 */
 	public async prefetch(element: Element) {
