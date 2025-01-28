@@ -140,6 +140,7 @@ const trapHandler: Handler = {
 			}
 		}
 		document.body.style.overflow = "";
+		disposeHandler();
 	},
 };
 
