@@ -11,7 +11,7 @@ const findStoreMember = (memberValue: string): StoreMember | null => {
 	if (memberDetails === null) return null;
 
 	for (const store of Elements.stores.values()) {
-		if (store[0].attributeMaps?.scope === memberDetails.scope) {
+		if (store[0].directives?.scope === memberDetails.scope) {
 			if (memberDetails.type === "action") {
 				const action = store[0].actions[memberDetails.key];
 				if (action === undefined) {

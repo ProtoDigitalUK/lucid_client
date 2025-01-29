@@ -8,12 +8,12 @@ import type { Store, StoreState, StoreActions } from "../../types/index.js";
  * - Global effects are always created when the store initialises
  */
 const registerEffects = (store: Store<StoreState, StoreActions>) => {
-	if (!store[0].attributeMaps?.effects) return;
+	if (!store[0].directives?.effects) return;
 	const effectInitialStates = new Map<string, boolean>();
 
 	//* create effects for manual effects
-	if (store[0].attributeMaps?.effects) {
-		for (const effect of store[0].attributeMaps.effects) {
+	if (store[0].directives?.effects) {
+		for (const effect of store[0].directives.effects) {
 			const effectKey = scope.removeScope(effect);
 			if (!store[0].effects.manual?.[effectKey]) continue;
 

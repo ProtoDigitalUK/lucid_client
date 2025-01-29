@@ -22,7 +22,8 @@ const handleMutation = (
 	const value = parseStateString(attributeValue);
 
 	get.state[key]?.[1](value);
-	bind.updateStateAttributes(target, { key, value }, get.attributeMaps);
+	if (!get.directives) return;
+	bind.updateStateAttributes(target, { key, value }, get.directives);
 };
 
 /**
@@ -39,7 +40,7 @@ const stateObserver = (
 	const statePrefix = buildAttribute(
 		Elements.options.attributes.selectors.state,
 	);
-	const stateAttributes = Array.from(get.attributeMaps?.state.keys() ?? []).map(
+	const stateAttributes = Array.from(get.directives?.state.keys() ?? []).map(
 		(key) => `${statePrefix}${key}`,
 	);
 

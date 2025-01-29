@@ -8,7 +8,7 @@ import type { Store, StoreState, StoreActions } from "../../types/index.js";
  */
 const createState = (store: Store<StoreState, StoreActions>) => {
 	const [storeGet, storeSet] = store;
-	const stateMap = storeGet.attributeMaps?.state;
+	const stateMap = storeGet.directives?.state;
 
 	if (!stateMap) return;
 

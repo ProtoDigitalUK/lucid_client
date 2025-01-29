@@ -1,4 +1,4 @@
-import parseAttributes from "./parse-attributes.js";
+import buildDirectives from "./build-directives.js";
 import Elements from "./elements.js";
 import handler from "./handler/index.js";
 import store from "./store/index.js";
@@ -11,9 +11,9 @@ import { log } from "../helpers.js";
  * - Re-initialises handlers
  */
 const refresh = (targetStore?: string) => {
-	const { elements, handlerAttributes, storeAttributes } = parseAttributes();
+	const { elements, handlerDirectives, storeDirectives } = buildDirectives();
 
-	Elements.handlerAttributes = handlerAttributes;
+	Elements.handlerDirectives = handlerDirectives;
 
 	handler.destroyHandlers();
 
@@ -32,7 +32,7 @@ const refresh = (targetStore?: string) => {
 		const s = Elements.stores.get(item[1]);
 		if (s) store.destroyStore(item[1], s);
 
-		store.initialiseStore(item[0], item[1], storeAttributes.get(item[1]));
+		store.initialiseStore(item[0], item[1], storeDirectives.get(item[1]));
 	}
 
 	handler.initialiseHandlers();

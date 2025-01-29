@@ -3,7 +3,7 @@ import { buildHandlerSelector, findStoreMember } from "../../helpers.js";
 import type { EventConfig } from "./types.js";
 import type {
 	Handler,
-	HandlerAttributes,
+	HandlerSpecifiersMap,
 	Action,
 	StoreMember,
 } from "../../types/index.js";
@@ -80,7 +80,7 @@ const getTargetElement = (
 /**
  * Handles registering event listeners
  */
-const registerEvents = (attributes: HandlerAttributes) => {
+const registerEvents = (attributes: HandlerSpecifiersMap) => {
 	for (const event of attributes) {
 		const [eventSpecifier, actions] = event;
 		const config = parseEventSpecifier(eventSpecifier);

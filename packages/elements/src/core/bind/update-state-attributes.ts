@@ -1,4 +1,4 @@
-import type { AttributeMaps } from "../../types/index.js";
+import type { DirectiveMap } from "../../types/index.js";
 import C from "../constants.js";
 import Elements from "../elements.js";
 import scope from "../scope/index.js";
@@ -57,15 +57,13 @@ const updateStateAttributes = (
 		key: string;
 		value: unknown;
 	},
-	attributeMaps: AttributeMaps | undefined,
+	attributeMaps: DirectiveMap,
 ) => {
 	if (!attributeMaps?.bindState) return;
 	//* prefix it with the state key $ so it matches that in the bindState map
 	const stateWithPrefix = `${C.defaults.attributes.denote.state}${state.key}`;
 
-	const stateKey = attributeMaps.scope
-		? scope.scopeValue(attributeMaps.scope, stateWithPrefix)
-		: stateWithPrefix;
+	const stateKey = scope.scopeValue(attributeMaps.scope, stateWithPrefix);
 
 	const affectedAttributes = attributeMaps.bindState.get(stateKey);
 	if (!affectedAttributes) return;

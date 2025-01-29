@@ -1,4 +1,4 @@
-import type { HandlerAttributes } from "./index.js";
+import type { HandlerSpecifiersMap } from "./index.js";
 
 export type Handler = {
 	/**
@@ -8,11 +8,11 @@ export type Handler = {
 	/**
 	 * Called once on the iniitalisation of Elements
 	 */
-	initialise: (attributes: HandlerAttributes) => void;
+	initialise: (attributes: HandlerSpecifiersMap) => void;
 	/**
 	 * Called when Elements.destroy() is called
 	 */
-	destroy?: (attributes: HandlerAttributes) => void;
+	destroy?: (attributes: HandlerSpecifiersMap) => void;
 };
 
 export type Handlers = Map<string, Handler>;

@@ -219,6 +219,8 @@ const { title } = Astro.props;
                 handlers: [events, dom, trap],
             });
 
+            Elements.sync();
+
             speculateLinks();
             const speculator = new Speculator({
                 elements: document.querySelectorAll("[data-page]"),

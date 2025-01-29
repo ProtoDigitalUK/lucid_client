@@ -6,7 +6,7 @@ import type {
 	StoreModule,
 	StoreActions,
 	StoreState,
-	AttributeMaps,
+	DirectiveMap,
 } from "../../types/store.js";
 import { log } from "../../helpers.js";
 import state from "../state/index.js";
@@ -26,7 +26,7 @@ import effect from "../effect/index.js";
 const initialiseStore = (
 	element: Element,
 	storeKey: string,
-	attributeMaps?: AttributeMaps,
+	attributeMaps?: DirectiveMap,
 ) => {
 	createRoot((dispose) => {
 		// -----------------
@@ -34,7 +34,7 @@ const initialiseStore = (
 		const store = createStore<StoreData<StoreState, StoreActions>>({
 			initialised: false,
 			dispose: dispose,
-			attributeMaps: attributeMaps,
+			directives: attributeMaps,
 			state: {},
 			actions: {},
 			effects: {
