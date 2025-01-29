@@ -36,7 +36,6 @@ const removeElement = (element: HTMLElement) => {
 	if (!store) return;
 
 	s.destroyStore(storeKey, store);
-	Elements.trackedElements.delete(element);
 };
 
 export default registerStoreObserver;

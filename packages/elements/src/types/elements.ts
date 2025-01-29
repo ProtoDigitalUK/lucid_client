@@ -31,5 +31,4 @@ export type ElementsInstance = {
 	handlerAttributes: HandlerAttributesMap;
 	storeModules: Map<string, StoreModule<StoreState, StoreActions>>;
 	stores: Map<string, Store<StoreState, StoreActions>>;
-	trackedElements: WeakSet<Element>;
 };

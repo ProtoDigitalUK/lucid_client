@@ -75,7 +75,6 @@ const initialiseStore = (
 		// -----------------
 		// update Elements instance
 		Elements.stores.set(storeKey, store);
-		Elements.trackedElements.add(element);
 
 		store[1]("initialised", true);
 		void store[0].actions.init?.();
