@@ -10,10 +10,15 @@ const Elements: ElementsInstance = {
 		attributes: C.defaults.attributes,
 	},
 	started: false,
+
 	handlers: new Map(),
 	handlerDirectives: new Map(),
+
 	stores: new Map(),
 	storeModules: new Map(),
+	storeDirectives: new Map(),
+
+	syncedElements: new WeakMap(),
 };
 
 export default Elements;

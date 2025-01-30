@@ -1,23 +1,31 @@
 import Elements from "./elements.js";
-import handler from "./handler/index.js";
-import store from "./store/index.js";
 import { log } from "../helpers.js";
 import buildDirectives from "./build-directives.js";
+import { createRoot } from "solid-js";
 
 /**
  * Checks for new Elements attributes and initialises them
+ * @todo Dont expose this, if youre not careful you can easily register duplicate effects
  */
-const sync = (target?: Element) => {
-	// build out directives based on target element (if no element, defaults to the document.body)
-	const { elements, handlerDirectives, storeDirectives } =
-		buildDirectives(target);
+const sync = (target: Element) => {
+	createRoot((dispose) => {
+		// if the target has been synced prior, dispose of it before re-initialsing
+		const targetDispose = Elements.syncedElements.get(target);
+		if (targetDispose) {
+			targetDispose();
+			Elements.syncedElements.delete(target);
+		}
 
-	// compare directives to those against ELements and stores already
-	// filter out new ones and initialsie only them
+		const directives = buildDirectives(target);
 
-	console.log(storeDirectives);
+		console.log(directives.storeDirectives);
+		console.log(directives.handlerDirectives);
 
-	log.debug("Elements synced.");
+		log.debug("Elements synced.");
+
+		// register target and dispose against Elements
+		Elements.syncedElements.set(target, dispose);
+	});
 };
 
 export default sync;

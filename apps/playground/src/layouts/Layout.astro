@@ -184,11 +184,12 @@ const { title } = Astro.props;
                         const target = store.refs.get("testEleRefresh");
                         if (target instanceof HTMLElement) {
                             target.innerHTML =
-                                "<button data-handler--event.click='nav:@newClick'>after</button>";
+                                "<button data-handler--event.click='nav:@newClick' data-bind--testing='nav:$ariaLabel'>after</button>";
                         }
-
-                        console.log("refreshElements");
-                        Elements.refresh();
+                        if (target && !Array.isArray(target)) {
+                            console.log(target);
+                            Elements.sync(target);
+                        }
                     },
                     newClick: () => {
                         console.log("newClick");
@@ -218,8 +219,6 @@ const { title } = Astro.props;
                 debug: true,
                 handlers: [events, dom, trap],
             });
-
-            Elements.sync();
 
             speculateLinks();
             const speculator = new Speculator({

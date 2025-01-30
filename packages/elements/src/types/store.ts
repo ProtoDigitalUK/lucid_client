@@ -28,9 +28,9 @@ export type Effect = (context: {
 export type StoreEffects = Record<string, Effect>;
 
 export type StoreData<S extends StoreState, A extends StoreActions> = {
+	key: string;
 	initialised: boolean;
 	dispose: () => void;
-	directives?: DirectiveMap;
 	stateObserver?: MutationObserver;
 	state: { [K in keyof S]: Signal<S[K]> };
 	actions: A;

@@ -1,4 +1,9 @@
-import type { Store, StoreState, StoreActions } from "../../types/index.js";
+import type {
+	Store,
+	StoreState,
+	StoreActions,
+	DirectiveMap,
+} from "../../types/index.js";
 import { parseStateString, buildAttribute } from "../../helpers.js";
 import bind from "../bind/index.js";
 import Elements from "../elements.js";
@@ -14,6 +19,7 @@ const handleMutation = (
 	oldValue: string | null,
 	get: Store<StoreState, StoreActions>[0],
 	statePrefix: string,
+	directives: DirectiveMap | undefined,
 ) => {
 	const key = attribute.slice(statePrefix.length);
 	const attributeValue = target.getAttribute(attribute);
@@ -22,8 +28,8 @@ const handleMutation = (
 	const value = parseStateString(attributeValue);
 
 	get.state[key]?.[1](value);
-	if (!get.directives) return;
-	bind.updateStateAttributes(target, { key, value }, get.directives);
+	if (!directives) return;
+	bind.updateStateAttributes(target, { key, value }, directives);
 };
 
 /**
@@ -40,13 +46,15 @@ const stateObserver = (
 	const statePrefix = buildAttribute(
 		Elements.options.attributes.selectors.state,
 	);
-	const stateAttributes = Array.from(get.directives?.state.keys() ?? []).map(
+	const directives = Elements.storeDirectives.get(get.key);
+
+	const stateAttributes = Array.from(directives?.state.keys() ?? []).map(
 		(key) => `${statePrefix}${key}`,
 	);
 
 	// sync initial state to bind attributes
 	for (const attribute of stateAttributes) {
-		handleMutation(element, attribute, null, get, statePrefix);
+		handleMutation(element, attribute, null, get, statePrefix, directives);
 	}
 
 	// register mutation observer
@@ -63,6 +71,7 @@ const stateObserver = (
 					mutation.oldValue,
 					get,
 					statePrefix,
+					directives,
 				);
 			}
 		}

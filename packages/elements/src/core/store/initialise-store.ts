@@ -23,18 +23,14 @@ import effect from "../effect/index.js";
  * - Observes state.
  * - Creates refs.
  */
-const initialiseStore = (
-	element: Element,
-	storeKey: string,
-	attributeMaps?: DirectiveMap,
-) => {
+const initialiseStore = (element: Element, storeKey: string) => {
 	createRoot((dispose) => {
 		// -----------------
 		// create store
 		const store = createStore<StoreData<StoreState, StoreActions>>({
+			key: storeKey,
 			initialised: false,
 			dispose: dispose,
-			directives: attributeMaps,
 			state: {},
 			actions: {},
 			effects: {

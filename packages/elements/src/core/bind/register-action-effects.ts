@@ -10,9 +10,11 @@ import scope from "../scope/index.js";
  * - When the state the actions call get updated this will update the bind attribute values
  */
 const registerActionEffects = (store: Store<StoreState, StoreActions>) => {
-	if (!store[0].directives?.bindActions) return;
+	const directives = Elements.storeDirectives.get(store[0].key);
 
-	for (const [action, attributes] of store[0].directives.bindActions) {
+	if (!directives?.bindActions) return;
+
+	for (const [action, attributes] of directives.bindActions) {
 		const actionKey = scope
 			.removeScope(action)
 			.replace(C.defaults.attributes.denote.action, "");

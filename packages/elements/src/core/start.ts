@@ -80,12 +80,13 @@ const start = (options?: {
 	}
 
 	// parse attributes
-	const { elements, handlerDirectives, storeDirectives } = buildDirectives();
+	const directives = buildDirectives();
 
-	Elements.handlerDirectives = handlerDirectives;
+	Elements.handlerDirectives = directives.handlerDirectives;
+	Elements.storeDirectives = directives.storeDirectives;
 
 	// initialise elements stores
-	for (const item of elements) {
+	for (const item of directives.elements) {
 		if (!item[1]) {
 			log.warn(
 				"Please ensure all 'data-store' attributes have a value. This is needed to scope state, binds and handler actions.",
@@ -93,7 +94,7 @@ const start = (options?: {
 			continue;
 		}
 
-		store.initialiseStore(item[0], item[1], storeDirectives.get(item[1]));
+		store.initialiseStore(item[0], item[1]);
 	}
 
 	handler.initialiseHandlers();

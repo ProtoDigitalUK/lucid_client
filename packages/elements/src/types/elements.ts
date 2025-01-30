@@ -5,6 +5,7 @@ import type {
 	StoreState,
 	Handlers,
 	HandlerDirectives,
+	StoreDirectives,
 } from "./index.js";
 
 export type ElementsInstance = {
@@ -29,6 +30,8 @@ export type ElementsInstance = {
 	started: boolean;
 	handlers: Handlers;
 	handlerDirectives: HandlerDirectives;
-	storeModules: Map<string, StoreModule<StoreState, StoreActions>>;
 	stores: Map<string, Store<StoreState, StoreActions>>;
+	storeModules: Map<string, StoreModule<StoreState, StoreActions>>;
+	storeDirectives: StoreDirectives;
+	syncedElements: WeakMap<Element, () => void>;
 };

@@ -11,13 +11,14 @@ import { log } from "../helpers.js";
  * - Re-initialises handlers
  */
 const refresh = (targetStore?: string) => {
-	const { elements, handlerDirectives, storeDirectives } = buildDirectives();
+	const directives = buildDirectives();
 
-	Elements.handlerDirectives = handlerDirectives;
+	Elements.handlerDirectives = directives.handlerDirectives;
+	Elements.storeDirectives = directives.storeDirectives;
 
 	handler.destroyHandlers();
 
-	for (const item of elements) {
+	for (const item of directives.elements) {
 		if (!item[1]) {
 			log.warn(
 				"Please ensure all 'data-store' attributes have a value. This is needed to scope state, binds and handler actions.",
@@ -32,7 +33,7 @@ const refresh = (targetStore?: string) => {
 		const s = Elements.stores.get(item[1]);
 		if (s) store.destroyStore(item[1], s);
 
-		store.initialiseStore(item[0], item[1], storeDirectives.get(item[1]));
+		store.initialiseStore(item[0], item[1]);
 	}
 
 	handler.initialiseHandlers();

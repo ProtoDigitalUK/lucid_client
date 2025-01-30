@@ -18,7 +18,7 @@ const createRefs = (
 	store: Store<StoreState, StoreActions>,
 ) => {
 	const refPrefix = buildAttribute(Elements.options.attributes.selectors.ref);
-	const scope = store[0].directives?.scope;
+	const scope = store[0].key;
 	const refElements = element.querySelectorAll(`[${refPrefix}]`);
 
 	const refs: Refs = new Map();
