@@ -94,7 +94,11 @@ const start = (options?: {
 			continue;
 		}
 
-		store.initialiseStore(item[0], item[1]);
+		store.initialiseStore(
+			item[0],
+			item[1],
+			directives.storeDirectives.get(item[1]),
+		);
 	}
 
 	handler.initialiseHandlers();

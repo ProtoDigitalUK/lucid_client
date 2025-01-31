@@ -1,6 +1,5 @@
 import { createSignal, type Signal } from "solid-js";
 import { produce } from "solid-js/store";
-import Elements from "../elements.js";
 import type {
 	Store,
 	StoreState,
@@ -14,17 +13,12 @@ import type {
  */
 const createState = (
 	store: Store<StoreState, StoreActions>,
-	directives?: DirectiveMap,
+	directives: DirectiveMap | undefined,
 ) => {
-	const [storeGet, storeSet] = store;
-	const targetDirectives = directives
-		? directives
-		: Elements.storeDirectives.get(storeGet.key);
-
-	const stateMap = targetDirectives?.state;
+	const stateMap = directives?.state;
 	if (!stateMap) return;
 
-	storeSet(
+	store[1](
 		produce((s) => {
 			for (const [key, defaultValue] of stateMap.entries()) {
 				if (s.state[key] === undefined) {

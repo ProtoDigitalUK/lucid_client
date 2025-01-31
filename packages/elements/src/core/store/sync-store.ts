@@ -1,8 +1,9 @@
 import state from "../state/index.js";
 import ref from "../ref/index.js";
 import Elements from "../elements.js";
-import { buildAttribute } from "../../helpers.js";
-import { handleMutation } from "../state/state-observer.js";
+import { buildAttribute, log } from "../../helpers.js";
+import bind from "../bind/index.js";
+import effect from "../effect/index.js";
 import type { DirectiveMap } from "../../types/store.js";
 
 const syncStore = (storeKey: string, directives: DirectiveMap) => {
@@ -22,11 +23,13 @@ const syncStore = (storeKey: string, directives: DirectiveMap) => {
 
 	state.createState(store, directives);
 	state.watchState(storeElement, store);
-
-	// TODO: check refs, registerActionEffects and registerEffects works with syncStore
 	ref.createRefs(storeElement, store);
-	// bind.registerActionEffects(store);
-	// effect.registerEffects(store);
+	bind.registerActionEffects(store, directives);
+	effect.registerEffects(store, directives);
+
+	log.debug(
+		`Store synced for element "${storeElement.id || storeElement.tagName}" with key "${storeKey}"`,
+	);
 
 	return () => {
 		syncStateObserver.disconnect();

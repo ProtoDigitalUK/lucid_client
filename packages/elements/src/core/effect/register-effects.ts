@@ -1,18 +1,17 @@
 import { createEffect } from "solid-js";
 import scope from "../scope/index.js";
-import Elements from "../elements.js";
-import type { Store, StoreState, StoreActions } from "../../types/index.js";
+import type {
+	Store,
+	StoreState,
+	StoreActions,
+	DirectiveMap,
+} from "../../types/index.js";
 
-/**
- * Register a createEffect for both manual and global effects
- * - Manual effects are created when their data-effect attribute exists
- * - Global effects are always created when the store initialises
- */
-const registerEffects = (store: Store<StoreState, StoreActions>) => {
-	const directives = Elements.storeDirectives.get(store[0].key);
-
+const registerEffects = (
+	store: Store<StoreState, StoreActions>,
+	directives: DirectiveMap | undefined,
+) => {
 	if (!directives?.effects) return;
-	// TODO: add to store instance so works with subsequent runs
 	const effectInitialStates = new Map<string, boolean>();
 
 	//* create effects for manual effects
@@ -22,6 +21,8 @@ const registerEffects = (store: Store<StoreState, StoreActions>) => {
 			if (!store[0].effects.manual?.[effectKey]) continue;
 
 			const manualKey = `manual:${effectKey}`;
+			if (store[0].effectsRegistered.has(manualKey)) continue;
+
 			effectInitialStates.set(manualKey, false);
 			createEffect(() => {
 				try {
@@ -36,6 +37,8 @@ const registerEffects = (store: Store<StoreState, StoreActions>) => {
 					console.error(error);
 				}
 			});
+
+			store[0].effectsRegistered.add(manualKey);
 		}
 	}
 
@@ -45,6 +48,8 @@ const registerEffects = (store: Store<StoreState, StoreActions>) => {
 			store[0].effects.global,
 		)) {
 			const globalKey = `global:${effectKey}`;
+			if (store[0].effectsRegistered.has(globalKey)) continue;
+
 			effectInitialStates.set(globalKey, false);
 			createEffect(() => {
 				try {
@@ -59,6 +64,8 @@ const registerEffects = (store: Store<StoreState, StoreActions>) => {
 					console.error(error);
 				}
 			});
+
+			store[0].effectsRegistered.add(globalKey);
 		}
 	}
 };

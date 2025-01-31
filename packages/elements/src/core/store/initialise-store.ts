@@ -26,7 +26,7 @@ import effect from "../effect/index.js";
 const initialiseStore = (
 	element: Element,
 	storeKey: string,
-	directives?: DirectiveMap,
+	directives: DirectiveMap | undefined,
 ) => {
 	createRoot((dispose) => {
 		// -----------------
@@ -36,6 +36,7 @@ const initialiseStore = (
 			initialised: false,
 			dispose: dispose,
 			stateRegisteredEffects: new Set(),
+			effectsRegistered: new Set(),
 			state: {},
 			actions: {},
 			effects: {
@@ -70,8 +71,8 @@ const initialiseStore = (
 		state.createState(store, directives);
 		state.watchState(element, store);
 		ref.createRefs(element, store);
-		bind.registerActionEffects(store);
-		effect.registerEffects(store);
+		bind.registerActionEffects(store, directives);
+		effect.registerEffects(store, directives);
 
 		// -----------------
 		// update Elements instance

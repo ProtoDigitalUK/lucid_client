@@ -33,7 +33,11 @@ const refresh = (targetStore?: string) => {
 		const s = Elements.stores.get(item[1]);
 		if (s) store.destroyStore(item[1], s);
 
-		store.initialiseStore(item[0], item[1]);
+		store.initialiseStore(
+			item[0],
+			item[1],
+			directives.storeDirectives.get(item[1]),
+		);
 	}
 
 	handler.initialiseHandlers();

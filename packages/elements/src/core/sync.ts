@@ -5,8 +5,7 @@ import { createRoot } from "solid-js";
 import store from "./store/index.js";
 
 /**
- * Checks for new Elements attributes and initialises them
- * @todo Dont expose this, if youre not careful you can easily register duplicate effects
+ * Checks for new Elements directive attributes and initialises them for a given target. \
  */
 const sync = (target: Element) => {
 	const handler = () => {

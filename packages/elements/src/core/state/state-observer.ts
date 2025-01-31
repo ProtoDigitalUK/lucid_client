@@ -42,30 +42,18 @@ export const handleMutation = (
 const stateObserver = (
 	element: Element,
 	store: Store<StoreState, StoreActions>,
-	directives?: DirectiveMap,
+	directives: DirectiveMap | undefined,
 ): MutationObserver => {
-	const [get] = store;
 	const statePrefix = buildAttribute(
 		Elements.options.attributes.selectors.state,
 	);
-	const targetDirectives = directives
-		? directives
-		: Elements.storeDirectives.get(get.key);
-
-	const stateAttributes = Array.from(targetDirectives?.state.keys() ?? []).map(
+	const stateAttributes = Array.from(directives?.state.keys() ?? []).map(
 		(key) => `${statePrefix}${key}`,
 	);
 
 	// sync initial state to bind attributes
 	for (const attribute of stateAttributes) {
-		handleMutation(
-			element,
-			attribute,
-			null,
-			get,
-			statePrefix,
-			targetDirectives,
-		);
+		handleMutation(element, attribute, null, store[0], statePrefix, directives);
 	}
 
 	// register mutation observer
@@ -80,9 +68,9 @@ const stateObserver = (
 					mutation.target,
 					mutation.attributeName,
 					mutation.oldValue,
-					get,
+					store[0],
 					statePrefix,
-					targetDirectives,
+					directives,
 				);
 			}
 		}
