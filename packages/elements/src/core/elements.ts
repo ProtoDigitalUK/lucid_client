@@ -16,9 +16,9 @@ const Elements: ElementsInstance = {
 
 	stores: new Map(),
 	storeModules: new Map(),
-	storeDirectives: new Map(),
+	// storeDirectives: new Map(),
 
-	syncedElements: new WeakMap(),
+	syncedElements: new Map(),
 };
 
 export default Elements;

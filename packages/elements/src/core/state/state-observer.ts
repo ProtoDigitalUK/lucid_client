@@ -4,6 +4,7 @@ import type {
 	StoreActions,
 	DirectiveMap,
 } from "../../types/index.js";
+import { batch } from "solid-js";
 import { parseStateString, buildAttribute } from "../../helpers.js";
 import bind from "../bind/index.js";
 import Elements from "../elements.js";
@@ -58,22 +59,24 @@ const stateObserver = (
 
 	// register mutation observer
 	const observer = new MutationObserver((mutations) => {
-		for (const mutation of mutations) {
-			if (
-				mutation.type === "attributes" &&
-				mutation.target instanceof Element &&
-				mutation.attributeName
-			) {
-				handleMutation(
-					mutation.target,
-					mutation.attributeName,
-					mutation.oldValue,
-					store[0],
-					statePrefix,
-					directives,
-				);
+		batch(() => {
+			for (const mutation of mutations) {
+				if (
+					mutation.type === "attributes" &&
+					mutation.target instanceof Element &&
+					mutation.attributeName
+				) {
+					handleMutation(
+						mutation.target,
+						mutation.attributeName,
+						mutation.oldValue,
+						store[0],
+						statePrefix,
+						directives,
+					);
+				}
 			}
-		}
+		});
 	});
 
 	// configure the observer

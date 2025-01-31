@@ -6,6 +6,9 @@ import store from "./store/index.js";
 
 /**
  * Checks for new Elements directive attributes and initialises them for a given target. \
+ *
+ * Avoid running this on an element that was initialised on Elements.start(). This is intended to be used on elements that been added to the DOM after init. \
+ * If you have called sync on an element before, you can safely call it on it again and the previous instance will get disposed of correctly.
  */
 const sync = (target: Element) => {
 	const handler = () => {
@@ -54,6 +57,7 @@ const sync = (target: Element) => {
 		});
 
 		log.debug("Elements synced.");
+		console.log(Elements.syncedElements);
 	};
 
 	typeof requestIdleCallback !== "undefined"

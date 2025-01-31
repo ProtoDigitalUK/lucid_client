@@ -36,7 +36,6 @@ const watchState = (
 
 /**
  * Register effect for state signal updates to update the state attributes
-
  *
  * Attribute bindings are update by the state-observer.
  */

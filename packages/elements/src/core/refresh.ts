@@ -14,7 +14,7 @@ const refresh = (targetStore?: string) => {
 	const directives = buildDirectives();
 
 	Elements.handlerDirectives = directives.handlerDirectives;
-	Elements.storeDirectives = directives.storeDirectives;
+	// Elements.storeDirectives = directives.storeDirectives;
 
 	handler.destroyHandlers();
 
@@ -41,6 +41,7 @@ const refresh = (targetStore?: string) => {
 	}
 
 	handler.initialiseHandlers();
+	for (const syncedEle of Elements.syncedElements) syncedEle[1]();
 
 	log.debug("Library refreshed.");
 };

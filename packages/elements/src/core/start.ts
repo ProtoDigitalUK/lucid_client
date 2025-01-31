@@ -83,7 +83,7 @@ const start = (options?: {
 	const directives = buildDirectives();
 
 	Elements.handlerDirectives = directives.handlerDirectives;
-	Elements.storeDirectives = directives.storeDirectives;
+	// Elements.storeDirectives = directives.storeDirectives;
 
 	// initialise elements stores
 	for (const item of directives.elements) {
