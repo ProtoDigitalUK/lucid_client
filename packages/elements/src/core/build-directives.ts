@@ -2,14 +2,13 @@ import type {
 	HandlerDirectives,
 	StoreDirectives,
 	ScopedMember,
-	ScopedAction,
-	ScopedState,
+	DirectiveMap,
 } from "../types/index.js";
 import {
 	deepCollectAttributes,
-	parseBindValue,
 	parseStateString,
 	buildAttribute,
+	inferMemberValue,
 } from "../helpers.js";
 import Elements from "./elements.js";
 import scope from "./scope/index.js";
@@ -49,6 +48,20 @@ const buildDirectives = (
 		return storeDirectives.get(storeName)!;
 	};
 
+	// helper to ensure state exists in store
+	const ensureState = (
+		storeDirectives: DirectiveMap,
+		stateName: string,
+		value?: string,
+	) => {
+		if (!storeDirectives.state.has(stateName)) {
+			storeDirectives.state.set(
+				stateName,
+				value !== undefined ? parseStateString(value) : undefined,
+			);
+		}
+	};
+
 	// --------------------------------------------
 	// Initialise child and taget stores and their state
 	const storeEles = target.querySelectorAll(`[${prefix.store}]`);
@@ -61,7 +74,7 @@ const buildDirectives = (
 		for (const attr of target.attributes) {
 			if (attr.name.startsWith(prefix.state)) {
 				const stateName = attr.name.slice(prefix.state.length);
-				store.state.set(stateName, parseStateString(attr.value));
+				ensureState(store, stateName, attr.value);
 			}
 		}
 	}
@@ -76,7 +89,7 @@ const buildDirectives = (
 		for (const attr of element.attributes) {
 			if (attr.name.startsWith(prefix.state)) {
 				const stateName = attr.name.slice(prefix.state.length);
-				store.state.set(stateName, parseStateString(attr.value));
+				ensureState(store, stateName, attr.value);
 			}
 		}
 	}
@@ -95,24 +108,30 @@ const buildDirectives = (
 		if (!scope.valueHasScope(value)) continue;
 		const memberValue = value as ScopedMember;
 
+		//* add state to directives if it hasnt been already, with the value undefined
+		const parsedMember = inferMemberValue(memberValue);
+		if (parsedMember && parsedMember.type === "state") {
+			const store = ensureStore(parsedMember.scope);
+			ensureState(store, parsedMember.key);
+		}
+
 		// Handle binds
 		if (name.startsWith(prefix.bind)) {
 			const bindName = name.slice(prefix.bind.length);
-			const bindValue = parseBindValue(memberValue);
-			if (!bindValue) continue;
+			if (!parsedMember) continue;
 
-			const store = ensureStore(bindValue.scope);
+			const store = ensureStore(parsedMember.scope);
 
-			if (bindValue.type === "state") {
-				if (!store.bindState.has(bindValue.value)) {
-					store.bindState.set(bindValue.value, new Set());
+			if (parsedMember.type === "state") {
+				if (!store.bindState.has(parsedMember.key)) {
+					store.bindState.set(parsedMember.key, new Set());
 				}
-				store.bindState.get(bindValue.value)?.add(bindName);
-			} else if (bindValue.type === "action") {
-				if (!store.bindActions.has(bindValue.value)) {
-					store.bindActions.set(bindValue.value, new Set());
+				store.bindState.get(parsedMember.key)?.add(bindName);
+			} else if (parsedMember.type === "action") {
+				if (!store.bindActions.has(parsedMember.key)) {
+					store.bindActions.set(parsedMember.key, new Set());
 				}
-				store.bindActions.get(bindValue.value)?.add(bindName);
+				store.bindActions.get(parsedMember.key)?.add(bindName);
 			}
 		}
 		// Handle handlers

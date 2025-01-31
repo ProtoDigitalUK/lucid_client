@@ -62,10 +62,9 @@ const updateStateAttributes = (
 	if (!attributeMaps?.bindState) return;
 	//* prefix it with the state key $ so it matches that in the bindState map
 	const stateWithPrefix = `${C.defaults.attributes.denote.state}${state.key}`;
-
 	const stateKey = scope.scopeValue(attributeMaps.scope, stateWithPrefix);
 
-	const affectedAttributes = attributeMaps.bindState.get(stateKey);
+	const affectedAttributes = attributeMaps.bindState.get(state.key);
 	if (!affectedAttributes) return;
 
 	const bindPrefix = buildAttribute(Elements.options.attributes.selectors.bind);

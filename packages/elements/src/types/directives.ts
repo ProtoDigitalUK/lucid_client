@@ -44,8 +44,8 @@ export type HandlerDirectives = Map<HandlerNamespace, HandlerSpecifiersMap>;
 
 export type BindAttributeName = string; // aria-label | aria-expanded | data-exmaple
 
-export type BindStateDirectives = Map<ScopedState, Set<BindAttributeName>>; // Map<scope:$state, Set<aria-label | aria-expanded | data-exmaple>>
-export type BindActionDirectives = Map<ScopedAction, Set<BindAttributeName>>; // Map<scope:@action, Set<aria-label | aria-expanded | data-exmaple>>
+export type BindStateDirectives = Map<StateKey, Set<BindAttributeName>>; // Map<state, Set<aria-label | aria-expanded | data-exmaple>>
+export type BindActionDirectives = Map<ActionKey, Set<BindAttributeName>>; // Map<action, Set<aria-label | aria-expanded | data-exmaple>>
 
 // ----------------
 // Effect Attributes

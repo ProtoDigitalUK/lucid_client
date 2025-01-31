@@ -21,19 +21,18 @@ const registerActionEffects = (
 	if (!directives?.bindActions) return;
 
 	for (const [action, attributes] of directives.bindActions) {
-		const actionKey = scope
-			.removeScope(action)
-			.replace(C.defaults.attributes.denote.action, "");
+		const actionWithPrefix = `${C.defaults.attributes.denote.action}${action}`;
+		const actionKey = scope.scopeValue(directives.scope, actionWithPrefix);
 
-		if (!store[0].actions[actionKey]) continue;
+		if (!store[0].actions[action]) continue;
 
 		for (const attr of attributes.values()) {
-			const selector = `[${buildAttribute(Elements.options.attributes.selectors.bind)}${attr}="${action}"]`;
+			const selector = `[${buildAttribute(Elements.options.attributes.selectors.bind)}${attr}="${actionKey}"]`;
 			const targets = document.querySelectorAll(selector);
 
 			createEffect(async () => {
 				try {
-					const result = store[0].actions[actionKey]?.();
+					const result = store[0].actions[action]?.();
 					const resolvedResult = await Promise.resolve(result);
 					const stringValue = stringifyState(resolvedResult);
 					for (const target of targets) target.setAttribute(attr, stringValue);

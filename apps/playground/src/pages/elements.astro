@@ -13,12 +13,12 @@ import Layout from "../layouts/Layout.astro";
             data-state--boolean="false"
             data-state--number="1"
             data-state--string="hello world"
-            data-state--object='{"hello":"world"}'
+            data-state--object='{"hello":"world", "world":"hello"}'
             data-state--array='[false,"world"]'
             data-bind--data-boolean="example:$boolean"
             data-bind--data-number="example:$number"
             data-bind--data-string="example:$string"
-            data-bind--data-object-hello="example:$object.hello"
+            data-bind--data-object-hello="example:$object.world"
             data-bind--data-array-hello="example:$array[0]"
             data-bind--data-custom-state-attribute="example:$customState"
             data-handler--event.scroll="example:@handleScroll"
@@ -39,7 +39,7 @@ import Layout from "../layouts/Layout.astro";
                 data-ref="example:span[]"></span>
             <span
                 data-handler--trap="example:$array[0]"
-                data-bind--data-array-hello="example:$array[0]"
+                data-bind--data-array-hello="example:$array[1]"
                 data-ref="example:span[]"></span>
             <button
                 data-handler--event.click="example:@handleClick"
