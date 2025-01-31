@@ -19,7 +19,6 @@ const syncStore = (storeKey: string, directives: DirectiveMap) => {
 		storeElement,
 		store,
 		directives,
-		true,
 	);
 
 	state.createState(store, directives);

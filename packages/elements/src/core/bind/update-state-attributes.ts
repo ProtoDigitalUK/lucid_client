@@ -60,7 +60,6 @@ const updateStateAttributes = (
 	attributeMaps: DirectiveMap,
 ) => {
 	if (!attributeMaps?.bindState) return;
-	//* prefix it with the state key $ so it matches that in the bindState map
 	const stateWithPrefix = `${C.defaults.attributes.denote.state}${state.key}`;
 	const stateKey = scope.scopeValue(attributeMaps.scope, stateWithPrefix);
 
