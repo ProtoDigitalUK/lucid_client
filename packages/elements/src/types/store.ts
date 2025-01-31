@@ -33,6 +33,7 @@ export type StoreData<S extends StoreState, A extends StoreActions> = {
 	dispose: () => void;
 	stateObserver?: MutationObserver;
 	state: { [K in keyof S]: Signal<S[K]> };
+	stateRegisteredEffects: Set<string>;
 	actions: A;
 	effects: {
 		global: StoreEffects;

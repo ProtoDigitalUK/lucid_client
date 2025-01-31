@@ -31,7 +31,10 @@ const { title } = Astro.props;
                 <div class="flex items-center">
                     <h1>Elements</h1>
                     <div data-ref="nav:testEleRefresh" class="ml-2.5">
-                        <button data-handler--event.click="nav:@oldClick">
+                        <button
+                            data-store="testreplace"
+                            data-handler--event.click="nav:@oldClick"
+                        >
                             before
                         </button>
                     </div>
@@ -184,10 +187,9 @@ const { title } = Astro.props;
                         const target = store.refs.get("testEleRefresh");
                         if (target instanceof HTMLElement) {
                             target.innerHTML =
-                                "<button data-handler--event.click='nav:@newClick' data-bind--testing='nav:$ariaLabel'>after</button>";
+                                "<button data-store='testreplace' data-state--example='false' data-handler--event.click='nav:@newClick' data-bind--testing='nav:$ariaLabel'>after<span  data-bind--test='testreplace:$example'>children</span></button>";
                         }
                         if (target && !Array.isArray(target)) {
-                            console.log(target);
                             Elements.sync(target);
                         }
                     },

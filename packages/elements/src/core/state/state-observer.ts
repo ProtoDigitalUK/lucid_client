@@ -13,7 +13,7 @@ import Elements from "../elements.js";
  * - Updates the state
  * - Updates the attribute bindings
  */
-const handleMutation = (
+export const handleMutation = (
 	target: Element,
 	attribute: string,
 	oldValue: string | null,
@@ -23,6 +23,7 @@ const handleMutation = (
 ) => {
 	const key = attribute.slice(statePrefix.length);
 	const attributeValue = target.getAttribute(attribute);
+
 	if (attributeValue === oldValue) return;
 
 	const value = parseStateString(attributeValue);
@@ -41,20 +42,30 @@ const handleMutation = (
 const stateObserver = (
 	element: Element,
 	store: Store<StoreState, StoreActions>,
+	directives?: DirectiveMap,
 ): MutationObserver => {
 	const [get] = store;
 	const statePrefix = buildAttribute(
 		Elements.options.attributes.selectors.state,
 	);
-	const directives = Elements.storeDirectives.get(get.key);
+	const targetDirectives = directives
+		? directives
+		: Elements.storeDirectives.get(get.key);
 
-	const stateAttributes = Array.from(directives?.state.keys() ?? []).map(
+	const stateAttributes = Array.from(targetDirectives?.state.keys() ?? []).map(
 		(key) => `${statePrefix}${key}`,
 	);
 
 	// sync initial state to bind attributes
 	for (const attribute of stateAttributes) {
-		handleMutation(element, attribute, null, get, statePrefix, directives);
+		handleMutation(
+			element,
+			attribute,
+			null,
+			get,
+			statePrefix,
+			targetDirectives,
+		);
 	}
 
 	// register mutation observer
@@ -71,7 +82,7 @@ const stateObserver = (
 					mutation.oldValue,
 					get,
 					statePrefix,
-					directives,
+					targetDirectives,
 				);
 			}
 		}

@@ -12,6 +12,7 @@ const registerEffects = (store: Store<StoreState, StoreActions>) => {
 	const directives = Elements.storeDirectives.get(store[0].key);
 
 	if (!directives?.effects) return;
+	// TODO: add to store instance so works with subsequent runs
 	const effectInitialStates = new Map<string, boolean>();
 
 	//* create effects for manual effects

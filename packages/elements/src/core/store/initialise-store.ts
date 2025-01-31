@@ -23,7 +23,11 @@ import effect from "../effect/index.js";
  * - Observes state.
  * - Creates refs.
  */
-const initialiseStore = (element: Element, storeKey: string) => {
+const initialiseStore = (
+	element: Element,
+	storeKey: string,
+	directives?: DirectiveMap,
+) => {
 	createRoot((dispose) => {
 		// -----------------
 		// create store
@@ -31,6 +35,7 @@ const initialiseStore = (element: Element, storeKey: string) => {
 			key: storeKey,
 			initialised: false,
 			dispose: dispose,
+			stateRegisteredEffects: new Set(),
 			state: {},
 			actions: {},
 			effects: {
@@ -58,11 +63,11 @@ const initialiseStore = (element: Element, storeKey: string) => {
 
 		// -----------------
 		// set data
-		store[1]("stateObserver", state.stateObserver(element, store));
+		store[1]("stateObserver", state.stateObserver(element, store, directives));
 
 		// -----------------
 		// handle state, attribute bindings
-		state.createState(store);
+		state.createState(store, directives);
 		state.watchState(element, store);
 		ref.createRefs(element, store);
 		bind.registerActionEffects(store);
