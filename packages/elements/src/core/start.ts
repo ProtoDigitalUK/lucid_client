@@ -82,9 +82,6 @@ const start = (options?: {
 	// parse attributes
 	const directives = buildDirectives();
 
-	Elements.handlerDirectives = directives.handlerDirectives;
-	// Elements.storeDirectives = directives.storeDirectives;
-
 	// initialise elements stores
 	for (const item of directives.elements) {
 		if (!item[1]) {
@@ -101,7 +98,7 @@ const start = (options?: {
 		);
 	}
 
-	handler.initialiseHandlers();
+	handler.initialiseHandlers(directives.handlerDirectives, { partial: false });
 	store.registerStoreObserver();
 
 	Elements.started = true;

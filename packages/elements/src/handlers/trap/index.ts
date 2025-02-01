@@ -8,7 +8,6 @@ import type { Handler } from "../../types/index.js";
 import type { TrapConfig, TrapState } from "./types.js";
 
 const namespace = "trap";
-let disposeHandler: () => void;
 const [activeFocusTraps, setActiveFocusTraps] = createSignal<TrapState[]>([]);
 
 /**
@@ -107,6 +106,8 @@ const parseEventSpecifier = (specifier: string): TrapConfig => {
 const trapHandler: Handler = {
 	namespace,
 	initialise: (attributes) => {
+		let disposeHandler: () => void;
+
 		createRoot((dispose) => {
 			disposeHandler = dispose;
 
@@ -132,15 +133,16 @@ const trapHandler: Handler = {
 				}
 			}
 		});
-	},
-	destroy: () => {
-		for (const trap of activeFocusTraps()) {
-			for (const sibling of trap.siblingElements) {
-				sibling.removeAttribute("inert");
+
+		return () => {
+			for (const trap of activeFocusTraps()) {
+				for (const sibling of trap.siblingElements) {
+					sibling.removeAttribute("inert");
+				}
 			}
-		}
-		document.body.style.overflow = "";
-		disposeHandler();
+			document.body.style.overflow = "";
+			disposeHandler();
+		};
 	},
 };
 

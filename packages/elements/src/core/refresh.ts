@@ -13,9 +13,6 @@ import { log } from "../helpers.js";
 const refresh = (targetStore?: string) => {
 	const directives = buildDirectives();
 
-	Elements.handlerDirectives = directives.handlerDirectives;
-	// Elements.storeDirectives = directives.storeDirectives;
-
 	handler.destroyHandlers();
 
 	for (const item of directives.elements) {
@@ -40,7 +37,7 @@ const refresh = (targetStore?: string) => {
 		);
 	}
 
-	handler.initialiseHandlers();
+	handler.initialiseHandlers(directives.handlerDirectives, { partial: false });
 	for (const syncedEle of Elements.syncedElements) syncedEle[1]();
 
 	log.debug("Library refreshed.");

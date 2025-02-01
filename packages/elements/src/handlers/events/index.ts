@@ -13,12 +13,6 @@ import type {
  */
 const namespace = "event";
 
-let abortController: AbortController | null = null;
-const eventListenerMap = new Map<
-	string,
-	Map<Element | Document | Window, Action>
->();
-
 /**
  * Create an event handler function that can be stored and removed later
  */
@@ -80,7 +74,11 @@ const getTargetElement = (
 /**
  * Handles registering event listeners
  */
-const registerEvents = (attributes: HandlerSpecifiersMap) => {
+const registerEvents = (
+	attributes: HandlerSpecifiersMap,
+	abortController: AbortController,
+	eventListenerMap: Map<string, Map<Element | Document | Window, Action>>,
+) => {
 	for (const event of attributes) {
 		const [eventSpecifier, actions] = event;
 		const config = parseEventSpecifier(eventSpecifier);
@@ -137,14 +135,19 @@ const registerEvents = (attributes: HandlerSpecifiersMap) => {
  */
 const eventsHandler: Handler = {
 	namespace: namespace,
-	initialise: (attributes) => {
-		if (!abortController) abortController = new AbortController();
-		registerEvents(attributes);
-	},
-	destroy: () => {
-		abortController?.abort();
-		abortController = null;
-		eventListenerMap.clear();
+	initialise: (attributes, options) => {
+		const abortController = new AbortController();
+		const eventListenerMap = new Map<
+			string,
+			Map<Element | Document | Window, Action>
+		>();
+
+		registerEvents(attributes, abortController, eventListenerMap);
+
+		return () => {
+			abortController.abort();
+			eventListenerMap.clear();
+		};
 	},
 };
 

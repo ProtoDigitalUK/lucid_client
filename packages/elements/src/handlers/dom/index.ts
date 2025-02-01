@@ -8,7 +8,6 @@ import { createEffect, createRoot } from "solid-js";
 import type { Handler } from "../../types/index.js";
 
 const namespace = "dom";
-let disposeHandler: () => void;
 
 /**
  * Text specifier
@@ -143,6 +142,8 @@ const specifierDeligate = (specifier: string) => {
 const domHandler: Handler = {
 	namespace: namespace,
 	initialise: (attributes) => {
+		let disposeHandler: () => void;
+
 		createRoot((dispose) => {
 			disposeHandler = dispose;
 
@@ -168,8 +169,9 @@ const domHandler: Handler = {
 				}
 			}
 		});
+
+		return () => disposeHandler();
 	},
-	destroy: () => disposeHandler(),
 };
 
 export default domHandler;

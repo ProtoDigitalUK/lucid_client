@@ -11,7 +11,7 @@ const registerHandler = (handler: Handler) => {
 		return;
 	}
 
-	Elements.handlers.set(handler.namespace, handler);
+	Elements.handlers.set(handler.namespace, { handler: handler });
 	log.debug(`Handler registered for namespace "${handler.namespace}"`); //* debug here not working as registerHandler is called before start, either remove, store message or start or change how debug is toggled
 };
 
