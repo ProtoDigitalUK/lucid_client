@@ -11,11 +11,11 @@ import {
 	inferMemberValue,
 } from "../helpers.js";
 import Elements from "./elements.js";
-import scope from "./scope/index.js";
 import C from "./constants.js";
 
 const buildDirectives = (
 	target: Element = document.body,
+	childrenOnly?: true,
 ): {
 	elements: Array<[Element, string | null]>;
 	handlerDirectives: HandlerDirectives;
@@ -67,16 +67,19 @@ const buildDirectives = (
 	// --------------------------------------------
 	// Initialise child and taget stores and their state
 	const storeEles = target.querySelectorAll(`[${prefix.store}]`);
-	const targetStore = target.getAttribute(prefix.store);
 
-	if (targetStore) {
-		storeElements.push([target, targetStore]);
-		const store = ensureStore(targetStore);
+	if (childrenOnly === undefined) {
+		const targetStore = target.getAttribute(prefix.store);
 
-		for (const attr of target.attributes) {
-			if (attr.name.startsWith(prefix.state)) {
-				const stateName = attr.name.slice(prefix.state.length);
-				ensureState(store, stateName, attr.value);
+		if (targetStore) {
+			storeElements.push([target, targetStore]);
+			const store = ensureStore(targetStore);
+
+			for (const attr of target.attributes) {
+				if (attr.name.startsWith(prefix.state)) {
+					const stateName = attr.name.slice(prefix.state.length);
+					ensureState(store, stateName, attr.value);
+				}
 			}
 		}
 	}
@@ -98,12 +101,11 @@ const buildDirectives = (
 
 	// --------------------------------------------
 	// Collect and process all attribute directives (bind, handler, and effect)
-	const attributes = deepCollectAttributes(target, [
-		prefix.bind,
-		prefix.handler,
-		prefix.effect,
-		prefix.loop,
-	]);
+	const attributes = deepCollectAttributes(
+		target,
+		[prefix.bind, prefix.handler, prefix.effect, prefix.loop],
+		childrenOnly,
+	);
 
 	for (const attribute of attributes) {
 		const { name, value } = attribute as { name: string; value: ScopedMember };

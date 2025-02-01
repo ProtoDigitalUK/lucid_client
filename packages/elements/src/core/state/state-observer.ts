@@ -21,6 +21,7 @@ export const handleMutation = (
 	get: Store<StoreState, StoreActions>[0],
 	statePrefix: string,
 	directives: DirectiveMap | undefined,
+	initial: boolean,
 ) => {
 	const key = attribute.slice(statePrefix.length);
 	const attributeValue = target.getAttribute(attribute);
@@ -29,8 +30,11 @@ export const handleMutation = (
 
 	const value = parseStateString(attributeValue);
 
-	get.state[key]?.[1](value);
 	if (!directives) return;
+
+	//* we only need need to update the state signal when the observer calls this, on init, the default value is already populated in the signal
+	if (!initial) get.state[key]?.[1](value);
+
 	bind.updateStateAttributes(target, { key, value }, directives);
 };
 
@@ -54,7 +58,15 @@ const stateObserver = (
 
 	// sync initial state to bind attributes
 	for (const attribute of stateAttributes) {
-		handleMutation(element, attribute, null, store[0], statePrefix, directives);
+		handleMutation(
+			element,
+			attribute,
+			null,
+			store[0],
+			statePrefix,
+			directives,
+			true,
+		);
 	}
 
 	// register mutation observer
@@ -73,6 +85,7 @@ const stateObserver = (
 						store[0],
 						statePrefix,
 						directives,
+						false,
 					);
 				}
 			}

@@ -5,6 +5,7 @@
 const deepCollectAttributes = (
 	element: Element,
 	attributePrefixes: string[],
+	ignoreSelf?: true,
 ): Attr[] => {
 	const result: Attr[] = [];
 
@@ -13,10 +14,12 @@ const deepCollectAttributes = (
 		return attributePrefixes.some((prefix) => attr.name.startsWith(prefix));
 	};
 
-	function traverse(el: Element) {
-		for (const attr of el.attributes) {
-			if (shouldIncludeAttr(attr)) {
-				result.push(attr);
+	function traverse(el: Element, ignoreSelf?: true) {
+		if (ignoreSelf !== true) {
+			for (const attr of el.attributes) {
+				if (shouldIncludeAttr(attr)) {
+					result.push(attr);
+				}
 			}
 		}
 
@@ -24,7 +27,7 @@ const deepCollectAttributes = (
 			traverse(child);
 		}
 	}
-	traverse(element);
+	traverse(element, ignoreSelf);
 
 	return result;
 };

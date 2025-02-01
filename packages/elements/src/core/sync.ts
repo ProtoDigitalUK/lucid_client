@@ -11,7 +11,7 @@ import handler from "./handler/index.js";
  * Avoid running this on an element that was initialised on Elements.start(). This is intended to be used on elements that been added to the DOM after init. \
  * If you have called sync on an element before, you can safely call it on it again and the previous instance will get disposed of correctly.
  */
-const sync = (target: Element) => {
+const sync = (target: Element, childrenOnly?: true) => {
 	const syncHandler = () => {
 		// if the target has been synced prior, dispose of it before re-initialsing
 		const targetDispose = Elements.syncedElements.get(target);
@@ -20,7 +20,7 @@ const sync = (target: Element) => {
 			Elements.syncedElements.delete(target);
 		}
 
-		const directives = buildDirectives(target);
+		const directives = buildDirectives(target, childrenOnly);
 		const storesDispose: Array<() => void> = [];
 
 		// sync exisitng stores & and initialise new stores

@@ -4,6 +4,8 @@ import sync from "../sync.js";
 
 /**
  * Responsible for verifyig the target, building out the tempalte markup, inserting into the DOM and syncing
+ *
+ * @todo add solution for swapping out the index
  */
 const handleLoop = (
 	target: Element,
@@ -49,9 +51,7 @@ const handleLoop = (
 
 	target.insertAdjacentHTML("beforeend", loopResult);
 
-	console.log("reran", target);
-
-	// sync(target);
+	sync(target, true);
 };
 
 export default handleLoop;
