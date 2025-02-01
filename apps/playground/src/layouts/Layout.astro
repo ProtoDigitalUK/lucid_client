@@ -139,6 +139,35 @@ const { title } = Astro.props;
                 },
             }));
 
+            storeModule<
+                {
+                    "loop-items": Array<
+                        Array<{
+                            title: string;
+                        }>
+                    >;
+                },
+                {}
+            >("loops", (store) => ({
+                actions: {
+                    init: () => {
+                        console.log("store", store);
+                    },
+                    childOnClick: () => {
+                        // const [getItems, setItems] = store.state["loop-items"];
+                        // console.log(
+                        // `I currently have "${getItems().length}", lets add one more for a re-render.`,
+                        // );
+                        // setItems((prev) => {
+                        //     if (prev[0]) {
+                        //         prev[0].push({ title: "A new title?" });
+                        //     }
+                        //     return prev;
+                        // });
+                    },
+                },
+            }));
+
             type NavStoreState = {
                 open: boolean;
                 ariaLabel: string;

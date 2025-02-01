@@ -5,6 +5,7 @@ import { buildAttribute, log } from "../../helpers.js";
 import bind from "../bind/index.js";
 import effect from "../effect/index.js";
 import type { DirectiveMap } from "../../types/store.js";
+import loop from "../loop/index.js";
 
 const syncStore = (storeKey: string, directives: DirectiveMap) => {
 	const store = Elements.stores.get(storeKey);
@@ -26,6 +27,7 @@ const syncStore = (storeKey: string, directives: DirectiveMap) => {
 	ref.createRefs(storeElement, store);
 	bind.registerActionEffects(store, directives);
 	effect.registerEffects(store, directives);
+	loop.registerLoops(store, directives);
 
 	log.debug(
 		`Store synced for element "${storeElement.id || storeElement.tagName}" with key "${storeKey}"`,

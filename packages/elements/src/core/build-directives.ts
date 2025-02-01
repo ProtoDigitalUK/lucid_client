@@ -108,7 +108,7 @@ const buildDirectives = (
 	for (const attribute of attributes) {
 		const { name, value } = attribute as { name: string; value: ScopedMember };
 
-		const parsedMember = inferMemberValue(value, name);
+		const parsedMember = inferMemberValue(value);
 		if (parsedMember === null) continue;
 
 		const store = ensureStore(parsedMember.scope);
@@ -167,10 +167,11 @@ const buildDirectives = (
 		}
 		// Handle effects
 		else if (name === prefix.effect) {
-			store.effects.add(value);
+			store.effects.add(parsedMember.key);
 		}
 		// Handle loops
 		else if (name === prefix.loop) {
+			//* store the full value (type ScopedMember) so we can correctly resolve the the value in the case its an object/array
 			store.loops.add(value);
 		}
 	}

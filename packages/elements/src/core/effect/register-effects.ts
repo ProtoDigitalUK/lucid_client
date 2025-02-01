@@ -11,23 +11,21 @@ const registerEffects = (
 	store: Store<StoreState, StoreActions>,
 	directives: DirectiveMap | undefined,
 ) => {
-	if (!directives?.effects) return;
 	const effectInitialStates = new Map<string, boolean>();
 
 	//* create effects for manual effects
 	if (directives?.effects) {
 		for (const effect of directives.effects) {
-			const effectKey = scope.removeScope(effect);
-			if (!store[0].effects.manual?.[effectKey]) continue;
+			if (!store[0].effects.manual?.[effect]) continue;
 
-			const manualKey = `manual:${effectKey}`;
+			const manualKey = `manual:${effect}`;
 			if (store[0].effectsRegistered.has(manualKey)) continue;
 
 			effectInitialStates.set(manualKey, false);
 			createEffect(() => {
 				try {
 					const initial = effectInitialStates.get(manualKey);
-					store[0].effects.manual[effectKey]?.({
+					store[0].effects.manual[effect]?.({
 						isInitial: initial ?? false,
 					});
 					if (!initial) {

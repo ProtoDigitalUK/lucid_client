@@ -55,4 +55,4 @@ export type EffectDirectives = Set<string>;
 // ----------------
 // Loop directives
 
-export type LoopDirectives = Set<string>;
+export type LoopDirectives = Set<ScopedMember>;

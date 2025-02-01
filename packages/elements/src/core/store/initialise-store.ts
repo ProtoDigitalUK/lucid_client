@@ -15,6 +15,7 @@ import Elements from "../elements.js";
 import getStoreInterface from "./get-store-interface.js";
 import bind from "../bind/index.js";
 import effect from "../effect/index.js";
+import loop from "../loop/index.js";
 
 /**
  * Creates a store for the given element if one hasnt already been specified.
@@ -73,6 +74,7 @@ const initialiseStore = (
 		ref.createRefs(element, store);
 		bind.registerActionEffects(store, directives);
 		effect.registerEffects(store, directives);
+		loop.registerLoops(store, directives);
 
 		// -----------------
 		// update Elements instance

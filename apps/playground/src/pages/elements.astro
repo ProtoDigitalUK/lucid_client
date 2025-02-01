@@ -73,15 +73,20 @@ import Layout from "../layouts/Layout.astro";
         <h2>For Loop Testing</h2>
         <ul
             data-store="loops"
-            data-state--loop-items='[{"title": "title one"}, {"title": "title two"}, {"title": "title threee"}]'
+            data-state--loop-items='[[{"title": "title one"}, {"title": "title two"}, {"title": "title threee"}]]'
             data-state--button-label="I shouldn't show within the template"
-            data-loop="loops:$loop-items"
+            data-loop="loops:$loop-items[0]"
         >
             <template>
-                <li>
-                    <p data-handler--dom-text="loops:$loop-items[index].title">
+                <li class="border-b py-2">
+                    <p
+                        data-handler--dom-text="loops:$loop-items[0][index].title"
+                    >
                     </p>
                     <p data-handler--dom.text="loops:$button-label"></p>
+                    <button data-handler--event.click="loops:@childOnClick">
+                        Click me
+                    </button>
                 </li>
             </template>
         </ul>

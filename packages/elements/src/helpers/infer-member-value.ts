@@ -11,7 +11,6 @@ import { extractBaseStateKey } from "../helpers.js";
  */
 const inferMemberValue = (
 	memberValue: string,
-	attribute?: string,
 ): {
 	type: "action" | "state" | "basic";
 	scope: string;

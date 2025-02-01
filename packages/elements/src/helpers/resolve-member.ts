@@ -16,9 +16,7 @@ const resolveMember = async (member: StoreMember, raw?: boolean) => {
 		return await Promise.resolve(response);
 	}
 
-	const [state] = member.member;
-	const value = state();
-
+	const value = member.member[0]();
 	if (raw) return value;
 
 	const valueType = inferValueType(value);
