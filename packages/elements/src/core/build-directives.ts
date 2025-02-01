@@ -31,6 +31,7 @@ const buildDirectives = (
 		bind: buildAttribute(Elements.options.attributes.selectors.bind),
 		handler: buildAttribute(Elements.options.attributes.selectors.handler),
 		effect: buildAttribute(Elements.options.attributes.selectors.effect),
+		loop: buildAttribute(Elements.options.attributes.selectors.loop),
 	};
 
 	// helper to ensure store exists and is initialised
@@ -42,6 +43,7 @@ const buildDirectives = (
 				bindState: new Map(),
 				bindActions: new Map(),
 				effects: new Set(),
+				loops: new Set(),
 			});
 		}
 		// biome-ignore lint/style/noNonNullAssertion: <explanation>
@@ -100,18 +102,19 @@ const buildDirectives = (
 		prefix.bind,
 		prefix.handler,
 		prefix.effect,
+		prefix.loop,
 	]);
 
 	for (const attribute of attributes) {
-		const { name, value } = attribute;
+		const { name, value } = attribute as { name: string; value: ScopedMember };
 
-		if (!scope.valueHasScope(value)) continue;
-		const memberValue = value as ScopedMember;
+		const parsedMember = inferMemberValue(value, name);
+		if (parsedMember === null) continue;
+
+		const store = ensureStore(parsedMember.scope);
 
 		//* add state to directives if it hasnt been already, with the value undefined
-		const parsedMember = inferMemberValue(memberValue);
 		if (parsedMember && parsedMember.type === "state") {
-			const store = ensureStore(parsedMember.scope);
 			ensureState(store, parsedMember.key);
 		}
 
@@ -119,8 +122,6 @@ const buildDirectives = (
 		if (name.startsWith(prefix.bind)) {
 			const bindName = name.slice(prefix.bind.length);
 			if (!parsedMember) continue;
-
-			const store = ensureStore(parsedMember.scope);
 
 			if (parsedMember.type === "state") {
 				if (!store.bindState.has(parsedMember.key)) {
@@ -151,9 +152,6 @@ const buildDirectives = (
 
 				if (!namespace) continue;
 
-				const [storeScope, member] = scope.splitValue(value);
-				if (!storeScope || !member) continue;
-
 				if (!handlerDirectives.has(namespace)) {
 					handlerDirectives.set(namespace, new Map());
 				}
@@ -163,17 +161,17 @@ const buildDirectives = (
 					if (!namespaceMap.has(specifier)) {
 						namespaceMap.set(specifier, new Set());
 					}
-					namespaceMap.get(specifier)?.add(memberValue);
+					namespaceMap.get(specifier)?.add(value);
 				}
 			}
 		}
 		// Handle effects
-		else if (name.startsWith(prefix.effect)) {
-			const [storeScope, member] = scope.splitValue(value);
-			if (!storeScope || !member) continue;
-
-			const store = ensureStore(storeScope);
+		else if (name === prefix.effect) {
 			store.effects.add(value);
+		}
+		// Handle loops
+		else if (name === prefix.loop) {
+			store.loops.add(value);
 		}
 	}
 

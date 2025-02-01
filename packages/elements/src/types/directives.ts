@@ -48,6 +48,11 @@ export type BindStateDirectives = Map<StateKey, Set<BindAttributeName>>; // Map<
 export type BindActionDirectives = Map<ActionKey, Set<BindAttributeName>>; // Map<action, Set<aria-label | aria-expanded | data-exmaple>>
 
 // ----------------
-// Effect Attributes
+// Effect directives
 
 export type EffectDirectives = Set<string>;
+
+// ----------------
+// Loop directives
+
+export type LoopDirectives = Set<string>;

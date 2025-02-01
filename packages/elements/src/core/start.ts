@@ -22,6 +22,7 @@ const start = (options?: {
 			handler?: string;
 			ref?: string;
 			effect?: string;
+			loop?: string;
 		};
 		seperators?: {
 			scope?: string;
@@ -60,6 +61,9 @@ const start = (options?: {
 				ref:
 					options?.attributes?.selectors?.ref ??
 					C.defaults.attributes.selectors.ref,
+				loop:
+					options?.attributes?.selectors?.loop ??
+					C.defaults.attributes.selectors.loop,
 			},
 			seperators: {
 				scope:

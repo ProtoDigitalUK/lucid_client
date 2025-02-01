@@ -4,14 +4,16 @@ import { extractBaseStateKey } from "../helpers.js";
 
 /**
  * Infers a member values type and splits it into its segments.
- * A member is the attribute value within a bind or handler, ie:
+ *
  * - data-bind--aria-label="scope:$state-member"
  * - data-handler--event.click="scope:@action-member"
+ * - data-effect="scope:effect"
  */
 const inferMemberValue = (
 	memberValue: string,
+	attribute?: string,
 ): {
-	type: "action" | "state";
+	type: "action" | "state" | "basic";
 	scope: string;
 	key: string;
 } | null => {
@@ -35,7 +37,11 @@ const inferMemberValue = (
 		};
 	}
 
-	return null;
+	return {
+		type: "basic",
+		scope: storeScope,
+		key: value,
+	};
 };
 
 export default inferMemberValue;

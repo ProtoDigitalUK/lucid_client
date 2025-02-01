@@ -205,10 +205,10 @@ const { title } = Astro.props;
                 },
                 effects: {
                     manual: {
-                        // customEffect: (context) => {
-                        //     const [getOpen] = store.state.open;
-                        //     // console.log("effect", getOpen(), context);
-                        // },
+                        customEffect: (context) => {
+                            const [getOpen] = store.state.open;
+                            console.log("effect", getOpen(), context);
+                        },
                     },
                 },
                 cleanup: () => {

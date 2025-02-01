@@ -11,6 +11,7 @@ const C = {
 				bind: "bind--",
 				effect: "effect",
 				handler: "handler--",
+				loop: "loop",
 			},
 			seperators: {
 				scope: ":",

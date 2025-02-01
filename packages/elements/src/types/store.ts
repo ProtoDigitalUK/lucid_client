@@ -4,12 +4,14 @@ import type {
 	BindStateDirectives,
 	StateDirectives,
 	EffectDirectives,
+	LoopDirectives,
 } from "./index.js";
 
 export type DirectiveMap = {
 	scope: string;
 	state: StateDirectives;
 	effects: EffectDirectives;
+	loops: LoopDirectives;
 	bindState: BindStateDirectives;
 	bindActions: BindStateDirectives;
 };

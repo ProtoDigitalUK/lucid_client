@@ -22,15 +22,16 @@ const findStoreMember = (memberValue: string): StoreMember | null => {
 				}
 				return { type: memberDetails.type, member: action, key: memberValue };
 			}
-
-			const state = store[0].state[memberDetails.key];
-			if (state === undefined) {
-				log.warn(
-					`Cannot find state with the key of "${memberDetails.key}" on store "${memberDetails.scope}".`,
-				);
-				return null;
+			if (memberDetails.type === "state") {
+				const state = store[0].state[memberDetails.key];
+				if (state === undefined) {
+					log.warn(
+						`Cannot find state with the key of "${memberDetails.key}" on store "${memberDetails.scope}".`,
+					);
+					return null;
+				}
+				return { type: memberDetails.type, member: state, key: memberValue };
 			}
-			return { type: memberDetails.type, member: state, key: memberValue };
 		}
 	}
 
