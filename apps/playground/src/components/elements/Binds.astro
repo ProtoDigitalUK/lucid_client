@@ -1,4 +1,11 @@
 <h2 class="mb-2.5 font-bold text-xl">Bind testing</h2>
-<div data-store="binds">
-    <button data-bind--aria-expanded="binds:"> </button>
+<div data-store="binds" class="mb-4">
+    <button
+        data-bind--data-store-count="binds:$storeState"
+        data-handler--event.click="binds:@incrementStoreState"
+        class="px-2.5 py-1 bg-green-100"
+    >
+        Increment the count <span data-handler--dom.text="binds:$storeState"
+        ></span>
+    </button>
 </div>

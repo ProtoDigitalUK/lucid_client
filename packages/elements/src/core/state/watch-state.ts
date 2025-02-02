@@ -1,4 +1,10 @@
-import type { Store, StoreState, StoreActions } from "../../types/index.js";
+import type {
+	Store,
+	StoreState,
+	StoreActions,
+	DirectiveMap,
+	BindStateDirectives,
+} from "../../types/index.js";
 import { createEffect, type Signal } from "solid-js";
 import state from "./index.js";
 import { inferValueType } from "../../helpers.js";
@@ -14,6 +20,7 @@ import { produce } from "solid-js/store";
 const watchState = (
 	element: Element,
 	store: Store<StoreState, StoreActions>,
+	directives: DirectiveMap | undefined,
 ) => {
 	const state = store[0].state;
 
@@ -27,7 +34,13 @@ const watchState = (
 		const type = inferValueType(signal[0]());
 		if (type === "object" || type === "array") return;
 
-		registerStateEffect(element, key, signal);
+		registerStateEffect(
+			element,
+			key,
+			signal,
+			store[0].key,
+			directives?.bindState,
+		);
 
 		store[1](
 			produce((s) => {
@@ -46,12 +59,19 @@ const registerStateEffect = (
 	element: Element,
 	key: string,
 	signal: Signal<unknown>,
+	storeKey: string,
+	bindState: BindStateDirectives | undefined,
 ) => {
 	createEffect(() => {
-		state.updateAttributes(element, {
-			key: key,
-			value: signal[0](),
-		});
+		state.updateAttributes(
+			element,
+			{
+				key: key,
+				value: signal[0](),
+			},
+			storeKey,
+			bindState,
+		);
 	}, undefined);
 };
 

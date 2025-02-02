@@ -23,7 +23,7 @@ const syncStore = (storeKey: string, directives: DirectiveMap) => {
 	);
 
 	state.createState(store, directives);
-	state.watchState(storeElement, store);
+	state.watchState(storeElement, store, directives);
 	ref.createRefs(storeElement, store);
 	bind.registerActionEffects(store, directives);
 	effect.registerEffects(store, directives);

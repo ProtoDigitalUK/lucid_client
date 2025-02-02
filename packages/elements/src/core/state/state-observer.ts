@@ -52,6 +52,7 @@ const stateObserver = (
 	const statePrefix = buildAttribute(
 		Elements.options.attributes.selectors.state,
 	);
+
 	const stateAttributes = Array.from(directives?.state.keys() ?? []).map(
 		(key) => `${statePrefix}${key}`,
 	);

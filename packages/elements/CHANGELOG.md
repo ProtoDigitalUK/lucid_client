@@ -5,6 +5,7 @@
 ## Minor Changes
 
 - Added support for the `data-loop` directive.
+- Fixed bug where data-bind directives wouldnt work for any state registered through the store modules as opposed to data-state.
 
 ## v0.4.0
 

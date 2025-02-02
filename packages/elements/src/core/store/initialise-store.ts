@@ -70,7 +70,7 @@ const initialiseStore = (
 		// -----------------
 		// handle state, attribute bindings
 		state.createState(store, directives);
-		state.watchState(element, store);
+		state.watchState(element, store, directives);
 		ref.createRefs(element, store);
 		bind.registerActionEffects(store, directives);
 		effect.registerEffects(store, directives);
