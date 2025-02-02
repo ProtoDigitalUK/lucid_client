@@ -1,0 +1,48 @@
+<header
+    data-store="nav"
+    data-state--open="false"
+    class="h-10 bg-black text-white"
+    data-effect="nav:customEffect"
+    data-handler--event.document.scroll="nav:@documentScroll"
+>
+    <div class="flex justify-between items-center">
+        <div class="flex items-center">
+            <h1>Elements</h1>
+            <div data-ref="nav:testEleRefresh" class="ml-2.5">
+                <button
+                    data-store="testreplace"
+                    data-handler--event.click="nav:@oldClick"
+                >
+                    before
+                </button>
+            </div>
+            <button
+                data-handler--event.click="nav:@replaceChild"
+                class="ml-2.5"
+            >
+                Refresh Elements
+            </button>
+        </div>
+        <button
+            data-handler--event.click="nav:@toggle"
+            data-bind--aria-expanded="nav:$open"
+            data-bind--aria-label="nav:$ariaLabel"
+            aria-controls="main-nav"
+        >
+            <span data-handler--dom.text="nav:@buttonLabel">
+                Open Navigation
+            </span>
+        </button>
+    </div>
+    <nav
+        id="main-nav"
+        data-bind--aria-hidden="nav:@closed"
+        class="[&[aria-hidden='false']]:translate-x-0 fixed inset-0 top-10 bg-gray-800 z-50 transition-transform duration-200 translate-x-full p-2.5"
+        aria-label="Main navigation"
+        aria-hidden="true"
+        data-handler--trap.both="nav:$open"
+    >
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+    </nav>
+</header>

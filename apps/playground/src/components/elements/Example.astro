@@ -1,0 +1,58 @@
+<div
+    data-store="example"
+    data-state--boolean="false"
+    data-state--number="1"
+    data-state--string="hello world"
+    data-state--object='{"hello":"world", "world":"hello"}'
+    data-state--array='[false,"world"]'
+    data-bind--data-boolean="example:$boolean"
+    data-bind--data-number="example:$number"
+    data-bind--data-string="example:$string"
+    data-bind--data-object-hello="example:$object.world"
+    data-bind--data-array-hello="example:$array[0]"
+    data-bind--data-custom-state-attribute="example:$customState"
+    data-handler--event.scroll="example:@handleScroll"
+    data-effect="example:elementEffect"
+    class="data-[state--boolean=true]:bg-red-500"
+>
+    <span data-bind--data-boolean="example:$boolean" data-ref="example:span[]"
+    ></span>
+    <span data-bind--data-number="example:$number" data-ref="example:span[]"
+    ></span>
+    <span data-bind--data-string="example:$string" data-ref="example:span[]"
+    ></span>
+    <span
+        data-bind--data-object-hello="example:$object.hello"
+        data-ref="example:span[]"></span>
+    <span
+        data-handler--trap="example:$array[0]"
+        data-bind--data-array-hello="example:$array[0]"
+        data-ref="example:span[]"></span>
+    <button
+        data-handler--event.click="example:@handleClick"
+        data-handler--dom.text="example:@contentCopy"
+        data-ref="example:button"
+        class="cursor-pointer pointer-events-auto"
+    >
+        Show Content
+    </button>
+    Parent Element (scoped)
+    <!-- Sub Element -->
+    <div
+        data-store="nested"
+        data-state--name="I am nested!"
+        data-ref="example:div"
+        data-bind--name="nested:$name"
+        data-bind--boolean="example:$boolean"
+    >
+        Single Nested (not scoped)
+        <div
+            data-store="doubleNested"
+            data-state--name="I am double nested!"
+            data-bind--name="doubleNested:$name"
+            data-bind--boolean="example:$boolean"
+        >
+            Double Nested (not scoped)
+        </div>
+    </div>
+</div>

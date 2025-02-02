@@ -1,5 +1,8 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Example from "../components/elements/Example.astro";
+import Loops from "../components/elements/Loops.astro";
+import Binds from "../components/elements/Binds.astro";
 ---
 
 <Layout title="Lucid Primitives Playground">
@@ -8,120 +11,8 @@ import Layout from "../layouts/Layout.astro";
         - Elements Playground
     </h1>
     <div class="w-full mt-2.5">
-        <div
-            data-store="example"
-            data-state--boolean="false"
-            data-state--number="1"
-            data-state--string="hello world"
-            data-state--object='{"hello":"world", "world":"hello"}'
-            data-state--array='[false,"world"]'
-            data-bind--data-boolean="example:$boolean"
-            data-bind--data-number="example:$number"
-            data-bind--data-string="example:$string"
-            data-bind--data-object-hello="example:$object.world"
-            data-bind--data-array-hello="example:$array[0]"
-            data-bind--data-custom-state-attribute="example:$customState"
-            data-handler--event.scroll="example:@handleScroll"
-            data-effect="example:elementEffect"
-            class="data-[state--boolean=true]:bg-red-500"
-        >
-            <span
-                data-bind--data-boolean="example:$boolean"
-                data-ref="example:span[]"></span>
-            <span
-                data-bind--data-number="example:$number"
-                data-ref="example:span[]"></span>
-            <span
-                data-bind--data-string="example:$string"
-                data-ref="example:span[]"></span>
-            <span
-                data-bind--data-object-hello="example:$object.hello"
-                data-ref="example:span[]"></span>
-            <span
-                data-handler--trap="example:$array[0]"
-                data-bind--data-array-hello="example:$array[0]"
-                data-ref="example:span[]"></span>
-            <button
-                data-handler--event.click="example:@handleClick"
-                data-handler--dom.text="example:@contentCopy"
-                data-ref="example:button"
-                class="cursor-pointer pointer-events-auto"
-            >
-                Show Content
-            </button>
-            Parent Element (scoped)
-            <!-- Sub Element -->
-            <div
-                data-store="nested"
-                data-state--name="I am nested!"
-                data-ref="example:div"
-                data-bind--name="nested:$name"
-                data-bind--boolean="example:$boolean"
-            >
-                Single Nested (not scoped)
-                <div
-                    data-store="doubleNested"
-                    data-state--name="I am double nested!"
-                    data-bind--name="doubleNested:$name"
-                    data-bind--boolean="example:$boolean"
-                >
-                    Double Nested (not scoped)
-                </div>
-            </div>
-        </div>
-
-        <h2 class="mb-2.5 font-bold text-xl">For Loop Testing</h2>
-        <div
-            data-store="loops"
-            data-state--items='[{"title": "title one"}, {"title": "title two"}, {"title": "title threee"}]'
-            data-state--nested='[{"title": "nested one"}, {"title": "nested two"}, {"title": "nested threee"}]'
-            data-state--button-label="I shouldn't show within the template"
-        >
-            <h3 class="mb-1 font-bold text-lg">Example with $state</h3>
-            <ul data-loop="loops:$items" class="border-b mb-2.5">
-                <template>
-                    <li class="border-b py-2">
-                        <p data-handler--dom.text="loops:$items[:index:].title">
-                        </p>
-                        <p data-handler--dom.text="loops:$button-label"></p>
-                        <button data-handler--event.click="loops:@childOnClick">
-                            Click me :indexOne:
-                        </button>
-                    </li>
-                </template>
-            </ul>
-
-            <h3 class="mb-1 font-bold text-lg">Example with @action</h3>
-            <ul data-loop="loops:@getItems">
-                <template>
-                    <li class="border-b py-2">
-                        <p data-handler--dom.text="loops:$items[:index:].title">
-                        </p>
-                    </li>
-                </template>
-            </ul>
-
-            <h3 class="mb-1 font-bold text-lg">Example of nested loops</h3>
-            <ul data-loop="loops:@getItems">
-                <template>
-                    <li class="border-b py-2">
-                        <p data-handler--dom.text="loops:$items[:index:].title">
-                        </p>
-                        <ul data-loop="loops:$nested" class="pl-4">
-                            <template>
-                                <li
-                                    class="border-b py-2 last:border-b-0 last:pb-0"
-                                >
-                                    <p
-                                        data-handler--dom.text="loops:$nested[:index:].title"
-                                    >
-                                    </p>
-                                </li>
-                            </template>
-                        </ul>
-                    </li>
-                </template>
-            </ul>
-        </div>
+        <Example />
+        <Binds />
+        <Loops />
     </div>
 </Layout>
