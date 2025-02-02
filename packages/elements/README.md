@@ -230,6 +230,31 @@ storeModule("store", (store) => ({
 
 With effects, whenever a dependency updates (in the above case the isOpen signal), the effect will re-run.
 
-## Limitations
+### Loops
 
-- Array and object state mutations don't update their state attribute value. They do still trigger side-effect though, so any binding or handler that subscribed to them will still re-trigger.
+Use `data-loop` to loop over an array and add an Element to the DOM for each iteration.
+
+```html
+<ul 
+    data-store="store"
+    data-state--array='[{"title": "title one"}, {"title": "title two"}, {"title": "title three"}]'
+    data-loop="store:$array" 
+>
+    <template>
+        <li>
+            <p data-handler--dom.text="store:$array[:index:].title"></p>
+            <button data-handler--event.click="store:@childOnClick">
+                Click me :indexOne:
+            </button>
+        </li>
+    </template>
+</ul>
+```
+
+Any element with the `data-loop` directive must contain a single `<template>` element. This is where you define the markup that needs looping over.
+
+You can use the `:index:` and `:indexOne:` keys to represent the loop's iteration. This is simply a find/replace, so it can be used anywhere within the template. This is most useful for targetting an index in array state, as with the above example: `data-handler--dom.text="store:$array[:index:].title"`.
+
+You can even nest loops, but not for the time being, any `:index:` keys are scoped to the loops template, meaning you cannot target the parent loop's index.
+
+With `data-loop`, the `$state` or `@action` value must return an array. 

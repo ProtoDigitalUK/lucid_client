@@ -143,7 +143,7 @@ const { title } = Astro.props;
 
             storeModule<
                 {
-                    "loop-items": Array<{
+                    items: Array<{
                         title: string;
                     }>;
                 },
@@ -154,10 +154,14 @@ const { title } = Astro.props;
                         console.log("store", store);
                     },
                     childOnClick: () => {
-                        const [getItems, setItems] = store.state["loop-items"];
+                        const [getItems, setItems] = store.state.items;
                         const items = getItems();
                         items.push({ title: "A new title?" });
                         setItems([...items]);
+                    },
+                    getItems: () => {
+                        const [getItems] = store.state.items;
+                        return getItems();
                     },
                 },
             }));

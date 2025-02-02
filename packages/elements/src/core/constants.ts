@@ -20,6 +20,8 @@ const C = {
 			denote: {
 				action: "@",
 				state: "$",
+				index: ":index:",
+				index1: ":indexOne:",
 			},
 		},
 		specifier: "",

@@ -14,6 +14,9 @@ import {
 import Elements from "../elements.js";
 import loop from "./index.js";
 
+/**
+ * Responsible for registering the loop directive effects
+ */
 const registerLoops = (
 	store: Store<StoreState, StoreActions>,
 	directives: DirectiveMap | undefined,

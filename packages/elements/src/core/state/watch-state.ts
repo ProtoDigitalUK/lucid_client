@@ -21,6 +21,9 @@ const watchState = (
 		// check if the state has already had an effect registered for it
 		if (store[0].stateRegisteredEffects.has(key)) continue;
 
+		//* If the two lines bellow are added back, this will disable array/object state being two-way bound with data-state attributes and signals
+		//* I havent decided what the behaviour here should be yet
+		//* Enabled currently, as this causes loops to re-render 1 extra time
 		const type = inferValueType(signal[0]());
 		if (type === "object" || type === "array") return;
 
@@ -44,18 +47,12 @@ const registerStateEffect = (
 	key: string,
 	signal: Signal<unknown>,
 ) => {
-	createEffect(
-		() => {
-			state.updateAttributes(element, {
-				key: key,
-				value: signal[0](),
-			});
-		},
-		undefined,
-		{
-			name: `State key: ${key} effect`,
-		},
-	);
+	createEffect(() => {
+		state.updateAttributes(element, {
+			key: key,
+			value: signal[0](),
+		});
+	}, undefined);
 };
 
 export default watchState;

@@ -1,5 +1,11 @@
 # @lucidclient/elements
 
+## v0.5.0
+
+## Minor Changes
+
+- Added support for the `data-loop` directive.
+
 ## v0.4.0
 
 ### Minor Changes
