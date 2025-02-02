@@ -6,6 +6,7 @@
 
 - Added support for the `data-loop` directive.
 - Fixed bug where data-bind directives wouldnt work for any state registered through the store modules as opposed to data-state.
+- DOM handler focus is now wrapped in a setTimeout so its delayed slightly. This means if its used within a trap target it still works.
 
 ## v0.4.0
 

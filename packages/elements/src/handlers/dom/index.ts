@@ -71,7 +71,7 @@ const focusSpecifier = (
 ) => {
 	for (const target of targets) {
 		if (target instanceof HTMLElement && actionResponse === true) {
-			target.focus();
+			setTimeout(() => target.focus(), 0);
 			break; // Only focus the first target
 		}
 	}
