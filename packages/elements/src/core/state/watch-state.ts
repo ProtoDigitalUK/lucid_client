@@ -32,7 +32,7 @@ const watchState = (
 		//* I havent decided what the behaviour here should be yet
 		//* Enabled currently, as this causes loops to re-render 1 extra time
 		const type = inferValueType(signal[0]());
-		if (type === "object" || type === "array") return;
+		if (type === "object" || type === "array") continue;
 
 		registerStateEffect(
 			element,

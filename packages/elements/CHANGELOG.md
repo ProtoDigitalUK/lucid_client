@@ -1,5 +1,11 @@
 # @lucidclient/elements
 
+## v0.5.1
+
+### Patch Changes
+
+- Fixed bug where in watch state setup, if the state was of type array/object we returned instead of continuing. This is responsible for keeping `data-state` attributes and subsequently `data-bind` in sync.
+
 ## v0.5.0
 
 ## Minor Changes
