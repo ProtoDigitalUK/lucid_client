@@ -207,11 +207,23 @@ class Speculator<T, D> {
 	/**
 	 * Refreshes the Speculator instance
 	 */
-	public refresh() {
+	public refresh(
+		refreshConfig?: Partial<
+			Pick<SpeculatorConfig<T, D>, "elements" | "optimistic">
+		>,
+	) {
+		if (refreshConfig) {
+			this.config = {
+				...this.config,
+				...(refreshConfig.elements && { elements: refreshConfig.elements }),
+				...(refreshConfig.optimistic && {
+					optimistic: refreshConfig.optimistic,
+				}),
+			};
+		}
+
 		this.destroy();
 		this.abortController = new AbortController();
-		this.cache = new Map();
-		this.intentDebounce = null;
 		this.registerEvents();
 		this.handleOptimisticPrefetch();
 	}

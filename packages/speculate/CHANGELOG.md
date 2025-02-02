@@ -1,5 +1,11 @@
 # @lucidclient/speculate
 
+## v1.1.1
+
+## Patch Changes
+
+- Updated the `refresh` method to include a partial config prop for `Speculator`.
+
 ## v1.1.0
 
 ## Minor Changes
