@@ -1,5 +1,11 @@
 # @lucidclient/speculate
 
+## v1.1.2
+
+## Patch Changes
+
+- Improved browser support for speculate links.
+
 ## v1.1.1
 
 ## Patch Changes

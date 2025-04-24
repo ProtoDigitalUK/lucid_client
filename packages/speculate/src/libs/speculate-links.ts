@@ -21,7 +21,10 @@ const C: {
 
 let initialised = false;
 const prefetched = new Set<string>();
-const speculationSupport = HTMLScriptElement.supports("speculationrules");
+const speculationSupport =
+	"supports" in HTMLScriptElement &&
+	HTMLScriptElement.supports &&
+	HTMLScriptElement.supports("speculationrules");
 const prefetchSupport = document
 	.createElement("link")
 	.relList?.supports?.("prefetch");
