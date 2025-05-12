@@ -1,4 +1,4 @@
-import type { StoreModule } from "@lucidclient/elements/types";
+import type { StoreModule } from "@lucidclient/elements-old/types";
 
 const loopsStore: StoreModule<
 	{

@@ -5,10 +5,5 @@ import tsupConfig from "@repo/config/tsupconfig-base.json" with {
 
 export default defineConfig({
     ...tsupConfig,
-    entry: [
-        "src/index.ts",
-        //"src/handlers.ts",
-        //  "src/helpers.ts",
-        //  "src/types/index.ts"
-    ],
+    entry: ["src/index.ts", "src/handlers.ts", "src/helpers.ts", "src/types/index.ts"],
 });

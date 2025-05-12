@@ -1,0 +1,77 @@
+{
+	"name": "@lucidclient/elements-old",
+	"version": "0.5.1",
+	"private": false,
+	"description": "A lightweight, reactive UI library that bridges HTML and JavaScript through attributes, powered by SolidJS. Adds reactive state and dynamic behaviors to markup while maintaining simplicity.",
+	"type": "module",
+	"types": "./dist/index.d.ts",
+	"main": "dist/index.cjs",
+	"module": "dist/index.js",
+	"files": ["dist"],
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"require": "./dist/index.cjs"
+		},
+		"./handlers": {
+			"types": "./dist/handlers.d.ts",
+			"import": "./dist/handlers.js",
+			"require": "./dist/handlers.cjs"
+		},
+		"./helpers": {
+			"types": "./dist/helpers.d.ts",
+			"import": "./dist/helpers.js",
+			"require": "./dist/helpers.cjs"
+		},
+		"./types": {
+			"types": "./dist/types/index.d.ts",
+			"require": "./dist/types/index.cjs",
+			"default": "./dist/types/index.js"
+		}
+	},
+	"scripts": {
+		"build": "tsc && tsup",
+		"dev": "tsup --watch",
+		"format": "biome format ./src",
+		"format:fix": "biome format --write ./src",
+		"lint": "biome lint ./src",
+		"lint:fix": "biome lint --write ./src"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^1.9.4",
+		"@repo/config": "*",
+		"tsup": "^8.3.6",
+		"typescript": "^5.7.3"
+	},
+	"author": "Proto Digital",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ProtoDigitalUK/lucid_client",
+		"directory": "packages/elements"
+	},
+	"keywords": [
+		"ui-library",
+		"reactive",
+		"solidjs",
+		"html-attributes",
+		"dom-manipulation",
+		"state-management",
+		"two-way-binding",
+		"javascript",
+		"typescript",
+		"frontend",
+		"minimal",
+		"lightweight",
+		"lucid-client",
+		"lucid"
+	],
+	"homepage": "https://lucidjs.build/elements",
+	"volta": {
+		"node": "22.13.1"
+	},
+	"dependencies": {
+		"solid-js": "^1.9.4"
+	}
+}

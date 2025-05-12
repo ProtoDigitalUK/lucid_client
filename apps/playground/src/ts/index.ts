@@ -1,5 +1,5 @@
-import Elements, { storeModule } from "@lucidclient/elements";
-import { events, dom, trap } from "@lucidclient/elements/handlers";
+import Elements, { storeModule } from "@lucidclient/elements-old";
+import { events, dom, trap } from "@lucidclient/elements-old/handlers";
 import { speculateLinks } from "@lucidclient/speculate";
 import "./speculate/speculator";
 
